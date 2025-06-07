@@ -24,7 +24,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git clone https://x-access-token:${GH_TOKEN}@github.com/your-org/qa-repo.git /tmp/qa-repo
+          git clone https://x-access-token:${GH_TOKEN}@github.com/Sudhi2000/Dev /tmp/qa-repo
 
       - name: Sync files to QA repo
         run: |
