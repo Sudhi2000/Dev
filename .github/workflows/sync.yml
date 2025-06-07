@@ -3,7 +3,7 @@ name: Sync Dev to QA
 on:
   push:
     branches:
-      - main
+      - B  # 🔁 Change to your actual reviewed branch name
 
 jobs:
   sync:
@@ -21,16 +21,15 @@ jobs:
       - name: Prepare only code to push (optional: exclude workflows)
         run: |
           rm -rf .git
-          rm -rf .github  # Optional: exclude workflows
+          rm -rf .github
           mkdir tmp
           mv * .[^.]* tmp 2>/dev/null || true
-          cd tmp
 
       - name: Push to QA Repo
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.QA_REPO_TOKEN }}
-          repository: Sudhi2000/QA
-          branch: main   # or QA branch
+          repository: Sudhi2000/QA  # 🔁 Change to actual org/repo
+          branch: main                      # 🔁 Target branch in QA repo
           directory: tmp
           force: true
