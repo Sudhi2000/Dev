@@ -1,24 +1,38 @@
-name: Check Token Access
+name: Sync Dev to QA
 
 on:
-  workflow_dispatch:  # This allows manual triggering from GitHub UI
+  push:
+    branches:
+      - B  # 🔁 Change if your reviewed branch name is different
 
 jobs:
-  test-token:
+  sync:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out this repo (Dev)
+      - name: Checkout Dev Repo (B branch)
         uses: actions/checkout@v3
 
-      - name: Test cloning QA repo using token
+      - name: Set up Git config
         run: |
-          git clone https://x-access-token:${{ secrets.QA_REPO_TOKEN }}@github.com/Sudhi2000/QA.git
+          git config --global user.name 'github-actions'
+          git config --global user.email 'actions@github.com'
+
+      - name: Prepare code for sync (exclude workflows)
+        run: |
+          mkdir tmp
+          shopt -s dotglob  # include hidden files like .env
+          mv * tmp/
+          rm -rf tmp/.git tmp/.github
+
+      - name: Debug - list contents to be pushed
+        run: ls -al tmp
 
       - name: Push to QA Repo
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.QA_REPO_TOKEN }}
-          repository: Sudhi2000/QA     # ✅ Make sure this repo exists and token has access
-          branch: main                 # ✅ Replace with target branch in QA repo
+          repository: Sudhi2000/QA  # 🔁 Replace with your QA repo if different
+          branch: main              # 🔁 Replace with QA repo target branch
           directory: tmp
           force: true
