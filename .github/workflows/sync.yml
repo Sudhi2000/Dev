@@ -24,6 +24,10 @@ jobs:
           done
           rm -rf tmp/.git tmp/.github
 
+      - name: Clean tmp folder before cloning
+        run: rm -rf tmp
+
+
       - name: Clone QA repo into tmp
         run: |
           git clone https://x-access-token:${{ secrets.QA_REPO_TOKEN }}@github.com/Sudhi2000/QA.git tmp
