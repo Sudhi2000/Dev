@@ -3,7 +3,7 @@ name: Sync Dev to QA
 on:
   push:
     branches:
-      - B  # 🔁 Change if your reviewed branch name is different
+      - main  # 🔁 Change if your reviewed branch name is different
 
 jobs:
   sync:
