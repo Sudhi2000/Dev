@@ -1,4 +1,4 @@
-nname: Check Token Access
+name: Check Token Access
 
 on:
   workflow_dispatch:  # This allows manual triggering from GitHub UI
