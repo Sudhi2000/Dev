@@ -3,25 +3,20 @@ name: Sync Dev to QA
 on:
   push:
     branches:
-      - main  # 🔁 Use 'B' if that's your reviewed branch in Dev repo
+      - main
 
 jobs:
   sync:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Dev Repo (B branch)
+      - name: Checkout Dev Repo (main branch)
         uses: actions/checkout@v3
-
-      - name: Set up Git config
-        run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'actions@github.com'
 
       - name: Prepare code for sync (exclude workflows and sensitive files)
         run: |
           mkdir tmp
-          shopt -s dotglob  # Include hidden files like .editorconfig
+          shopt -s dotglob
           for item in * .[^.]*; do
             if [ "$item" != "tmp" ] && [ -e "$item" ] && [ "$item" != ".env" ] && [ "$item" != ".env.local" ] && [ "$item" != ".env.production" ]; then
               mv "$item" tmp/
@@ -29,14 +24,36 @@ jobs:
           done
           rm -rf tmp/.git tmp/.github
 
-      - name: Debug - list contents to be pushed
-        run: ls -al tmp
+      - name: Clone QA repo into tmp
+        run: |
+          git clone https://x-access-token:${{ secrets.QA_REPO_TOKEN }}@github.com/Sudhi2000/QA.git tmp
+          find tmp ! -name '.git' ! -name '.' -exec rm -rf {} +
 
-      - name: Push to QA Repo
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.QA_REPO_TOKEN }}
-          repository: Sudhi2000/QA  # 🔁 Change if needed
-          branch: main              # 🔁 Target branch in QA repo
-          directory: tmp
-          force: true
+      - name: Copy prepared files to tmp
+        run: |
+          shopt -s dotglob
+          cp -r tmp/* tmp/.* tmp-backup/ 2>/dev/null || true  # optional backup
+          cp -r tmp/ ../tmp-bkp/  # backup old if you want
+          cp -r tmp/* tmp/.* tmp/  # copy again if needed
+          cp -r tmp/* tmp/.* tmp/ # better: cp -r tmp/* tmp/.* tmp/
+
+          # Actually, simpler is:
+          cp -r tmp/* tmp/.* tmp/ || true
+          cp -r ../tmp/* tmp/
+
+          # Actually, safer:
+          cp -r ../tmp/* tmp/
+          cp -r ../tmp/.* tmp/ 2>/dev/null || true
+
+          # But since your prepared files are already in tmp/, you want to copy from your prepared `tmp/` folder outside cloned tmp:
+          cp -r ../tmp/* tmp/
+          cp -r ../tmp/.* tmp/ 2>/dev/null || true
+
+      - name: Commit and push from tmp
+        run: |
+          cd tmp
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Sync Dev to QA" || echo "No changes to commit"
+          git push origin main --force
