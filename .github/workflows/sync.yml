@@ -19,11 +19,16 @@ jobs:
           git config --global user.email 'actions@github.com'
 
       - name: Prepare code for sync (exclude workflows)
-        run: |
-          mkdir tmp
-          shopt -s dotglob  # include hidden files like .env
-          mv * tmp/
-          rm -rf tmp/.git tmp/.github
+  run: |
+    mkdir tmp
+    shopt -s dotglob  # Include hidden files like .env
+    for item in * .[^.]*; do
+      if [ "$item" != "tmp" ]; then
+        mv "$item" tmp/
+      fi
+    done
+    rm -rf tmp/.git tmp/.github
+
 
       - name: Debug - list contents to be pushed
         run: ls -al tmp
