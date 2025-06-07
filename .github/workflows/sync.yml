@@ -18,12 +18,12 @@ jobs:
           git config --global user.name 'github-actions'
           git config --global user.email 'actions@github.com'
 
-      - name: Prepare code for sync (exclude workflows)
+      - name: Prepare code for sync (exclude workflows and sensitive files)
         run: |
           mkdir tmp
-          shopt -s dotglob  # Include hidden files like .env
+          shopt -s dotglob  # Include hidden files like .editorconfig
           for item in * .[^.]*; do
-            if [ "$item" != "tmp" ]; then
+            if [ "$item" != "tmp" ] && [ -e "$item" ] && [ "$item" != ".env" ] && [ "$item" != ".env.local" ] && [ "$item" != ".env.production" ]; then
               mv "$item" tmp/
             fi
           done
