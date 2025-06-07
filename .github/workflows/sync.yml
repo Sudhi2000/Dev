@@ -1,46 +1,46 @@
-name: Sync Dev to QA
+name: Mirror Dev to QA Repo
 
 on:
   push:
     branches:
-      - main
+      - main   # Trigger only on pushes to main branch
 
 jobs:
-  sync:
+  mirror:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Dev Repo (main branch)
+      - name: Checkout Dev repository (source)
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch full history, useful for proper commits
 
-      - name: Prepare code for sync (exclude workflows and sensitive files)
+      - name: Set up git for pushing
         run: |
-          mkdir prepared
-          shopt -s dotglob
-          for item in * .[^.]*; do
-            if [ "$item" != "prepared" ] && [ "$item" != ".env" ] && [ "$item" != ".env.local" ] && [ "$item" != ".env.production" ] && [ "$item" != ".git" ] && [ "$item" != ".github" ]; then
-              mv "$item" prepared/
-            fi
-          done
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
 
-      - name: Clean tmp folder before cloning
-        run: rm -rf tmp
-
-      - name: Clone QA repo into tmp
+      - name: Clone QA repository (target)
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git clone https://x-access-token:${{ secrets.QA_REPO_TOKEN }}@github.com/Sudhi2000/QA.git tmp
-          find tmp ! -name '.git' ! -name '.' -exec rm -rf {} +
+          git clone https://x-access-token:${GH_TOKEN}@github.com/your-org/qa-repo.git /tmp/qa-repo
 
-      - name: Copy prepared files into cloned repo (tmp)
+      - name: Sync files to QA repo
         run: |
-          shopt -s dotglob
-          cp -r prepared/* prepared/.* tmp/ 2>/dev/null || true
+          rsync -av --delete --exclude='.github' --exclude='.git' ./ /tmp/qa-repo/
 
-      - name: Commit and push changes from tmp
+      - name: Commit and push changes to QA repo
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          cd tmp
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add .
-          git commit -m "Sync Dev to QA" || echo "No changes to commit"
-          git push origin main --force
+          cd /tmp/qa-repo
+          # Check if there are changes
+          if git diff --quiet; then
+            echo "No changes detected, skipping commit"
+          else
+            git add .
+            COMMIT_HASH=$(git rev-parse --short HEAD)
+            git commit -m "Mirror from Dev repo commit ${COMMIT_HASH}"
+            git push origin main
+          fi
