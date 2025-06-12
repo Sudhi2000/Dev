@@ -231,19 +231,19 @@
     <div class="divider" role="separator" aria-label="Divider"></div>
     <div class="right-side">
       <div class="pill-group">
-        <a
-  *ngFor="let item of [
-    { title: 'Explore tk,nbsakjbclkaslknkhe sudheesh\'s Docs', link: 'https://angular.dev' },
-    { title: 'Learn with Tutorials', link: 'https://angular.dev/tutorials' },
-    { title: 'CLI Docs', link: 'https://angular.dev/tools/cli' },
-    { title: 'Angular Language Service', link: 'https://angular.dev/tools/language-service' },
-    { title: 'Angular DevTools', link: 'https://angular.dev/tools/devtools' }
-  ]; trackBy: trackByTitle"
-  class="pill"
-  [href]="item.link"
-  target="_blank"
-  rel="noopener"
->
+        @for (item of [
+          { title: 'Explore the Docs', link: 'https://angular.dev' },
+          { title: 'Learn with Tutorials', link: 'https://angular.dev/tutorials' },
+          { title: 'CLI Docs', link: 'https://angular.dev/tools/cli' },
+          { title: 'Angular Language Service', link: 'https://angular.dev/tools/language-service' },
+          { title: 'Angular DevTools', link: 'https://angular.dev/tools/devtools' },
+        ]; track item.title) {
+          <a
+            class="pill"
+            [href]="item.link"
+            target="_blank"
+            rel="noopener"
+          >
             <span>{{ item.title }}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -257,7 +257,7 @@
               />
             </svg>
           </a>
-        &#125;
+        }
       </div>
       <div class="social-links">
         <a

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "my-angular-s3-app": {
+    "tempapp": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/my-angular-s3-app",
+            "outputPath": "dist/tempapp",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -59,10 +59,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "my-angular-s3-app:build:production"
+              "buildTarget": "tempapp:build:production"
             },
             "development": {
-              "buildTarget": "my-angular-s3-app:build:development"
+              "buildTarget": "tempapp:build:development"
             }
           },
           "defaultConfiguration": "development"
