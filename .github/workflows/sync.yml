@@ -1,47 +1,56 @@
-name: Mirror Dev to QA Repo
+name: CI/CD with QA Approval
 
 on:
   push:
     branches:
-      - main  # Only trigger on Dev's main branch
+      - main
 
 jobs:
-  mirror:
+  build:
     runs-on: ubuntu-latest
+    outputs:
+      build-status: ${{ steps.build-status.outcome }}
 
     steps:
-      - name: Checkout Dev repository (source)
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
+          node-version: 18
 
-      - name: Set up Git config
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Angular project
+        id: build-status
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
+          npm run build --prod
 
-      - name: Clone QA repository (target)
+  notify_qa:
+    needs: build
+    if: ${{ needs.build.result == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify QA via Slack
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": ":rocket: Build passed on `main`. QA approval needed before deployment.\nCommit: ${{ github.sha }}\nTriggered by: ${{ github.actor }}"
+            }
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          git clone https://x-access-token:${GH_TOKEN}@github.com/Sudhi2000/QA /tmp/qa-repo
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 
-      - name: Sync files to QA repo (excluding .github)
+  deploy:
+    needs: notify_qa
+    runs-on: ubuntu-latest
+    environment:
+      name: qa-approval
+      url: https://your-qa-instance.com
+    steps:
+      - name: Deploy to QA server
         run: |
-          rsync -av --delete --exclude='.git' --exclude='.github' ./ /tmp/qa-repo/
-
-      - name: Commit and push changes to QA repo
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          cd /tmp/qa-repo
-          git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
-
-          if git diff --quiet; then
-            echo "No changes to commit."
-          else
-            git add .
-            git commit -m "Mirror from Dev repo"
-            git push origin main
-          fi
+          echo "Deploying to QA instance..."
+          # Your actual deployment logic goes here
