@@ -28,13 +28,22 @@ jobs:
         run: |
           npm run build --prod
 
+      - name: Get commit message
+        id: commit_message
+        run: |
+          echo "message=$(git log -1 --pretty=format:'%s')" >> "$GITHUB_OUTPUT"
+
+      - outputs:
+        build-status: ${{ steps.build-status.outcome }}
+        commit-message: ${{ steps.commit_message.outputs.message }}
+
       - name: Notify developer on build failure
         if: failure()
         uses: slackapi/slack-github-action@v1.25.0
         with:
           payload: |
             {
-              "text": ":x: *Build Failed!*\nRepo: `${{ github.repository }}`\nBranch: `main`\nCommit: `${{ github.sha }}`\nTriggered by: `${{ github.actor }}`\nPlease fix the build and push again."
+              "text": ":rocket: *Build Passed!*\n*Developer:* `${{ github.actor }}`\n*Commit:* `${{ needs.build.outputs.commit-message }}`\n\n➡️ [Click here to approve deployment](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
