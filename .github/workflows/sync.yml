@@ -9,7 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      build-status: ${{ steps.build-status.outcome }}
+      build-status: ${{ steps.build_status.outcome }}
+      commit-message: ${{ steps.commit_message.outputs.message }}
 
     steps:
       - name: Checkout code
@@ -24,29 +25,28 @@ jobs:
         run: npm install
 
       - name: Build Angular project
-        id: build-status
-        run: |
-          npm run build --prod
+        id: build_status
+        run: npm run build --prod
 
       - name: Get commit message
         id: commit_message
         run: |
           echo "message=$(git log -1 --pretty=format:'%s')" >> "$GITHUB_OUTPUT"
 
-      - outputs:
-        build-status: ${{ steps.build-status.outcome }}
-        commit-message: ${{ steps.commit_message.outputs.message }}
-
+  notify_dev_on_failure:
+    needs: build
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
       - name: Notify developer on build failure
-        if: failure()
         uses: slackapi/slack-github-action@v1.25.0
         with:
           payload: |
             {
-              "text": ":rocket: *Build Passed!*\n*Developer:* `${{ github.actor }}`\n*Commit:* `${{ needs.build.outputs.commit-message }}`\n\n➡️ [Click here to approve deployment](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+              "text": ":x: *Build Failed!*\n*Developer:* `${{ github.actor }}`\n*Commit:* `${{ needs.build.outputs.commit-message }}`\n➡️ [View Build Logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_DEV }}
 
   notify_qa:
     needs: build
@@ -58,7 +58,7 @@ jobs:
         with:
           payload: |
             {
-              "text": ":rocket: Build passed on `main`. QA approval needed before deployment.\nCommit: ${{ github.sha }}\nTriggered by: ${{ github.actor }}"
+              "text": ":rocket: *Build Passed!*\n*Developer:* `${{ github.actor }}`\n*Commit:* `${{ needs.build.outputs.commit-message }}`\n\n:clipboard: QA approval needed before deployment.\n➡️ [Click to review and approve](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_QA }}
