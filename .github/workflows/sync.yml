@@ -28,6 +28,17 @@ jobs:
         run: |
           npm run build --prod
 
+      - name: Notify developer on build failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": ":x: *Build Failed!*\nRepo: `${{ github.repository }}`\nBranch: `main`\nCommit: `${{ github.sha }}`\nTriggered by: `${{ github.actor }}`\nPlease fix the build and push again."
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
   notify_qa:
     needs: build
     if: ${{ needs.build.result == 'success' }}
@@ -41,7 +52,7 @@ jobs:
               "text": ":rocket: Build passed on `main`. QA approval needed before deployment.\nCommit: ${{ github.sha }}\nTriggered by: ${{ github.actor }}"
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_QA }}
 
   deploy:
     needs: notify_qa
