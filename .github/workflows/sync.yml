@@ -93,4 +93,4 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync ./dist/ ${{ secrets.v5-sattva-sample}} --delete
+          aws s3 sync ./dist/ s3://v5-sattva-sample --delete
