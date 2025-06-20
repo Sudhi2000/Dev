@@ -104,4 +104,5 @@ jobs:
 
       - name: Upload to S3
         run: |
-          aws s3 sync ./dist/tempapp/browser s3://v5-sattva-sample/tempapp/browser --delete
+         aws s3 sync ./dist/tempapp/browser s3://v5-sattva-sample/ --delete
+
