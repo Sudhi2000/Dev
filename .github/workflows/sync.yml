@@ -87,7 +87,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
+          aws_s3_bucket : v5-sattva-sample
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          SOURCE_DIR: ./dist/tempapp/browser s3://your-bucket-name --delete
+          SOURCE_DIR: dist/tempapp/browser 
