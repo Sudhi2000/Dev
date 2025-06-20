@@ -3,7 +3,7 @@ name: CI/CD with QA Approval
 on:
   push:
     branches:
-      - Sattva_test1
+      - Sattva-test1
 
 jobs:
   build:
