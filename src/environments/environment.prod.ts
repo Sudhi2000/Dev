@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   // client_backend:'https://d34cddnz7xqrlq.cloudfront.net',
+  client_backend:'https://xqrlq.cloudfront.net',
   token:'session-token',
   wheather:'https://api.weatherapi.com/v1/current.json?',
   wheather_key:'42c1f44ea6854ac4a76170801221105',
