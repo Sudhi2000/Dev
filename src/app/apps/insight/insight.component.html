@@ -1,0 +1,99 @@
+
+
+
+<!-- <div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="position-relative">
+               <iframe width="100%" height="60" src="https://rss.app/embed/v1/ticker/tKGnX6pSRogqiY4c" frameborder="0"></iframe>
+                <figure class="overflow-hidden mb-0 d-flex justify-content-center">
+                    <img src="../../../assets/images/banner-2.jpg" class="rounded-top" alt="profile cover" width="100%">
+               
+                      
+                  </figure>
+            </div>
+            <div class="d-flex justify-content-center p-3 rounded-bottom">
+                <ul class="d-flex align-items-center m-0 p-0">
+                    <li class="d-flex align-items-center active">
+                        <i class="feather icon-columns me-1 icon-md text-primary"></i>
+                        <a class="pt-1px d-none d-md-block text-primary" routerLink=".">Timeline</a>
+                    </li>
+                    <li class="ms-3 ps-3 border-start d-flex align-items-center">
+                        <i class="feather icon-user me-1 icon-md"></i>
+                        <a class="pt-1px d-none d-md-block text-body" routerLink=".">About</a>
+                    </li>
+                    <li class="ms-3 ps-3 border-start d-flex align-items-center">
+                        <i class="feather icon-users me-1 icon-md"></i>
+                        <a class="pt-1px d-none d-md-block text-body" routerLink=".">Friends <span
+                                class="text-muted tx-12">3,765</span></a>
+                    </li>
+                    <li class="ms-3 ps-3 border-start d-flex align-items-center">
+                        <i class="feather icon-image me-1 icon-md"></i>
+                        <a class="pt-1px d-none d-md-block text-body" routerLink=".">Photos</a>
+                    </li>
+                    <li class="ms-3 ps-3 border-start d-flex align-items-center">
+                        <i class="feather icon-video me-1 icon-md"></i>
+                        <a class="pt-1px d-none d-md-block text-body" routerLink=".">Videos</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="row">
+    <div class="col-12 grid-margin">
+      <div class="card">
+        <div class="position-relative">
+        <!-- <iframe width="100%" height="55" src="https://rss.app/embed/v1/ticker/tKGnX6pSRogqiY4c" frameborder="0"></iframe> -->
+        <iframe width="100%" height="55" src="https://rss.app/embed/v1/ticker/tsWfmxsyMnWzmn3r" frameborder="0"></iframe>
+          <!-- <figure class="overflow-hidden mb-0 d-flex justify-content-center banner">
+            <img src="https://via.placeholder.com/1148x272" class="rounded-top" alt="profile cover">
+            <img src="../../../assets/images/banner.jpg" class="rounded-top" alt="profile cover" width="100%" height="">
+          </figure> -->
+          <ngb-carousel *ngIf="images" [showNavigationArrows]="true" [showNavigationIndicators]="false">
+            <ng-template ngbSlide *ngFor="let image of images">
+              <div class="picsum-img-wrapper">
+                <img [src]="image" class="d-block w-100" alt="Random slide">
+              </div>
+            </ng-template>
+          </ngb-carousel>
+          <div class="d-flex justify-content-between align-items-center position-absolute top-90 w-100 px-2 px-md-4 mt-n4">
+            <div>
+              <img class="wd-70 rounded-circle"  [src]="userImage" alt="profile">
+              <!-- <img class="wd-80 ht-80 rounded-circle" [src]="userImage" alt=""> -->
+              <span class="h4 ms-3 text-dark">Welcome, {{userName}}</span>
+              <!-- <span class="h5 ms-3 text-dark">{{userEmail}}</span>
+              <span class="h5 ms-3 text-dark">{{userDesignation}}</span> -->
+
+
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center p-3 rounded-bottom">
+          <ul class="d-flex align-items-center m-0 p-0">
+           
+            <li class="d-flex align-items-center">
+              <i class="feather icon-user me-1 icon-md"></i>
+              <a class="pt-1px d-none d-md-block text-body" routerLink=".">User Manual</a>
+            </li>
+            <li class="ms-3 ps-3 border-start d-flex align-items-center">
+              <i class="feather icon-users me-1 icon-md"></i>
+              <a class="pt-1px d-none d-md-block text-body" routerLink=".">Release Note</a>
+            </li>
+            <li class="ms-3 ps-3 border-start d-flex align-items-center">
+              <i class="feather icon-image me-1 icon-md"></i>
+              <a class="pt-1px d-none d-md-block text-body" routerLink=".">User Profile</a>
+            </li>
+            <li class="ms-3 ps-3 border-start d-flex align-items-center">
+              <i class="feather icon-video me-1 icon-md"></i>
+              <a class="pt-1px d-none d-md-block text-body" routerLink=".">Latest News</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+ 

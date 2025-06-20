@@ -1,0 +1,353 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-12">
+
+            <div class="container-fluid d-flex justify-content-between header">
+                <div class="col-lg-8 ps-0">
+                    <a routerLink="." class="nobleui-logo d-block mt-3">RAG <span>
+                        </span></a>
+                    <p class="mt-1 mb-1">Modify RAG details : {{Form.value.reference_number}}</p>
+                </div>
+                <div class="col-lg-4 pe-0">
+                    <h6 class="fw-bold text-end mt-4 mb-2">Reported Date</h6>
+                    <h6 class="text-end mb-5 ">{{Form.value.reported_date| date:'MMM d, y'}}</h6>
+                </div>
+            </div>
+            <div class="container-fluid  d-flex justify-content-center w-100">
+                <div class="table-responsive w-100">
+                    <div class="row">
+                        <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex">
+                            <mat-tab>
+                                <ng-template mat-tab-label>
+                                    <mat-icon class="example-tab-icon">article</mat-icon>
+                                    Personnel Details
+                                </ng-template>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                        <mat-form-field fxFlex appearance="outline">
+                                            <mat-label>Division</mat-label>
+                                            <mat-select [formControl]="Division"
+                                                (selectionChange)="BusinessUnit($event)">
+                                                <mat-option [value]="data.division_name"
+                                                    *ngFor="let data of divisions">{{data.division_name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field fxFlex appearance="outline" color="primary">
+                                            <mat-label>Employee Type</mat-label>
+                                            <mat-select formControlName="employee_type">
+                                                <mat-option *ngFor="let type of employeeType"
+                                                    value="{{type.attributes.Value}}">
+                                                    {{type.attributes.Value}}</mat-option>
+                                            </mat-select>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Employee ID</mat-label>
+                                            <input type="text" matInput formControlName="employee_id">
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-12">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Employee Name</mat-label>
+                                            <input type="text" matInput formControlName="employee_name">
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                        <mat-form-field fxFlex appearance="outline" color="primary">
+                                            <mat-label>Gender</mat-label>
+                                            <mat-select formControlName="gender">
+                                                <mat-option *ngFor="let gender of genderData"
+                                                    value="{{gender.attributes.Value}}">
+                                                    {{gender.attributes.Value}}</mat-option>
+                                            </mat-select>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="outline" color="primary">
+                                            <mat-label>Date of Birth</mat-label>
+                                            <input matInput [matDatepicker]="birthdp" placeholder="Choose a date"
+                                                [formControl]="birthdate" (dateChange)="birthDate($event)">
+                                            <mat-datepicker-toggle matSuffix [for]="birthdp"></mat-datepicker-toggle>
+                                            <mat-datepicker #birthdp></mat-datepicker>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Age</mat-label>
+                                            <input type="number" matInput formControlName="age">
+                                            <mat-error>Required Field</mat-error>
+
+                                        </mat-form-field>
+                                        <p class="error" *ngIf=minor>Minor employee. Unable to proceed</p>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                        (click)="nextStep()">
+                                        <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                        Next
+                                    </button>
+
+                                </div>
+                            </mat-tab>
+                            <mat-tab>
+                                <ng-template mat-tab-label>
+                                    <mat-icon class="example-tab-icon">layers</mat-icon>
+                                    Employment Details
+                                </ng-template>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="outline" color="primary">
+                                            <mat-label>Date of Join</mat-label>
+                                            <input matInput [matDatepicker]="joindp" placeholder="Choose a date"
+                                                [formControl]="joindate" (dateChange)="joinDate($event)">
+                                            <mat-datepicker-toggle matSuffix [for]="joindp"></mat-datepicker-toggle>
+                                            <mat-datepicker #joindp></mat-datepicker>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Service Period</mat-label>
+                                            <input type="text" matInput formControlName="service_period">
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Tenure Split</mat-label>
+                                            <input type="text" matInput formControlName="tenure_split">
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+
+
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Designation</mat-label>
+                                            <mat-select formControlName="designation">
+                                                <mat-option *ngFor="let name of designations"
+                                                    value="{{name.attributes.designation}}">
+                                                    {{name.attributes.designation}}</mat-option>
+
+                                                <mat-option (click)="new_designation()" class="option-btn"> <i
+                                                        class=" mdi mdi-plus-circle"></i> Create designation
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field fxFlex appearance="outline">
+                                            <mat-label>Department</mat-label>
+                                            <mat-select formControlName="department">
+                                                <mat-option *ngFor="let name of departments"
+                                                    value="{{name.attributes.department_name}}">
+                                                    {{name.attributes.department_name}}</mat-option>
+
+                                                <mat-option (click)="new_name()" class="option-btn"> <i
+                                                        class=" mdi mdi-plus-circle"></i> Create department
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Function</mat-label>
+                                            <mat-select formControlName="function">
+                                                <mat-option *ngFor="let name of functions"
+                                                    value="{{name.attributes.function_name}}">
+                                                    {{name.attributes.function_name}}</mat-option>
+
+                                                <mat-option (click)="new_function()" class="option-btn"> <i
+                                                        class=" mdi mdi-plus-circle"></i> Create function </mat-option>
+                                            </mat-select>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Reporting Manager</mat-label>
+                                            <input type="text" matInput formControlName="reporting_manager">
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field fxFlex appearance="outline" color="primary">
+                                            <mat-label>Source of Hiring</mat-label>
+                                            <mat-select formControlName="source_of_hiring">
+                                                <mat-option *ngFor="let source of sourceOfHiring"
+                                                    value="{{source.attributes.Value}}">
+                                                    {{source.attributes.Value}}</mat-option>
+                                            </mat-select>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Employment Type</mat-label>
+                                            <mat-select formControlName="employment_type">
+                                                <mat-option *ngFor="let employment of employmentType"
+                                                    value="{{employment.attributes.Value}}">
+                                                    {{employment.attributes.Value}}</mat-option>
+                                            </mat-select>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                        (click)="nextStep()">
+                                        <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                        Next
+                                    </button>
+                                    <button type="button"
+                                        class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                        (click)="previousStep()">
+                                        <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                        Previous
+                                    </button>
+                                </div>
+                            </mat-tab>
+                            <mat-tab>
+                                <ng-template mat-tab-label>
+                                    <mat-icon class="example-tab-icon">article</mat-icon>
+                                    Location Details
+                                </ng-template>
+
+                                <div class="row ">
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Country</mat-label>
+                                            <mat-select formControlName="country" (selectionChange)="getStates()">
+                                                <mat-option *ngFor="let country of countries"
+                                                    value="{{country.attributes.country_name}}">
+                                                    {{country.attributes.country_name}}</mat-option>
+
+                                                <mat-option (click)="new_country()" class="option-btn"> <i
+                                                        class=" mdi mdi-plus-circle"></i> Create a new country
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>State</mat-label>
+                                            <mat-select formControlName="state">
+                                                <mat-option *ngFor="let state of filterStates"
+                                                    value="{{state.attributes.state_name}}">
+                                                    {{state.attributes.state_name}}</mat-option>
+
+                                                <mat-option (click)="new_state()" class="option-btn"> <i
+                                                        class=" mdi mdi-plus-circle"></i> Create a new state
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Origin</mat-label>
+                                            <input type="text" matInput formControlName="origin">
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                        (click)="nextStep()">
+                                        <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                        Next
+                                    </button>
+                                    <button type="button"
+                                        class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                        (click)="previousStep()">
+                                        <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                        Previous
+                                    </button>
+                                </div>
+                            </mat-tab>
+
+                            <mat-tab>
+                                <ng-template mat-tab-label>
+                                    <mat-icon class="example-tab-icon">image</mat-icon>
+                                    RAG Details
+                                </ng-template>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Category</mat-label>
+                                            <mat-select formControlName="category">
+                                                <mat-option (click)="categoryEvent(category)"
+                                                    *ngFor="let category of categoryList"
+                                                    value="{{category.attributes.Value}}">
+                                                    {{category.attributes.Value}}</mat-option>
+                                            </mat-select>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row mb-4 mt-4">
+                                    <quill-editor placeholder="Discussion Summary *" [modules]="quillConfig"
+                                        formControlName="discussion_summary">
+                                    </quill-editor>
+
+                                    <p *ngIf="!Form.controls['discussion_summary'].valid &&Form.controls['discussion_summary'].touched"
+                                        class="quill-editor-error"> Required Field *</p>
+                                </div>
+                                <div class="row mb-4 mt-4">
+                                    <quill-editor placeholder="Remarks" [modules]="quillConfig"
+                                        formControlName="remarks">
+                                    </quill-editor>
+                                </div>
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                                        (click)="submit()" [disabled]="!Form.valid">
+                                        <i class="feather icon-send btn-icon-prepend"></i>
+                                        Update
+                                    </button>
+
+                                    <button type="button"
+                                        class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                        (click)="previousStep()">
+                                        <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                        Previous
+                                    </button>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

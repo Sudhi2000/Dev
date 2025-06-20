@@ -1,0 +1,31 @@
+.table-responsive {
+    overflow: hidden;
+}
+.action-btn {
+    margin-right: 5px;
+}
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+table {
+    thead {
+        tr {
+            th {
+                padding-left: 20px;
+            }
+        }
+
+    }
+
+    tbody {
+        tr {
+            td {
+                padding-left: 20px;
+
+            }
+        }
+    }
+}

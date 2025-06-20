@@ -1,0 +1,25 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { MaternityRegisterComponent } from './maternity-register.component';
+
+describe('MaternityRegisterComponent', () => {
+  let component: MaternityRegisterComponent;
+  let fixture: ComponentFixture<MaternityRegisterComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ MaternityRegisterComponent ]
+    })
+    .compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(MaternityRegisterComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

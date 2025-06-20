@@ -1,0 +1,34 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-12">
+                    
+                        <p class="mb-4"><strong>Please provide the actual start date</strong></p>
+                    
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Actual Start Date</mat-label>
+                        <input matInput [matDatepicker]="dpStart"  placeholder="Choose a date"
+                            [formControl]="actualstartDate" (dateChange)="start_date($event)">
+                        <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
+                        <mat-datepicker #dpStart></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                   
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4 "
+                    (click)="submit()" [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                
+
+            </div>
+        </div>
+
+    </div>
+    </div>

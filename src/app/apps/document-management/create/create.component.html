@@ -1,0 +1,265 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Document<span>
+                                    Management</span></a>
+                            <p class="mt-1 mb-1"><b>Create a new document</b></p>
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Date</h6>
+                            <h6 class="text-end mb-5 ">{{Form.value.reported_date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row ">
+                                <div class="col-md-6">
+                                    <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Document Type</mat-label>
+                                        <mat-select formControlName="document_type"
+                                            (selectionChange)="getTitles($event)">
+                                            <mat-option *ngFor="let type of documentType "
+                                                value="{{type.attributes.Value}}">
+                                                {{type.attributes.Value}}</mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Division</mat-label>
+                                        <mat-select (selectionChange)="BusinessUnit($event)" [formControl]="Division">
+                                            <mat-option *ngFor="let division of divisions" [value]="division">
+                                                {{division.division_name}}</mat-option>
+                                            <mat-option value="All units">
+                                                All units</mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <!-- <div class="col-md-6">
+                                    <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Issuing Authority</mat-label>
+                                        <mat-select formControlName="issuing_authority">
+                                            <mat-option *ngFor="let name of issuingAuthority"
+                                                value="{{name.attributes.name}}" >
+                                                {{name.attributes.name}}</mat-option>
+                                            <mat-option (click)="new_issuing_authority()" class="option-btn"> <i
+                                                    class=" mdi mdi-plus-circle"></i> Create new Issuing Authority
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div> -->
+                                <div class="col-md-6">
+                                    <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Issuing Authority</mat-label>
+                                        <input type="text" matInput [formControl]="issuing_authority"
+                                            [matAutocomplete]="autoIssuingAuthority" (focus)="onInputFocus()">
+                                        <mat-autocomplete #autoIssuingAuthority="matAutocomplete"
+                                            (optionSelected)="onOptionSelected($event)">
+                                            <mat-option *ngFor="let name of filteredIssuingAuthorities | async"
+                                                [value]="name.attributes.name">
+                                                {{name.attributes.name}}
+                                            </mat-option>
+                                            <mat-option (click)="new_issuing_authority()" class="option-btn">
+                                                <i class="mdi mdi-plus-circle"></i> Create new Issuing Authority
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Document Number</mat-label>
+                                        <input type="text" matInput formControlName="document_number">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-12">
+                                    <!-- <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Title</mat-label>
+                                        <mat-select formControlName="title">
+                                            <mat-option *ngFor="let title of filterTitles" [value]="title">
+                                                <div class="title-container">
+                                                    <span>{{ title.title }}</span>
+                                                    <span class="icon-container"><i class="feather icon-trash-2 titleicon" (click)="delete_title(title.id)"></i></span>
+                                                </div>
+                                            </mat-option>
+                                            <mat-option (click)="new_title()" class="option-btn"
+                                                *ngIf="Form.value.document_type"> <i class=" mdi mdi-plus-circle"></i>
+                                                Create a new title </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field> -->
+
+                                    <!-- <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Title</mat-label>
+                                        <input type="text" placeholder="Pick one" aria-label="Number" matInput
+                                            [formControl]="myControl" [matAutocomplete]="auto" formControlName="title">
+                                        <mat-autocomplete #auto="matAutocomplete">
+                                            <mat-option *ngFor="let option of filterTitles " value="{{option}}">
+                                                {{option}}</mat-option>
+                                            <mat-option (click)="new_title()" class="option-btn"
+                                                *ngIf="Form.value.document_type"> <i class=" mdi mdi-plus-circle"></i>
+                                                Create a new title </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field> -->
+
+                                    <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Title</mat-label>
+                                        <input type="text" matInput [formControl]="title" [matAutocomplete]="autoTitle"
+                                            (focus)="onInputFocustitle()">
+                                        <mat-autocomplete #autoTitle="matAutocomplete"
+                                            (optionSelected)="onTitleSelected($event)">
+                                            <mat-option *ngFor="let title of filteredTitles | async"
+                                                [value]="title.title">
+                                                <div class="title-container">
+                                                    <span>{{ title.title }}</span>
+                                                    <span class="icon-container"><i
+                                                            class="feather icon-trash-2 titleicon"
+                                                            (click)="delete_title(title.id)"></i></span>
+                                                </div>
+                                            </mat-option>
+                                            <mat-option (click)="new_title()" class="option-btn"
+                                                *ngIf="Form.value.document_type">
+                                                <i class="mdi mdi-plus-circle"></i> Create a new title
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Document Owner</mat-label>
+                                        <input type="text" matInput formControlName="document_owner">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Document Reviewer</mat-label>
+                                        <input type="text" matInput formControlName="document_reviewer">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Physical Location</mat-label>
+                                        <input type="text" matInput formControlName="physical_location">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Version Number</mat-label>
+                                        <input type="text" matInput formControlName="version_number">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row mb-4 mt-4">
+                                <quill-editor placeholder="Remarks" [modules]="quillConfig" formControlName="remarks">
+                                </quill-editor>
+                            </div>
+
+                            <div class="col-md-12">
+                                <ngx-dropzone [accept]="'.pdf,.jpg,.jpeg,.png,.docx,.xlsx'" (change)="onSelect($event)">
+                                    <ngx-dropzone-label>
+                                        Drop Your Documents Here
+                                    </ngx-dropzone-label>
+                                    <div *ngFor="let file of files; let i = index;" class="custom-dropzone">
+                                        <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true"
+                                            [file]="file" (removed)="onRemove(file)">
+                                            <ngx-dropzone-label class="preview-text">
+                                                <div class="preview-text">
+                                                    {{ file.name }}
+                                                </div>
+                                            </ngx-dropzone-label>
+                                        </ngx-dropzone-preview>
+
+                                    </div>
+
+                                </ngx-dropzone>
+                                <p *ngIf="!Form.controls['DocumentFile'].valid" class="warning-font-size">
+                                    Required Field *</p>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary btn-icon-text float-end mt-4" (click)="submit()"
+                            [disabled]="!Form.valid">
+                            <i class="feather icon-send btn-icon-prepend"></i>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-3">
+                        <button class="btn btn-primary" aria-label="Example icon-button with a menu">
+                            {{Form.value.status}}
+                        </button>
+                        <button class="btn btn-secondary back-button" aria-label="Example icon-button with a menu"
+                            (click)="go_back()">
+                            Go Back
+                        </button>
+                    </div>
+
+
+                    <div class="mt-3">
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Issued Date</mat-label>
+                            <input matInput readonly [matDatepicker]="dpIssuedDate" placeholder="Choose a date"
+                                [formControl]="issued_date" (dateChange)="issuedDate($event)">
+                            <mat-datepicker-toggle matSuffix [for]="dpIssuedDate"></mat-datepicker-toggle>
+                            <mat-datepicker #dpIssuedDate></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                        <div class="form-check form-switch mb-3">
+                            <input type="checkbox" class="form-check-input" id="formSwitch1" formControlName="no_expiry"
+                                (change)="validate_expiry()">
+                            <label class="form-check-label" for="formSwitch1">No Expiry</label>
+                        </div>
+                        <mat-form-field appearance="outline" color="primary" *ngIf="Form.value.no_expiry=='0'">
+                            <mat-label>Expiry Date</mat-label>
+                            <input matInput readonly [matDatepicker]="dpExpiryDate" placeholder="Choose a date"
+                                [formControl]="expiry_date" (dateChange)="expiryDate($event)"
+                                [min]="Form.controls.issued_date.value">
+                            <mat-datepicker-toggle matSuffix [for]="dpExpiryDate"></mat-datepicker-toggle>
+                            <mat-datepicker #dpExpiryDate></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" color="primary" *ngIf="Form.value.no_expiry=='0'">
+                            <mat-label>Notify Date</mat-label>
+                            <input matInput readonly [matDatepicker]="dpNotifyDate" placeholder="Choose a date"
+                                [min]="Form.controls.issued_date.value" [formControl]="notify_date"
+                                (dateChange)="notifyDate($event)" [max]="Form.controls.expiry_date.value">
+                            <mat-datepicker-toggle matSuffix [for]="dpNotifyDate"></mat-datepicker-toggle>
+                            <mat-datepicker #dpNotifyDate></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

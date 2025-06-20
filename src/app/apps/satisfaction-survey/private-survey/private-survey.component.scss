@@ -1,0 +1,191 @@
+// .table-responsive {
+//     overflow: hidden;
+// }
+
+// .reminder-checkboxes {
+//     display: flex;
+//     flex-direction: column;
+// }
+
+// .checkbox-container {
+//     display: flex;
+//     flex-wrap: wrap;
+// }
+
+// .checkbox-container .form-check {
+//     margin-right: 20px; 
+//     margin-bottom: 10px; 
+// }
+
+
+// .custom-file-upload {
+//     border: 1px solid #ccc;
+//     display: inline-block;
+//     padding: 6px 12px;
+//     cursor: pointer;
+// }
+
+// input[type="file"] {
+//     display: none;
+// }
+
+// .mat-button-toggle-checked {
+//     background-color: #6571ff;
+//     color: white !important;
+// }
+
+// table {
+//     thead {
+//         tr {
+//             th {
+//                 padding-left: 20px;
+//             }
+//         }
+//     }
+
+//     tbody {
+//         tr {
+//             td {
+//                 padding-left: 20px;
+
+//             }
+//         }
+//     }
+// }
+
+
+
+
+// .wrap-text {
+//     overflow-wrap: break-word;
+//     word-wrap: break-word;
+//     white-space: normal;
+// }
+// .question-container {
+//     max-width: 100%; 
+//     white-space: normal;
+//     overflow-wrap: break-word;
+// }
+
+// .question-container p {
+//     margin-right: 3px;
+//     margin-bottom: 15px;
+//     overflow-wrap: break-word;
+// }
+
+.btn-previous {
+    margin-right: 2px;
+}
+
+.action-btn {
+    margin-right: 5px;
+}
+
+
+// mat-chip {
+//     background-color: #05A34A !important;
+//     color: white !important;
+// }
+
+// .injuryType{
+//     display: grid;
+//     .injuryTypeOption{
+//         border-bottom: solid 1px #e7e7e7;
+//         border-left:none
+//     }
+// }
+// .time-dropdown{
+//     display: inline-flex;
+//     mat-form-field{
+//         margin-right: 5px;
+//     }
+// }
+// .announce{
+//     display: grid;
+//     .announceOption{
+//         border-bottom: solid 1px #e7e7e7;
+//         border-left:none
+//     }
+// }
+
+
+
+
+.table-responsive {
+    overflow: hidden;
+}
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+.selected-observation {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+.draft-button {
+    margin-right: 5px;
+}
+
+.pe-0{
+    align-content: center;
+    text-align: right;
+}
+
+.summary-card{
+    height: 100%;
+}
+
+#surveyMatTabHeader{
+
+    .mat-tab-header{
+        display: none !important; 
+    }
+    // display: none;
+}
+.question-card {
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+}
+.table-responsive {
+    overflow: unset;
+}
+.response-section {
+    margin-top: 15px;
+}
+
+// mat-card-title {
+//     font-size: 18px;
+//     font-weight: bold;
+// }
+
+.mat-button-toggle-group {
+    margin-top: 10px;
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+.logo {
+    img {
+        width: 200px;
+    }
+}

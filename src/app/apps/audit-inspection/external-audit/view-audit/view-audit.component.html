@@ -1,0 +1,459 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">External<span>
+                                    Audit</span></a>
+                            <p class="mt-1 mb-1"><b># {{Form.value.reference_number}}</b></p>
+
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Date</h6>
+                            <h6 class="text-end mb-5 ">{{Form.value.date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+
+                                <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex">
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">article</mat-icon>
+                                            General
+                                        </ng-template>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Type</mat-label>
+                                                    <input type="text" matInput formControlName="audit_type">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Category</mat-label>
+                                                    <input type="text" matInput formControlName="audit_category">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+
+
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Customer</mat-label>
+                                                    <input type="text" matInput formControlName="customer">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-md-12">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Standard</mat-label>
+                                                    <input type="text" matInput formControlName="audit_standard">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Firm</mat-label>
+                                                    <input type="text" matInput formControlName="audit_firm">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Division</mat-label>
+                                                    <input type="text" matInput formControlName="division">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Announcement</mat-label>
+                                                    <input type="text" matInput formControlName="announcement">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <!-- <div class="col-md-4">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Management Representative</mat-label>
+                                                    <mat-select formControlName="audit_representative">
+                                                        <mat-option *ngFor="let representative of peopleList" [value]="representative.id">
+                                                            {{ representative.attributes.first_name }}{{representative.attributes.last_name}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div> -->
+
+
+                                        </div>
+                                        <!-- <div class="row">
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Fee</mat-label>
+                                                    <input type="number" matInput formControlName="audit_fee">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+                                        </div> -->
+
+                                        <div class="row">
+                                            <quill-editor placeholder="Remarks" [modules]="quillConfig"
+                                                formControlName="remarks">
+                                            </quill-editor>
+                                        </div>
+
+
+
+
+                                    </mat-tab>
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">view_timeline</mat-icon>
+                                            Audit Details
+                                        </ng-template>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Status</mat-label>
+                                                    <input type="text" matInput formControlName="audit_status">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Score</mat-label>
+                                                    <input type="text" matInput formControlName="audit_rating">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Grace Period</mat-label>
+                                                    <input type="number" matInput formControlName="grace_period">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Number of Non Compliance</mat-label>
+                                                    <input type="number" matInput formControlName="non_compliance">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Fee</mat-label>
+                                                    <input type="number" matInput formControlName="audit_fee">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Grade</mat-label>
+                                                    <input type="text" matInput formControlName="audit_grade">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-12 mt-3">
+                                            <ng-container *ngFor="let pdfUrl of pdfUrls">
+                                                <div class="pdf-viewer-container">
+                                                    <pdf-viewer [src]="pdfUrl" [render-text]="true"
+                                                        [original-size]="false"
+                                                        style="width: 100%; height: 500px"></pdf-viewer>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <ngx-dropzone [disableClick]="true">
+                                                <ngx-dropzone-label>
+                                                    Audit Report documents (PDF only)
+                                                </ngx-dropzone-label>
+                                                <div *ngFor="let file of AuditReportFiles; let i = index"
+                                                    class="custom-dropzone"
+                                                    (click)="openReport(pdfSrcs[i]); $event.stopPropagation();">
+                                                    <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview"
+                                                        [removable]="false" [file]="file">
+                                                        <ngx-dropzone-label>
+                                                            <div class="preview-text">
+                                                                Click To Preview Audit Report: {{ file.name }}
+                                                            </div>
+                                                        </ngx-dropzone-label>
+                                                    </ngx-dropzone-preview>
+                                                </div>
+                                            </ngx-dropzone>
+                                        </div>
+
+
+                                    </mat-tab>
+                                    <mat-tab [formGroup]="actionPlanForm">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">diversity_3</mat-icon>
+                                            Action Plan
+                                        </ng-template>
+
+                                        <!-- <div class="row">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Impact Type</th>
+                                                        <th>Unit</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let data of actionList">
+                                                        <td>{{data.finding}}</td>
+                                                        <td>{{data.action_plan}}</td>
+                                                        <td>{{data.root_cause}}</td>
+                                                        <td>
+                                                            <button type="button"
+                                                                class="btn btn-danger btn-icon-text btn-xs action-btn float-end"
+                                                                (click)="deleteAction(data)">
+
+                                                                <i class="feather icon-trash-2"></i>
+                                                            </button>
+                                                        
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div> -->
+                                        <div class="table-responsive pt-3" id="auditActionPlan">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Finding</th>
+                                                        <th></th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let list of actionList">
+                                                        <td></td>
+                                                        <td class="col-sm-7">
+                                                            <p
+                                                                innerHTML="{{list.attributes.finding | slice:0:50 }}{{list.attributes.finding.length > 20 ? '...' : ''}}">
+                                                            </p>
+                                                        </td>
+                                                        <td class="action">
+                                                            <div class="table-responsive">
+                                                                <ul class="list-group">
+                                                                    <li
+                                                                        class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        Date :
+                                                                        <span>{{list.attributes.date |
+                                                                            date:'MMM,d,y'}}</span>
+                                                                    </li>
+
+                                                                    <li
+                                                                        class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        Status :
+                                                                        <span>{{list.attributes.status}}</span>
+                                                                    </li>
+
+                                                                    <li
+                                                                        class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        Priority :
+                                                                        <span>{{list.attributes.priority}}</span>
+                                                                    </li>
+
+                                                                    <li
+                                                                        class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        Due Date :
+                                                                        <span>{{list.attributes.due_date |
+                                                                            date:'MMM,d,y'}}</span>
+                                                                    </li>
+
+                                                                    <li
+                                                                        class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        Completion Date:
+                                                                        <span>{{list.attributes.actual_completion_date |
+                                                                            date:'MMM d, y'}}</span>
+                                                                    </li>
+
+                                                                </ul>
+
+                                                                <div class="d-grid gap-2 mt-3">
+
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        (click)="viewActionPlan(list)">View
+                                                                        Action Plan</button>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </mat-tab>
+                                </mat-tab-group>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary">{{Form.value.status}}</button>
+                        <button class="btn btn-success status-btn ms-2" mat-icon-button
+                            aria-label="Example icon-button with a menu" (click)="navigate()">
+                            <i class="feather icon-chevron-left"></i> Back to History
+
+                        </button>
+                    </div>
+
+
+                    <!-- <div class="mt-3">
+                        <button class="btn btn-primary" mat-icon-button aria-label="Example icon-button with a menu">
+                            {{Form.value.status}}
+                        </button>
+                    </div> -->
+                    <div class="mt-3">
+
+                        <mat-form-field appearance="outline" color="primary" id="dashboard">
+                            <mat-label>Audit Date</mat-label>
+                            <mat-date-range-input [formGroup]="auditDateRange" [rangePicker]="picker">
+                                <input matStartDate formControlName="start" placeholder="Start date"
+                                    (dateChange)="startDateChange($event)">
+                                <input matEndDate formControlName="end" placeholder="End date"
+                                    (dateChange)="endDateChange($event)">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                            <mat-error *ngIf="auditDateRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                                start date</mat-error>
+                            <mat-error *ngIf="auditDateRange.controls.end.hasError('matEndDateInvalid')">Invalid end
+                                date
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-3">
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Date for Approval</mat-label>
+                            <input matInput [matDatepicker]="dpApproval" placeholder="Choose a date"
+                                [formControl]="approvalDate" (dateChange)="approval_date($event)">
+                            <mat-datepicker-toggle matSuffix [for]="dpApproval"></mat-datepicker-toggle>
+                            <mat-datepicker #dpApproval></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Management Representative</mat-label>
+                            <input type="text" matInput formControlName="audit_representative">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+
+
+                    </div>
+
+
+                    <div>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Approver</mat-label>
+                            <input type="text" matInput formControlName="approver">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Auditor Name</mat-label>
+                            <input type="text" matInput formControlName="auditor_name">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+
+
+                    </div>
+                    <!-- <div >
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Date for Approval</mat-label>
+                            <input matInput [matDatepicker]="dpApproval"  placeholder="Choose a date"
+                                [formControl]="approvalDate" (dateChange)="approval_date($event)">
+                            <mat-datepicker-toggle matSuffix [for]="dpApproval"></mat-datepicker-toggle>
+                            <mat-datepicker #dpApproval></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div> -->
+                    <div>
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Assessment Date</mat-label>
+                            <input matInput [matDatepicker]="dpAssessment" placeholder="Choose a date"
+                                [formControl]="assessmentDate">
+                            <mat-datepicker-toggle matSuffix [for]="dpAssessment"></mat-datepicker-toggle>
+                            <mat-datepicker #dpAssessment></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Audit Expiry Date</mat-label>
+                            <input matInput [matDatepicker]="dpExpiry" placeholder="Choose a date"
+                                [formControl]="expiryDate" (dateChange)="audit_expiry_date($event)">
+                            <mat-datepicker-toggle matSuffix [for]="dpExpiry"></mat-datepicker-toggle>
+                            <mat-datepicker #dpExpiry></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

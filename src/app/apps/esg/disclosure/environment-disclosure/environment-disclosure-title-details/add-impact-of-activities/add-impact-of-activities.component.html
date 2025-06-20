@@ -1,0 +1,110 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Operational site name</mat-label>
+                        <input type="text" matInput formControlName="site_name">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Land Tenure</mat-label>
+                        <mat-select formControlName="land_tenure">
+                            <mat-option *ngFor="let data of lov[28]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Type of operation</mat-label>
+                        <mat-select formControlName="type_of_operation">
+                            <mat-option *ngFor="let data of lov[29]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Position in relation to the protected area or high biodiversity value area outside protected areas</mat-label>
+                        <mat-select formControlName="position_in_relation">
+                            <mat-option *ngFor="let data of lov[30]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Size of operational site (km2)</mat-label>
+                        <input type="number" matInput formControlName="size_of_operational_site">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                    <!-- <mat-form-field appearance="outline">
+                        <mat-label>Size of operational site (km2)</mat-label>
+                        <mat-select formControlName="size_of_operational_site">
+                            <mat-option *ngFor="let data of lov[31]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field> -->
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Type of ecosystem</mat-label>
+                        <mat-select formControlName="type_of_ecosystem">
+                            <mat-option *ngFor="let data of lov[32]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+    
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Biodiversity area category</mat-label>
+                        <mat-select formControlName="biodiversity_area_category">
+                            <mat-option *ngFor="let data of lov[33]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                            
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3">
+                    <button *ngIf="data.mode!=='view'" type="button"
+                        class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                        (click)="submit()">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Submit
+                    </button>
+                    <button *ngIf="data.mode=='view'" type="button" class="btn btn-secondary float-end mt-4"
+                        mat-dialog-close>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

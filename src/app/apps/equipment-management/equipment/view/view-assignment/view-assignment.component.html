@@ -1,0 +1,80 @@
+
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Start Date</mat-label>
+                        <input matInput [matDatepicker]="dp" placeholder="Choose a date"
+                            [formControl]="startdate" (dateChange)="startDate($event)">
+                        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                        <mat-datepicker #dp></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>End Date</mat-label>
+                        <input matInput [matDatepicker]="ip" placeholder="Choose a date"
+                            [formControl]="enddate" (dateChange)="endDate($event)">
+                        <mat-datepicker-toggle matSuffix [for]="ip"></mat-datepicker-toggle>
+                        <mat-datepicker #ip></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Client Name</mat-label>
+                        <input type="text" matInput formControlName="client_name">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Project Name</mat-label>
+                        <input type="text" matInput formControlName="project_name">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Assigned Operator</mat-label>
+                            <input type="text" matInput formControlName="assigned_operator">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+                    
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Project Location</mat-label>
+                        <input type="text" matInput formControlName="project_location">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <agm-map [latitude]="lat" [longitude]="lng">
+                    <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+                </agm-map>
+            </div>
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid" (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+
+            
+
+        
+        </div>
+    </div>
+</div>

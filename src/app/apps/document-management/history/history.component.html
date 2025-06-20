@@ -1,0 +1,203 @@
+ <div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-4">
+        <nav aria-label="breadcrumb">
+          <a routerLink="." class="nobleui-logo d-block mt-3">Document <span>Management</span></a>
+          <ol class="breadcrumb breadcrumb-dot">
+            <li class="breadcrumb-item"><a routerLink="/apps/insight">Home</a></li>
+            <li class="breadcrumb-item"><a routerLink="/apps/document-management/register">Document Management</a></li>
+            <li class="breadcrumb-item"><a routerLink="/apps/document-management/register">Register</a></li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row align-items-center">
+      <div class="col-md-3 search">
+        <div class="input-group">
+          <div class="input-group-text">
+            <i class="feather icon-search"></i>
+          </div>
+          <input type="text" class="form-control" id="navbarForm" placeholder="Search here..."
+            (keyup)="applyFilter($event)">
+        </div>
+      </div>
+
+      <div class="col-auto  search">
+        <select class="form-select" id="document_type_id" (change)="docType($event)">
+          <option selected disabled>Document Type</option>
+          <option *ngFor="let type of documentType" [value]="type.attributes.Value">{{type.attributes.Value}}</option>
+        </select>
+      </div>
+
+      <div *ngIf="(corporateUser === true) || (divisions.length > 1)" class="col-auto  search">
+        <select class="form-select" id="document_div_id" [formControl]="Division" (change)="docDiv($event)">
+          <option selected disabled>Division</option>
+          <option *ngFor="let division of divisions" [ngValue]="division">{{ division.division_name }}</option>
+          <option Value="All units">All units</option>
+        </select>
+      </div>
+
+      <div class="col-auto  search">
+        <!-- <select class="form-select" id="document_year_id" (change)="docYear($event)">
+          <option selected disabled>Year</option>
+          <option *ngFor="let year of years" [value]="year.year">{{year.year}}</option>
+        </select> -->
+        <mat-form-field appearance="outline" color="primary" id="dashboard">
+          <mat-label>Year</mat-label>
+          <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+              <input matStartDate formControlName="start" placeholder="Start year" readonly
+                   />
+              <input matEndDate formControlName="end" placeholder="End year" readonly
+                  />
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker startView="multi-year"
+              (yearSelected)="onYearSelected($event,picker)"
+              panelClass="year-picker"></mat-date-range-picker>
+          <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">
+              Invalid start year
+          </mat-error>
+          <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">
+              Invalid end year
+          </mat-error>
+      </mat-form-field>
+        
+      </div>
+
+      <div class="col-auto  search">
+        <mat-select class="form-select" id="document_status_id" [(value)]="selectedStatuses" placeholder="Status"
+          (selectionChange)="docStatus($event)" multiple>
+          <mat-select-trigger>
+            <!-- Limit the number of displayed statuses to 2 and add "..." if more are selected -->
+            {{ selectedStatuses.length > 0 ? (selectedStatuses.length > 2 ? selectedStatuses.slice(0, 2).join(', ') +
+            '...' : selectedStatuses.join(', ')) : 'Status' }}
+          </mat-select-trigger>
+          <mat-option *ngFor="let status of statusOptions" [value]="status">
+            {{ status }}
+          </mat-option>
+        </mat-select>
+      </div>
+
+      <button type="button" class="btn btn-primary btn-icon me-2" (click)="search(initialPage)">
+        <i class="feather icon-search btn-icon-prepend"></i>
+      </button>
+      <button type="button" class="btn btn-danger btn-icon me-2" (click)="reset()">
+        <i class="feather icon-rotate-cw btn-icon-prepend"></i>
+      </button>
+
+      <button type="button" class="btn btn-secondary btn-icon me-2" (click)="generateReport()" id="doc_report">
+        <i class="feather icon-printer btn-icon-prepend"></i>
+      </button>
+      <button type="button" class="btn btn-secondary btn-icon hide btn-reset" id="doc_report_loader">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="col-md-12 stretch-card">
+    <div class="card">
+      <div class="card-body table-card">
+        <div class="table-responsive">
+          <ng-container *ngIf="isLoading">
+            <app-loading-screen [rows]="9"></app-loading-screen>
+          </ng-container>
+          <ng-container *ngIf="!isLoading">
+            <table mat-table [dataSource]="dataSource" matSort>
+              <ng-container matColumnDef="document_number">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Document Number </th>
+                <td mat-cell *matCellDef="let element"> {{element.document_number}} </td>
+              </ng-container>
+              <ng-container matColumnDef="version_number">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Version Number </th>
+                <td mat-cell *matCellDef="let element"> {{element.version_number}} </td>
+              </ng-container>
+              <ng-container matColumnDef="document_type">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Document Type </th>
+                <td mat-cell *matCellDef="let element"> {{element.document_type}} </td>
+              </ng-container>
+              <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+                <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+              </ng-container>
+              <ng-container matColumnDef="division">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Division">Division </th>
+                <td mat-cell *matCellDef="let element"> {{element.division}} </td>
+              </ng-container>
+              <ng-container matColumnDef="issuing_authority">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Issuing Authority"> Issuing
+                  Authority
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.issuing_authority}} </td>
+              </ng-container>
+              <ng-container matColumnDef="issued_date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Issued Date"> Issued Date
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.issued_date| date:'dd-MMM-yyyy'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="expiry_date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Expiry Date"> Expiry Date
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.expiry_date| date:'dd-MMM-yyyy'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="notify_date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Due Date"> Notify Date
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.notify_date| date:'dd-MMM-yyyy'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="elapse_days">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Elapse Days"> Elapse Days
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.elapse_days}} </td>
+              </ng-container>
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Status"> Status
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <button type="button" class="btn {{statusButton(element.status)}} status-btn btn-icon-text">
+                    {{element.status}}
+                  </button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th *matHeaderCellDef class="actions-cell" mat-header-cell mat-sort-header>Actions</th>
+                <td *matCellDef="let row" class="actions-cell" mat-cell>
+                  <button type="button" class="btn btn-success btn-icon btn-xs" (click)="modify(row)" placement="top"
+                    ngbTooltip="Modify">
+                    <i class="feather icon-edit"></i>
+                  </button>
+                  <button type="button" class="btn btn-primary btn-icon btn-xs hide" id="{{row.document_number}}_1">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="visually-hidden">Loading...</span>
+                  </button>
+
+                  <button type="button" class="btn btn-secondary btn-icon btn-xs" (click)="view(row)" placement="top"
+                    ngbTooltip="View">
+                    <i class="feather icon-eye"></i>
+                  </button>
+
+                  <button type="button" class="btn btn-primary btn-icon btn-xs" (click)="email(row)" placement="top"
+                    ngbTooltip="Email">
+                    <i class="feather icon-mail"></i>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="visibleColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: visibleColumns;"></tr>
+            </table>
+          </ng-container>
+          <mat-paginator [pageSize]="pageSize" showFirstLastButtons [showFirstLastButtons]="true" [length]="totalItems"
+            (page)="filterValue != null ? filterData($event) : search($event)"
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+

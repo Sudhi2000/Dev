@@ -1,0 +1,20 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+
+            <mat-form-field appearance="outline">
+                <mat-label>Industry Name</mat-label>
+                <input matInput formControlName="value" />
+                <mat-error>Required Field</mat-error>
+
+            </mat-form-field>
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4 " (click)="submit()"
+                    [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

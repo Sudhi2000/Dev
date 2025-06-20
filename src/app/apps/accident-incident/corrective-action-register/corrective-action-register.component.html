@@ -1,0 +1,101 @@
+<div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-8">
+          <nav aria-label="breadcrumb ">
+            <a routerLink="." class="nobleui-logo d-block mt-3">Corrective <span>Action Register</span></a>  
+            <ol class="breadcrumb breadcrumb-dot">
+              <li class="breadcrumb-item"><a routerLink="/apps/insight">Home</a></li>
+              <li class="breadcrumb-item"><a routerLink="/apps/accident-incident/dashboard">Accident & Incident</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Corrective Action Register</li>
+  
+            </ol>
+          </nav>
+        </div>
+        <div class="col-md-4 search">
+          <div>
+            <div class="input-group">
+              <div class="input-group-text">
+                <i class="feather icon-search"></i>
+              </div>
+              <input type="text" class="form-control" id="navbarForm" placeholder="Search here..."
+                (keyup)="applyFilter($event)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 stretch-card">
+      <div class="card">
+        <div class="card-body table-card">
+          <div class="table-responsive">
+            <ng-container *ngIf="isLoading">
+              <app-loading-screen [rows]="9"></app-loading-screen>
+            </ng-container>
+            <ng-container *ngIf="!isLoading">
+            <table mat-table [dataSource]="dataSource" matSort>
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+              </ng-container>
+              <ng-container matColumnDef="reference_number">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                <td mat-cell *matCellDef="let element"> {{element.attributes.reference_number}} </td>
+              </ng-container>
+              <ng-container matColumnDef="accident">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Accident </th>
+                <td mat-cell *matCellDef="let element"> {{element.attributes.accident.data.attributes.reference_number}} </td>
+              </ng-container>
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                <td mat-cell *matCellDef="let element" class="col-sm-6">
+                  <p class="actionTextd"
+                    innerHTML="{{element.attributes.action | slice:0:700 }}{{element.attributes.action.length > 20 ? '...' : ''}}">
+                  </p>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="due_date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Due Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.attributes.due_date | date:'dd-MMM-yyyy'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="completed_date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Completed Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.attributes.completed_date | date:'dd-MMM-yyyy'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="status"> Status
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <button type="button" class="btn {{statusButton(element.attributes.status)}} status-btn btn-icon-text btn-xs">
+                    {{element.attributes.status}}
+                  </button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th *matHeaderCellDef class="actions-cell" mat-header-cell mat-sort-header>Actions</th>
+                <td *matCellDef="let row" class="actions-cell" mat-cell>
+                  <button type="button" class="btn btn-success btn-icon btn-xs" (click)="view(row)" placement="top"
+                    ngbTooltip="View">
+                    <i class="feather icon-eye"></i>
+                  </button>
+                 
+                  <button type="button" class="btn btn-primary btn-icon btn-xs hide" id="{{row.reference_number}}_1">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="visually-hidden">Loading...</span>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="visibleColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: visibleColumns; "></tr>
+            </table>
+            </ng-container>
+            <mat-paginator [pageSize]="pageSize" showFirstLastButtons [showFirstLastButtons]="true" [length]="totalItems"
+            (page)="get_corrective_actions($event)" aria-label="Select page of periodic elements">
+          </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

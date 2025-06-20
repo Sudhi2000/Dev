@@ -1,0 +1,318 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Chemical<span>
+                                    Management</span></a>
+                            <p class="mt-1 mb-1">Modify Chemical Request - {{Form.value.reference_number}}</p>
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Request Created Date:</h6>
+                            <h6 class="text-end mb-5 ">{{Form.value.reported_date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row ">
+                                <div class="col-md-6">
+                                    <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Commercial Name</mat-label>
+                                        <mat-select formControlName="commercial_name" (selectionChange)="chatGPT()"
+                                            (selectionChange)="onCommercialNameSelected($event.value)">
+                                            <mat-option *ngFor="let name of commercialName"
+                                                value="{{name.attributes.name}}" (onSelectionChange)="findUnit(name)">
+                                                <div class="title-container">
+                                                    <span> {{name.attributes.name}}</span>
+                                                    <span class="icon-container"><i
+                                                            class="feather icon-edit titleicon_edit"
+                                                            (click)="update_name(name.id)"></i> &nbsp;
+                                                        <i class="feather icon-trash-2 titleicon_delete"
+                                                            (click)="delete_commercial_name(name.id)"></i>
+                                                    </span>
+                                                </div>
+                                            </mat-option>
+                                            <mat-option (click)="new_name()" class="option-btn"> <i
+                                                    class=" mdi mdi-plus-circle"></i> Create a new chemical
+                                            </mat-option>
+
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Substance Name</mat-label>
+                                        <input type="text" matInput formControlName="substance_name">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row mb-2 hide" id="ai-loader">
+                                <button class="btn btn-success" type="button">
+                                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                                    Please wait our AI is finding the formula for you.
+                                </button>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Molecular Formula</mat-label>
+                                        <input type="text" matInput formControlName="formula">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Reach Registration Number</mat-label>
+                                        <input type="text" matInput formControlName="reach_regi_number">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Requested Quantity</mat-label>
+                                        <input type="number" matInput formControlName="requested_quantity">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Requested Unit</mat-label>
+                                        <mat-select formControlName="requested_unit">
+                                            <mat-option *ngFor="let unit of requestedUnit"
+                                                [value]="unit.attributes.Value">
+                                                {{ unit.attributes.Value }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Category</mat-label>
+                                        <mat-select formControlName="category"
+                                            (selectionChange)="onCategorySelection($event)">
+                                            <mat-option *ngFor="let category of Categories"
+                                                [value]="category.attributes.Value">
+                                                {{ category.attributes.Value }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>ZDHC use category</mat-label>
+                                        <mat-select formControlName="zdhc_use_category">
+                                            <mat-option *ngFor="let category of filteredZdhcCategory"
+                                                [value]="category.attributes.Value">
+                                                {{ category.attributes.Value }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Chemical Form Type</mat-label>
+                                        <mat-select formControlName="chemical_form">
+                                            <mat-option *ngFor="let value of chemical_dropdown" value="{{ value }}">
+                                                {{value}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Where and Why It is Used?</mat-label>
+                                        <input type="text" matInput formControlName="where_why">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+
+                            <div class="row ">
+                                <div class="col-md-6">
+                                    <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Product Standard</mat-label>
+                                        <mat-select [formControl]="ProductStandard"
+                                            (selectionChange)="Standard($event)">
+                                            <mat-option *ngFor="let standard of standardList" [value]="standard">
+                                                {{ standard }}
+                                            </mat-option>
+                                            <mat-option (click)="add_standard()" class="option-btn"> <i
+                                                    class=" mdi mdi-plus-circle"></i> Add new standard
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row ">
+                                <div class="col-md-12">
+                                    <div class="form-check form-switch mb-2">
+                                        <input type="checkbox" class="form-check-input" id="formSwitch1"
+                                            formControlName="msds_sds" (change)="validate_msds()">
+                                        <label class="form-check-label" for="formSwitch1">Do you have an
+                                            MSDS/SDS?</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3" *ngIf="Form.value.msds_sds==true">
+                                <div class="custom-dropzone" ngx-dropzone [accept]="'application/pdf'"
+                                    (change)="onSelect($event)">
+                                    <ngx-dropzone-label>Drop your MSDS/SDS document. Please ensure the
+                                        document
+                                        size is less than 5 MB</ngx-dropzone-label>
+                                    <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true"
+                                        *ngFor="let f of files" [file]="f" (removed)="onRemove(f)">
+                                        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                                    </ngx-dropzone-preview>
+                                </div>
+
+                                <button type="button" class="btn btn-icon-text btn-outline-twitter"
+                                    (click)="view_msds_document()" *ngIf="Form.value.document_id">
+                                    <i class="feather icon-file-text btn-icon-prepend"></i>
+                                    View MSDS/SDS Document
+                                </button>
+                                <button type="button" class="btn btn-icon-text btn-outline-twitter"
+                                    (click)="download_msds_document()" *ngIf="Form.value.document_id">
+                                    <i class="feather icon-download btn-icon-prepend"></i>
+                                    Download MSDS/SDS Document
+                                </button>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <mat-form-field fxFlex appearance="outline" color="warning"
+                                        *ngIf="Form.value.msds_sds=='1'">
+                                        <mat-label>MSDS / SDS Issued Date</mat-label>
+                                        <input matInput [matDatepicker]="issueddate" [formControl]="issuedDate"
+                                            value="date" (dateChange)="issuedDateVal($event)">
+                                        <mat-datepicker-toggle matSuffix [for]="issueddate"></mat-datepicker-toggle>
+                                        <mat-datepicker #issueddate></mat-datepicker>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field fxFlex appearance="outline" color="warning"
+                                        *ngIf="Form.value.msds_sds=='1'">
+                                        <mat-label>MSDS / SDS Expiry Date</mat-label>
+                                        <input matInput [matDatepicker]="expirydate" [formControl]="expiryDate"
+                                            value="date" (dateChange)="expiryDateVal($event)">
+                                        <mat-datepicker-toggle matSuffix [for]="expirydate"></mat-datepicker-toggle>
+                                        <mat-datepicker #expirydate></mat-datepicker>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="Form.value.status==='Rejected' && Form.value.reviewer_remarks">
+                                <p>Reviewer Remarks:</p>
+                                <p [innerHTML]="Form.value.reviewer_remarks"></p>
+                            </div>
+                            <hr *ngIf="Form.value.status==='Rejected' && Form.value.approver_remarks">
+                            <div class="row mt-2" *ngIf="Form.value.status==='Rejected' && Form.value.approver_remarks">
+                                <p>Approver Remarks:</p>
+                                <p [innerHTML]="Form.value.approver_remarks"></p>
+                            </div>
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                                    (click)="complete()" [disabled]="!Form.valid">
+                                    <i class="feather icon-send btn-icon-prepend"></i>
+                                    Submit
+                                </button>
+                                <button type="button" [disabled]="!this.Form.value.division"
+                                    class="btn btn-secondary btn-icon-text float-end mt-4 btn-previous mx-2"
+                                    (click)="draft()">
+                                    <i class="feather icon-save btn-icon-prepend"></i>
+                                    Save as Draft
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-3">
+                        <button [disabled]="Form.value.status==='Completed'" class="btn btn-primary" mat-icon-button>
+                            {{Form.value.status}}
+                        </button>
+                        <button class="btn btn-success status-btn ms-2" mat-icon-button
+                            aria-label="Example icon-button with a menu" (click)="navigate()">
+                            <i class="feather icon-chevron-left"></i> Back to History
+
+                        </button>
+                    </div>
+                    <div class="mt-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Request Date</mat-label>
+                            <input matInput readonly [matDatepicker]="dpSubDate" placeholder="Choose a date"
+                                [formControl]="requestDate" (dateChange)="request_date($event)" [max]="maxDate">
+                            <mat-datepicker-toggle matSuffix [for]="dpSubDate"></mat-datepicker-toggle>
+                            <mat-datepicker #dpSubDate></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+                    </div>
+                    <div>
+                        <div class="col-md-12">
+                            <mat-form-field fxFlex appearance="outline">
+                                <mat-label>Division</mat-label>
+                                <mat-select [formControl]="Division" (selectionChange)="BusinessUnit($event)">
+                                    <mat-option [value]="data.attributes.division_name"
+                                        *ngFor="let data of divisions">{{data.attributes.division_name}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Requested Customer</mat-label>
+                                <input type="text" matInput formControlName="requested_customer">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Requested Merchandiser</mat-label>
+                                <input type="text" matInput formControlName="requested_merchandiser">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-12">
+                            <mat-form-field fxFlex appearance="outline" color="primary">
+                                <mat-label>Reviewer</mat-label>
+                                <mat-select formControlName="reviewer">
+                                    <mat-option *ngFor="let reviewer of DivisionFilteredpeopleList"
+                                        [value]="reviewer.id">
+                                        <img style="vertical-align:middle; margin-right: 4px;"
+                                            src={{reviewer?.attributes?.image?.data?.attributes?.image}} height="30" />
+                                        <span>{{ reviewer.attributes.first_name }}
+                                            {{reviewer.attributes.last_name}}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+
+
+            <div>
+                <mat-form-field appearance="outline">
+                    <mat-label>Meter Name</mat-label>
+                    <input matInput formControlName="meter_name" type="text">
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+
+
+
+            </div>
+            <div>
+                <mat-form-field appearance="outline">
+                    <mat-label>location</mat-label>
+                    <input matInput formControlName="location" type="text">
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+
+
+
+            </div>
+            <div>
+                <mat-form-field appearance="outline">
+                    <mat-label>Meter Quantity Unit</mat-label>
+                    <input matInput formControlName="meter_quantity_unit">
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12 text-end">
+                    <button type="button" class="btn btn-success btn-icon-text mt-4" [disabled]="!Form.valid"
+                        (click)="submit()">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Add Meter
+                    </button>
+
+                </div>
+            </div>
+        </div>

@@ -1,0 +1,183 @@
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-5">
+                <nav aria-label="breadcrumb ">
+                    <a routerLink="." class="nobleui-logo d-block mt-3">Satisfaction <span>Survey</span></a>
+                    <ol class="breadcrumb breadcrumb-dot">
+                        <li class="breadcrumb-item"><a routerLink="/apps/insight">Home</a></li>
+                        <!-- <li class="breadcrumb-item"><a routerLink="/apps/hazard-risk/dashboard">Satisfaction Survey</a> -->
+                        <li class="breadcrumb-item"><a>Satisfaction Survey</a>
+                        </li>
+                        <li class="breadcrumb-item"><a routerLink="/apps/satisfaction-survey/assigned-surveys">Assigned
+                                Surveys</a></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-md-4 search">
+                <div>
+                    <div class="input-group">
+                        <div class="input-group-text">
+                            <i class="feather icon-search"></i>
+                        </div>
+                        <input type="text" class="form-control" [(ngModel)]="serachReference" id="navbarForm"
+                            placeholder="Please provide the reference number">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 search">
+                <button type="button" class="btn btn-primary btn-icon-text" (click)="generate()" id="env_report">
+                    <i class="feather icon-search text-white"></i>
+                    Search
+                </button>
+                &nbsp;<button type="button" class="btn btn-secondary btn-icon-text" id="env_report_loader"
+                    (click)="reset()">
+                    <i class="feather icon-rotate-cw"></i>
+                    Reset&nbsp;
+                </button>
+            </div>
+
+
+        </div>
+        <!-- <nav aria-label="breadcrumb ">
+        <ol class="breadcrumb breadcrumb-dot">
+          <li class="breadcrumb-item"><a routerLink="/apps/insight">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink="/apps/hazard-risk/dashboard">Hazard / Risk Management</a></li>
+          <li class="breadcrumb-item active" aria-current="page">History</li>
+        </ol>
+      </nav>
+      <div>
+        <label for="exampleInputUsername1" class="form-label">Search for an entry:</label>
+        <input type="text" class="form-control" (keyup)="applyFilter($event)" id="exampleInputUsername1"
+          autocomplete="off" placeholder="Please provide the Reference Number">
+      </div> -->
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 stretch-card">
+        <div class="card">
+            <div class="card-body table-card">
+                <div class="table-responsive">
+                    <ng-container *ngIf="isLoading">
+                        <app-loading-screen [rows]="9"></app-loading-screen>
+                    </ng-container>
+                    <ng-container *ngIf="!isLoading">
+                        <table mat-table [dataSource]="dataSource" matSort>
+                            <ng-container matColumnDef="reference_number">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Survey ID </th>
+                                <td mat-cell *matCellDef="let element"> {{element.reference_number}} </td>
+                            </ng-container>
+                            <!-- <ng-container matColumnDef="survey_type">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Survey Type"> Survey Type
+                                </th>
+                                <td mat-cell *matCellDef="let element"> {{element.survey_type}} </td>
+                            </ng-container>-->
+                            <ng-container matColumnDef="survey_category">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Survey Category"> Survey Category </th>
+                                <td mat-cell *matCellDef="let element"> {{element.survey_category}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="survey_title">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Survey Title"> Survey Title </th>
+                                <td mat-cell *matCellDef="let element"> {{element.survey_title}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="question_count">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Questions </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.question_count}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="start_date">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Duration </th>
+                                <td mat-cell *matCellDef="let element"> {{element.survey_start_date |
+                                    date:'dd-MMM-yyyy'}} -
+                                    {{element.survey_end_date
+                                    | date:'dd-MMM-yyyy'}} </td>
+                            </ng-container>
+                            <!-- <ng-container matColumnDef="frequency">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Feequency">
+                                    Freequency
+                                </th>
+                                <td mat-cell *matCellDef="let element"> {{element.frequency}} </td>
+                            </ng-container> -->
+                            <!-- <ng-container matColumnDef="participant_count">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Participant Count"> Participant Count
+                                </th>
+                                <td mat-cell *matCellDef="let element"> {{element.participant_count}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="res_count">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Response Count"> Response Count
+                                </th>
+                                <td mat-cell *matCellDef="let element"> </td>
+                            </ng-container>
+                            <ng-container matColumnDef="compl_rate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Completion Rate"> Completion Rate
+                                </th>
+                                <td mat-cell *matCellDef="let element"> </td>
+                            </ng-container>
+                            <ng-container matColumnDef="created_user">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Created By">Created By
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.created_user.data.attributes.first_name}}
+                                    {{element.created_user.data.attributes.last_name}}</td>
+                            </ng-container> -->
+                            <!-- <ng-container matColumnDef="survey_description">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Survey Description </th>
+                                <td mat-cell *matCellDef="let element"> {{element.survey_description}} </td>
+                            </ng-container> -->
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Status
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button type="button"
+                                        class="btn {{SurveyStatus(element.attended?'Completed': element.status)}} status-btn btn-icon-text btn-xs">
+                                        {{element.attended?'Attended':element.status}}
+                                    </button>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="actions">
+                                <th *matHeaderCellDef class="actions-cell" mat-header-cell mat-sort-header
+                                    style="width: 13%;">Actions</th>
+                                <td *matCellDef="let row" class="actions-cell" mat-cell>
+                                    <button *ngIf="!row.attended" type="button" class="btn btn-success btn-icon btn-xs"
+                                        (click)="modify(row)" placement="top" ngbTooltip="">
+                                        <i class="feather icon-zap"></i>
+                                    </button>
+
+                                    <!-- <button type="button"
+                                        *ngIf="row.status === 'Completed' || row.status === 'In Progress'"
+                                        class="btn btn-success btn-icon btn-xs" (click)="completed(row)" placement="top"
+                                        ngbTooltip="Action">
+                                        <i class="feather icon-zap"></i>
+                                    </button> -->
+                                    <!-- <button type="button" class="btn btn-primary btn-icon btn-xs" placement="top"
+                                        ngbTooltip="Survey Link">
+                                        <i class="feather icon-link"></i>
+                                    </button> -->
+                                    <button type="button" class="btn btn-secondary btn-icon btn-xs" (click)="view(row)"
+                                        placement="top" ngbTooltip="View">
+                                        <i class="feather icon-eye"></i>
+                                    </button>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="visibleColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: visibleColumns;"></tr>
+                        </table>
+                    </ng-container>
+                    <mat-paginator [pageSize]="pageSize" showFirstLastButtons [showFirstLastButtons]="true"
+                        [length]="totalItems"
+                        (page)="unitSpecific && !corporateUser ? get_unit_specific_survey_history($event) : get_survey_history($event)"
+                        aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

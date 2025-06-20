@@ -1,0 +1,54 @@
+<!-- <div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Observation</mat-label>
+                        <input type="text" matInput formControlName="observation">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                   
+                </div>
+
+               
+
+            </div>
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4 "
+                    (click)="submit()" [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                
+
+            </div>
+        </div>
+
+    </div>
+    </div> -->
+
+
+<h2 mat-dialog-title>New Observation</h2>
+<mat-dialog-content class="mat-typography" [formGroup]="Form">
+    <mat-form-field appearance="outline">
+        <mat-label>Observation</mat-label>
+        <input type="text" matInput formControlName="observation">
+        <mat-error>Required Field</mat-error>
+    </mat-form-field>
+
+
+
+
+
+
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button type="button" class="btn btn-success btn-icon-text float-end mt-4 " (click)="submit()"
+        [disabled]="!Form.valid">
+        <i class="feather icon-send btn-icon-prepend"></i>
+        Submit
+    </button>
+</mat-dialog-actions>

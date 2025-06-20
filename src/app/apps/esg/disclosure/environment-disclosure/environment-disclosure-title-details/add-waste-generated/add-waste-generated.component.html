@@ -1,0 +1,186 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+              
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Type of Waste</mat-label>
+                        <mat-select formControlName="type_of_waste">
+                            <mat-option *ngFor="let data of lov[22]?.value" [value]="data.value">
+                                <span class="option-container">{{ data.value }}
+                                    <span>
+                                        <i class="feather icon-edit modifyicon"
+                                            (click)="modify_type_of_waste(data)"></i>
+                                        <i class="feather icon-trash-2 deleteicon"
+                                            (click)="delete_type_of_waste(data)"></i>
+                                    </span>
+                                </span>
+                            </mat-option>
+                            <mat-option (click)="new_type_of_waste()" class="option-btn"> <i
+                                    class=" mdi mdi-plus-circle"></i>
+                                Create New Type of Waste
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Category</mat-label>
+                        <mat-select formControlName="category">
+                            <mat-option *ngFor="let data of lov[23]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+           
+            <div class="row ">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-secondary btn-icon-text mb-2 text-start">
+                        Waste generated</button>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Waste generated</mat-label>
+                        <input type="number" matInput formControlName="waste_generated">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Unit</mat-label>
+                        <mat-select formControlName="wasteGeneratedUnit">
+                            <mat-option *ngFor="let data of lov[42]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Process</mat-label>
+                        <input type="text" matInput formControlName="process">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                
+            </div>
+            <div class="row ">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-secondary btn-icon-text mb-2 text-start">
+                        Waste Disposed</button>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Type of disposal</mat-label>
+                        <mat-select formControlName="type_of_disposal">
+                            <mat-option *ngFor="let data of lov[24]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Site of waste disposal</mat-label>
+                        <mat-select formControlName="site_of_waste_disposal">
+                            <mat-option *ngFor="let data of lov[25]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Waste disposed</mat-label>
+                        <input type="number" matInput formControlName="waste_disposed">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="row ">
+                    <div class="col-md-4">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Unit</mat-label>
+                            <mat-select formControlName="wasteDisposedUnit">
+                                <mat-option *ngFor="let data of lov[42]?.value" [value]="data.Value">
+                                    <span>{{ data.Value }}</span>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row ">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-secondary btn-icon-text mb-2 text-start">
+                        Waste Diverted</button>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Type of recovery</mat-label>
+                        <mat-select formControlName="type_of_recovery">
+                            <mat-option *ngFor="let data of lov[26]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Site of waste recovery</mat-label>
+                        <mat-select formControlName="site_of_waste_recovery">
+                            <mat-option *ngFor="let data of lov[27]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Waste recovered</mat-label>
+                        <input type="number" matInput formControlName="waste_recovered">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="row ">
+                    <div class="col-md-4">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Unit</mat-label>
+                            <mat-select formControlName="wasteRecoveredUnit">
+                                <mat-option *ngFor="let data of lov[42]?.value" [value]="data.Value">
+                                    <span>{{ data.Value }}</span>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <button *ngIf="data.mode!=='view'" type="button"
+                        class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                        (click)="submit()">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Submit
+                    </button>
+                    <button *ngIf="data.mode=='view'" type="button" class="btn btn-secondary float-end mt-4"
+                        mat-dialog-close>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

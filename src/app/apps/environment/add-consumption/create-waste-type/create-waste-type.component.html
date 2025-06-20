@@ -1,0 +1,35 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-7">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Waste Type</mat-label>
+                        <input type="text" matInput formControlName="waste_type">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-5">
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Category</mat-label>
+                        <mat-select formControlName="category" (selectionChange)="onCategoryChange($event)">
+                            <mat-option *ngFor="let category of categories" [value]="category.attributes.Value">
+                                {{ category.attributes.Value }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-end">
+                    <button type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid" (click)="submit()">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+.table-responsive {
+    //overflow-x: unset;
+    overflow: hidden;
+}
+
+.com-btn{
+    margin-right: 3px;
+}
+.save-btn{
+    margin-right: 5px;
+}
+.hide{
+    display: none;
+}
+.preview-text {
+    font-size: small;
+    text-align: center;
+  }
+  
+  .custom-dropzone-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.custom-dropzone {
+    width: calc(33.33% - 20px); /* Adjust width as needed */
+    margin-bottom: 20px; /* Adjust margin as needed */
+}
+
+.custom-dropzone:last-child {
+    margin-right: 0;
+}
+
+
+

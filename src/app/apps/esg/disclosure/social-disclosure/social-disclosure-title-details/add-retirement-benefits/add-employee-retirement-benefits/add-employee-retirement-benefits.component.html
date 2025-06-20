@@ -1,0 +1,43 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Benefits Provided</mat-label>
+                        <mat-select [formControl]="benefitsProvidedControl" multiple
+                        (selectionChange)="setBenefitsProvided($event)">
+                            <mat-option *ngFor="let data of lov[9]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Number of Employees Covered</mat-label>
+                        <input type="number" matInput formControlName="number_of_employees_covered">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+            </div>
+           
+            </div>
+
+           
+ 
+            <div class="mb-3">
+                <button *ngIf="data.mode!=='view'" type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                    (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                <button *ngIf="data.mode==='view'" type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                (click)="close()">
+                <i class="feather icon-x-circle btn-icon-prepend"></i>
+                Close
+            </button>
+            </div>
+        </div>
+    </div>
+</div>

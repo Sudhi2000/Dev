@@ -1,0 +1,90 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <mat-form-field fxFlex appearance="outline">
+                    <mat-label>Person Type</mat-label>
+                    <mat-select formControlName="person_type" (selectionChange)="person_type($event)">
+                        <mat-option *ngFor="let type of personType" value="{{type.type_name}}">
+                            {{type.type_name}}</mat-option>
+                    </mat-select>
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Employee ID</mat-label>
+                    <input type="text" matInput formControlName="employee_id">
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Person Name</mat-label>
+                        <input type="text" matInput formControlName="person_name">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="gender"
+                        #group="matButtonToggleGroup">
+                        <mat-button-toggle value="Male">Male</mat-button-toggle>
+                        <mat-button-toggle value="Female">Female</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Age</mat-label>
+                        <input type="number" matInput formControlName="age">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Date of Join</mat-label>
+                        <input matInput [matDatepicker]="accdp" placeholder="Choose a date" [formControl]="joindate"
+                            (dateChange)="joinDate($event)">
+                        <mat-datepicker-toggle matSuffix [for]="accdp"></mat-datepicker-toggle>
+                        <mat-datepicker #accdp></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Employment Duration</mat-label>
+                        <input type="text" matInput formControlName="employment_duration">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Industry Experience</mat-label>
+                        <mat-select formControlName="industry_experience">
+                            <mat-option *ngFor="let experience of experienceType"
+                                value="{{experience.experience_type}}">
+                                {{experience.experience_type}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Designation</mat-label>
+                    <input type="text" matInput formControlName="designation">
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-primary btn-icon-text float-end mt-4" (click)="submit()"
+                    [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

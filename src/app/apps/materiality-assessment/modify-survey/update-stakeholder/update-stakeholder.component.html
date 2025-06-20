@@ -1,0 +1,92 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            
+                <div class="row ">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Full Name    </mat-label>
+                            <input type="text" matInput formControlName="full_name">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Role</mat-label>
+                            <input type="text" matInput formControlName="role">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col-md-6">
+                        <mat-form-field  appearance="outline">
+                            <mat-label>Category</mat-label>
+                            <mat-select    formControlName="category" >
+                                <mat-option (click)="is_external(categories)" *ngFor="let categories of categories" value="{{categories.attributes.Value}}"
+                                   >
+                                  {{ categories.attributes.Value}}</mat-option>
+                                  
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                  
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Organisation</mat-label>
+                            <input type="text" matInput formControlName="organisation">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label> Email </mat-label>
+                            <input type="email" matInput formControlName="email_id">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field  appearance="outline">
+                            <mat-label> External </mat-label>
+                            <input [readonly]="true" type="text" matInput formControlName="external">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field  appearance="outline">
+                            <mat-label> Contact </mat-label>
+                            <input type="number" matInput formControlName="contact">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <!-- <div class="col-md-6"*ngIf="Form.value.stack_holder_type==='internal'">
+                        <mat-form-field fxFlex appearance="outline" color="primary">
+                            <mat-label>User Profile</mat-label>
+                            <mat-select formControlName="user_profile">
+                              <mat-option *ngFor="let assignee of peopleList" [value]="assignee.id">
+                                <span>{{ assignee.attributes.first_name }} {{ assignee.attributes.last_name }}</span>
+                              </mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                          </mat-form-field>
+                    </div> -->
+                   
+                </div>
+                <div class="mb-3">
+                    <button *ngIf="isEditMode === false" type="button" class="btn btn-success btn-icon-text float-end mt-4 " (click)="submit()"
+                        [disabled]="!Form.valid">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Submit
+                    </button>
+                    <button type="button" *ngIf="isEditMode === true" class="btn btn-success btn-icon-text float-end mt-4 " (click)="submit()"
+                        [disabled]="!Form.valid">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Update
+                    </button>
+                </div>
+            
+        </div>
+    </div>

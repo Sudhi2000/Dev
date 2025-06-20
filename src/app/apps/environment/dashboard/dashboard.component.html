@@ -1,0 +1,878 @@
+<div class="container-fluid" id="dashboard">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a routerLink="." class="nobleui-logo d-block ">Environment <span>
+                            Management</span></a>
+                    <span class="badge ">
+                        <form class="d-flex my-2 my-lg-0" [formGroup]="filterForm">
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Year</mat-label>
+                                    <mat-select formControlName="year">
+                                        <mat-option [value]="data.year"
+                                            *ngFor="let data of years">{{data.year}}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Month</mat-label>
+                                    <mat-select formControlName="month">
+                                        <mat-option value="January">January</mat-option>
+                                        <mat-option value="February">February</mat-option>
+                                        <mat-option value="March">March</mat-option>
+                                        <mat-option value="April">April</mat-option>
+                                        <mat-option value="May">May</mat-option>
+                                        <mat-option value="June">June</mat-option>
+                                        <mat-option value="July">July</mat-option>
+                                        <mat-option value="August">August</mat-option>
+                                        <mat-option value="September">September</mat-option>
+                                        <mat-option value="October">October</mat-option>
+                                        <mat-option value="November">November</mat-option>
+                                        <mat-option value="December">December</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="input-group me-2 mb-2 mb-md-0" *ngIf="(divisions.length > 1)">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Division</mat-label>
+                                    <mat-select formControlName="division">
+                                        <mat-option [value]="data.division_uuid"
+                                            *ngFor="let data of divisions">{{data.division_name}}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-primary btn-icon" (click)="search()">
+                                    <i class="feather icon-search btn-icon-prepend"></i>
+                                </button>
+                            </div>
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-danger btn-icon" (click)="reset()">
+                                    <i class="feather icon-rotate-cw btn-icon-prepend"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12 col-xl-12 stretch-card">
+
+            <div class="row flex-grow-1">
+
+                <div class="col-md-2 grid-margin stretch-card" *ngFor="let data of ghgEmissionCard">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <h5 class=" mb-0">Total GHG Emission </h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-12 col-xl-6 value">
+                                    <h5 class="mb-2">{{data.emission}} </h5>
+                                    <div class="d-flex align-items-baseline">
+                                        <p class="text-success">
+                                            <span>{{data.Attrition}}</span>
+                                            <i class="feather {{data.Attrition_icon}} icon-sm mb-1"></i>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-12 col-xl-6 icon">
+                                    <div class=" mt-xl-0">
+                                        <img src="../../../../assets/images/environment/pollution.png" width="60">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2 grid-margin stretch-card" *ngFor="let data of summaryCard">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <h5 class=" mb-2">{{data.category}}</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-12 col-xl-6 value">
+                                    <h5 class="mb-2">{{data.quantity}}</h5>
+                                    <div class="d-flex align-items-baseline">
+                                        <p class="{{data.attrition_bg}}">
+                                            <span>{{data.attrition}}</span>
+                                            <i class="feather {{data.attrition_icon}} icon-sm mb-1"></i>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-12 col-xl-6 icon">
+                                    <div class=" mt-xl-0">
+                                        <img src="../../../../assets/images/environment/{{data.icon}}" width="60">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 grid-margin stretch-card" *ngFor="let data of amountCard">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <h5 class=" mb-2">Amount</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-12 col-xl-6 value">
+                                    <h5>{{data.amount}}</h5>
+                                    <h5>{{data.unit}}</h5>
+                                    <div class="d-flex align-items-baseline">
+                                        <p class="text-success">
+                                            <span>{{data.Attrition}}</span>
+                                            <i class="feather {{data.Attrition_icon}} icon-sm mb-1"></i>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-12 col-xl-6 icon">
+                                    <div class=" mt-xl-0">
+                                        <img src="../../../../assets/images/accident/amount.png" width="60">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Waste</h6>
+                    </div>
+                    <ul ngbNav #wasteNav="ngbNav" [activeId]="1" class="nav-pills bg-light rounded">
+                        <li [ngbNavItem]="1">
+                            <a ngbNavLink>Overview</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause" id="waterCon">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of wasteCard | callback: filterCategory">
+                                                <td colspan="2">
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In {{data.unit}}</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Quantity</p>
+                                                    <h5 class="mb-0">{{data.count}} {{data.unit}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="2">
+                            <a ngbNavLink>Hazardous</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause" id="waterCon">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of wasteCard | callback: filterHazardCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In {{data.unit}}</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Quantity</p>
+                                                    <h5 class="mb-0">{{data.count}} {{data.unit}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="3">
+                            <a ngbNavLink>Non Hazardous</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause" id="waterCon">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of wasteCard | callback: filterNonHazardCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In {{data.unit}}</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Quantity</p>
+                                                    <h5 class="mb-0">{{data.count}} {{data.unit}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                    <div [ngbNavOutlet]="wasteNav" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-xl-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Consumption</h6>
+                    </div>
+                    <apx-chart dir="ltr" class="apex-charts" [chart]="consuptionChart.chart"
+                        [series]="consuptionChart.series" [legend]="consuptionChart.legend"
+                        [colors]="consuptionChart.colors" [fill]="consuptionChart.fill"
+                        [dataLabels]="consuptionChart.dataLabels" [xaxis]="consuptionChart.xaxis"
+                        [plotOptions]="consuptionChart.plotOptions" [tooltip]="consuptionChart.tooltip"
+                        [yaxis]="consuptionChart.yaxis">
+                    </apx-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4  grid-margin stretch-card">
+            <div class="card custom-height-2" [perfectScrollbar]>
+                <div class="card-body custom-height-2" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0">Renewable Energy Used</h6>
+                    </div>
+                    <apx-chart [series]="renewalEnergyUsedChart.series" [chart]="renewalEnergyUsedChart.chart"
+                        [plotOptions]="renewalEnergyUsedChart.plotOptions" [labels]="renewalEnergyUsedChart.labels"
+                        [fill]="renewalEnergyUsedChart.fill" [stroke]="renewalEnergyUsedChart.stroke"></apx-chart>
+                    <div *ngFor="let data of renewableEnergyCard">
+                        <div class="row ">
+                            <div class="col-12 status">
+                                <div>
+                                    <label class="align-items-center tx-10 text-uppercase fw-bold status-label">This
+                                        Month</label>
+                                    <h5 class="fw-bolder mb-0">{{data.quantity}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid text-center">
+                            <p class="text-success">
+                                <span>{{data.Attrition}}</span>
+                                <i class="feather {{data.Attrition_icon}} icon-sm mb-1"></i> From
+                                Previous Period
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-xl-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="card-title mb-0">Environment Footprint</h6>
+                        <div ngbDropdown>
+                            <select class="form-select" (change)="intencistyType($event)" id="intencity_div_id">
+                                <option selected value="Total Work Force">Total Work Force</option>
+                                <option value="Total product produced/shipped (kg)">Total product produced/shipped (kg)</option>
+                                <option value="Total product produced/shipped (pcs)">Total product produced/shipped (pcs)
+                                </option>
+                                <option value="Area in Square Meter (M2)">Area in Square Meter (M2)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="intencityChart.series"
+                        [chart]="intencityChart.chart" [colors]="intencityChart.colors" [stroke]="intencityChart.stroke"
+                        [dataLabels]="intencityChart.dataLabels" [tooltip]="intencityChart.tooltip">
+                    </apx-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0">Hazardous and Non-Hazardous Waste</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="HazardNonHazardChart.series"
+                        [chart]="HazardNonHazardChart.chart" [colors]="HazardNonHazardChart.colors"
+                        [plotOptions]="HazardNonHazardChart.plotOptions" [legend]="HazardNonHazardChart.legend"
+                        [labels]="HazardNonHazardChart.labels">
+                    </apx-chart>
+                    <div class="row mb-3">
+                        <div class="col-6 d-flex justify-content-end">
+                            <div>
+                                <label
+                                    class="d-flex align-items-center justify-content-end tx-10 text-uppercase fw-bold">Hazardous
+                                    Waste<span class="p-1 ms-1 rounded-circle bg-primary"></span></label>
+                                <h6 class="fw-bolder mb-0 text-end">{{hazardTotal}} KG</h6>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div>
+                                <label class="d-flex align-items-center tx-10 text-uppercase fw-bold"><span
+                                        class="p-1 me-1 rounded-circle bg-success"></span> Non-Hazardous Waste</label>
+                                <h6 class="fw-bolder mb-0">{{nonHazardTotal}} KG</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-xl-8 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h6 class="card-title mb-0">Category And Source</h6>
+                    </div>
+                    <ul ngbNav #catSource="ngbNav" [activeId]="1" class="nav-pills bg-light rounded">
+                        <li [ngbNavItem]="1">
+                            <a ngbNavLink>Overview</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of categorySourceCard | callback: filterCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In environment category</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Quantity</p>
+                                                    <h5 class="mb-0">{{data.count}} {{data.unit}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="2">
+                            <a ngbNavLink>Energy</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th class="small-header">Percentage in kWh</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr
+                                                *ngFor="let data of categorySourceCard | callback: filterEnergyCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In {{data.unit}}</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Quantity</p>
+                                                    <h5 class="mb-0">{{data.count}} {{data.unit}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="3">
+                            <a ngbNavLink>Water</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of categorySourceCard | callback: filterWaterCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In {{data.unit}}</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Quantity</p>
+                                                    <h5 class="mb-0">{{data.count}} {{data.unit}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="4">
+                            <a ngbNavLink>Waste</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of categorySourceCard | callback: filterWasteCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In {{data.unit}}</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Quantity</p>
+                                                    <h5 class="mb-0">{{data.count}} {{data.unit}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="5">
+                            <a ngbNavLink>Air Emission</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of categorySourceCard | callback: filterAirCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In {{data.unit}}</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Quantity</p>
+                                                    <h5 class="mb-0">{{data.count}} {{data.unit}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="6">
+                            <a ngbNavLink>Wastewater</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr
+                                                *ngFor="let data of categorySourceCard | callback: filterWasteWaterCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In {{data.unit}}</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Quantity</p>
+                                                    <h5 class="mb-0">{{data.count}} {{data.unit}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                    <div [ngbNavOutlet]="catSource" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Water Consumption</h6>
+                    </div>
+                    <div class="table-responsive mt-4 route-cause" id="waterCon">
+                        <table class="table table-centered mb-0">
+                            <tbody>
+                                <tr *ngFor="let data of waterConsumptionCard">
+                                    <td colspan="2">
+                                        <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                        <p class="text-muted mb-0">In time of work</p>
+                                    </td>
+                                    <td>
+                                        <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                            [plotOptions]="radialChart.plotOptions" [labels]="radialChart.labels">
+                                        </apx-chart>
+                                    </td>
+                                    <td>
+                                        <p class="text-muted mb-1">Quantity</p>
+                                        <h5 class="mb-0">{{data.count}} {{data.unit}}</h5>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-xl-8 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Waste Disposal</h6>
+                        <div ngbDropdown>
+                            <select class="form-select" (change)="wasteDisposalType($event)" id="intencity_div_id">
+                                <option selected value="All Waste">All Waste</option>
+                                <option value="Hazardous Waste">Hazardous Waste</option>
+                                <option value="Non Hazardous Waste">Non Hazardous Waste</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive mt-4 route-cause">
+                        <table class="table table-centered mb-0">
+                            <tbody>
+                                <tr *ngFor="let data of wasteDisposalCard">
+                                    <td>
+                                        <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                        <p class="text-muted mb-0">In time of work</p>
+                                    </td>
+                                    <td>
+                                        <ngb-progressbar type="'primary" [value]="data.percentage" [striped]="true"
+                                            [animated]="true" [ngbTooltip]=" data.percentage + '%'"></ngb-progressbar>
+
+                                    </td>
+                                    <td>
+                                        <p class="text-muted mb-1">Quantity</p>
+                                        <h5 class="mb-0">{{data.count}} {{data.unit}}</h5>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Wastewater Treatment</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="WasteWaterChart.series"
+                        [chart]="WasteWaterChart.chart" [colors]="WasteWaterChart.colors"
+                        [plotOptions]="WasteWaterChart.plotOptions" [legend]="WasteWaterChart.legend"
+                        [labels]="WasteWaterChart.labels">
+                    </apx-chart>
+                    <!-- <div class="row mb-3">
+                        <div class="col-4 d-flex justify-content-center" *ngFor="let data of wasteWaterCard">
+                            <div>
+                                <label
+                                    class="d-flex align-items-center justify-content-end tx-10 text-uppercase fw-bold">{{data.name}}<span
+                                        class="p-1 ms-1 rounded-circle {{data.color}}"></span></label>
+                                <h6 class="fw-bolder mb-0 ">{{data.count}} M3</h6>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-xl-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">GHG Emissions</h6>
+                    </div>
+                    <apx-chart dir="ltr" class="apex-charts" [chart]="GHGEmissionChart.chart"
+                        [series]="GHGEmissionChart.series" [legend]="GHGEmissionChart.legend"
+                        [colors]="GHGEmissionChart.colors" [fill]="GHGEmissionChart.fill"
+                        [dataLabels]="GHGEmissionChart.dataLabels" [xaxis]="GHGEmissionChart.xaxis"
+                        [plotOptions]="GHGEmissionChart.plotOptions" [tooltip]="GHGEmissionChart.tooltip">
+                    </apx-chart>
+                    <p class="text-muted mb-0">Note: The chart shows the data in tonnes (tCO2e)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Wastewater</h6>
+                    </div>
+                    <div class="table-responsive mt-4 route-cause">
+                        <table class="table table-centered mb-0">
+                            <tbody>
+                                <tr *ngFor="let data of wasteWatersCard">
+                                    <td>
+                                        <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                        <p class="text-muted mb-0">In time of work</p>
+                                    </td>
+                                    <td>
+                                        <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                            [plotOptions]="radialChart.plotOptions" [labels]="radialChart.labels">
+                                        </apx-chart>
+                                    </td>
+                                    <td>
+                                        <p class="text-muted mb-1">Quantity</p>
+                                        <h5 class="mb-0">{{data.count}} {{data.unit}}</h5>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-xl-8 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Target Setting Progress</h6>
+                    </div>
+                    <ul ngbNav #targetSettingProgress="ngbNav" [activeId]="1" class="nav-pills bg-light rounded">
+                        <li [ngbNavItem]="1">
+                            <a ngbNavLink>Energy</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr
+                                                *ngFor="let data of targetSettingProgressCard | callback: filterTargetProgressEnergy">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">Against {{data.source}} source</p>
+
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Acheived</p>
+                                                    <h5 class="mb-0">{{data.acheived}} / {{data.baseline}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="2">
+                            <a ngbNavLink>Water</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr
+                                                *ngFor="let data of targetSettingProgressCard | callback: filterTargetProgressWater">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">Against {{data.source}} source</p>
+
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Acheived</p>
+                                                    <h5 class="mb-0">{{data.acheived}} / {{data.baseline}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="3">
+                            <a ngbNavLink>Waste</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr
+                                                *ngFor="let data of targetSettingProgressCard | callback: filterTargetProgressWaste">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">Against {{data.source}} source</p>
+
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Acheived</p>
+                                                    <h5 class="mb-0">{{data.acheived}} / {{data.baseline}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="4">
+                            <a ngbNavLink>Renewable Energy</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr
+                                                *ngFor="let data of targetSettingProgressCard | callback: filterTargetProgressRenewable">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">Against {{data.source}} source</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Acheived</p>
+                                                    <h5 class="mb-0">{{data.acheived}} / {{data.baseline}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+
+                    </ul>
+                    <div [ngbNavOutlet]="targetSettingProgress" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0">Emissions Breakdown</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="emissionChart.series"
+                        [chart]="emissionChart.chart" [plotOptions]="emissionChart.plotOptions"
+                        [legend]="emissionChart.legend" [labels]="emissionChart.labels">
+                    </apx-chart>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0">Wastewater Reused or Recycled</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="reusedRecycledChart.series"
+                        [chart]="reusedRecycledChart.chart" [plotOptions]="reusedRecycledChart.plotOptions"
+                        [legend]="reusedRecycledChart.legend" [labels]="reusedRecycledChart.labels">
+                    </apx-chart>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3 d-flex justify-content-center">
+                        <div>
+                            <label class="d-flex align-items-center tx-10 text-uppercase fw-bold">Total
+                                <span class="p-1 ms-1 rounded-circle bg-secondary"></span></label>
+                            <h6 class="fw-bolder mb-0 text-end">{{totalWasteWater}} </h6>
+                        </div>
+                    </div>
+                    <div class="col-3 d-flex justify-content-center">
+                        <div>
+                            <label class="d-flex align-items-center tx-10 text-uppercase fw-bold"><span
+                                    class="p-1 me-1 rounded-circle bg-primary"></span> Recycled</label>
+                            <h6 class="fw-bolder mb-0">{{recycledTotal}} </h6>
+                        </div>
+                    </div>
+                    <div class="col-3 d-flex justify-content-center">
+                        <div>
+                            <label class="d-flex align-items-center tx-10 text-uppercase fw-bold"><span
+                                    class="p-1 me-1 rounded-circle bg-success"></span> Reused</label>
+                            <h6 class="fw-bolder mb-0">{{reusedTotal}} </h6>
+                        </div>
+                    </div>
+                    <div class="col-3 d-flex justify-content-center">
+                        <div>
+                            <label class="d-flex align-items-center tx-10 text-uppercase fw-bold"><span
+                                    class="p-1 me-1 rounded-circle bg-warning"></span> Others</label>
+                            <h6 class="fw-bolder mb-0">{{othersTotal}} </h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0">Total Water Vs Wastewater</h6>
+                    </div>
+                    <apx-chart [series]="waterWastewaterChart.series" [chart]="waterWastewaterChart.chart"
+                        [plotOptions]="waterWastewaterChart.plotOptions" [labels]="waterWastewaterChart.labels"
+                        [fill]="waterWastewaterChart.fill" [stroke]="waterWastewaterChart.stroke"></apx-chart>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

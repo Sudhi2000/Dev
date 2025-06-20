@@ -1,0 +1,224 @@
+<div mat-dialog-content [formGroup]="Form">
+  <div class="container-fluid d-flex justify-content-center w-100">
+    <div class="table-responsive w-100">
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field fxFlex appearance="outline" color="primary">
+            <mat-label>Consumption Category</mat-label>
+            <mat-select formControlName="consumption_category" (selectionChange)="consCategory($event)">
+              <mat-option value="{{data.attributes.Value}}" *ngFor="let data of consumCategory">
+                {{data.attributes.Value}}</mat-option>
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field fxFlex appearance="outline" color="primary">
+            <mat-label>Source</mat-label>
+            <mat-select formControlName="source" (selectionChange)="sourceVal($event)">
+              <mat-option value="{{data.attributes.Value}}" *ngFor="let data of source">
+                {{data.attributes.Value}}</mat-option>
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Unit</mat-label>
+            <input type="text" matInput formControlName="unit" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Quantity</mat-label>
+            <input type="number" matInput formControlName="quantity" (change)="kwhQuantity($event)" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Amount</mat-label>
+            <input type="number" matInput formControlName="amount" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4" *ngIf="Form.value.consumption_category === 'Energy'">
+          <mat-form-field fxFlex appearance="outline" color="primary">
+            <mat-label>Scope</mat-label>
+            <input type="text" matInput formControlName="scope" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4" *ngIf="Form.value.consumption_category === 'Water'">
+          <mat-form-field appearance="outline">
+            <mat-label>Meter Reading</mat-label>
+            <input type="number" matInput formControlName="meter_reading" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4" *ngIf="Form.value.consumption_category === 'Wastewater'">
+          <mat-form-field appearance="outline">
+            <mat-label>Treatment Where</mat-label>
+            <input type="text" matInput formControlName="treatment" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4" *ngIf="Form.value.consumption_category === 'Waste'">
+          <mat-form-field fxFlex appearance="outline" color="primary">
+            <mat-label>Category</mat-label>
+
+            <input type="text" matInput formControlName="category" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-4" *ngIf="Form.value.consumption_category === 'Air Emission'">
+          <mat-form-field fxFlex appearance="outline" color="primary">
+            <mat-label>Pollutants Emitted</mat-label>
+            <input type="text" matInput formControlName="pollutants_emitted" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4" *ngIf="Form.value.source === 'Electricity'">
+          <mat-form-field appearance="outline">
+            <mat-label>Meter Reading</mat-label>
+            <input type="number" matInput formControlName="meter_reading" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-4"
+        *ngIf="Form.value.consumption_category==='Water' || Form.value.consumption_category==='Energy' || Form.value.consumption_category==='Wastewater'">
+        <mat-form-field fxFlex appearance="outline" color="primary">
+            <mat-label>Method of Tracking</mat-label>
+            <mat-select formControlName="quantity_source">
+                <mat-option value="{{data.attributes.Value}}" *ngFor="let data of quantities">
+                    {{data.attributes.Value}}</mat-option>
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+        </mat-form-field>
+    </div>
+      </div>
+      <div class="row" *ngIf="Form.value.consumption_category === 'Waste'">
+        <div class="col-md-4">
+          <mat-form-field appearance="outline" color="primary">
+            <mat-label>Collected From</mat-label>
+            <input matInput [matDatepicker]="collFromDP" placeholder="Choose a date" [formControl]="collectedFrom"
+              (dateChange)="collFrom($event)" />
+            <mat-datepicker-toggle matSuffix [for]="collFromDP"></mat-datepicker-toggle>
+            <mat-datepicker #collFromDP></mat-datepicker>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline" color="primary">
+            <mat-label>Collected to</mat-label>
+            <input matInput [matDatepicker]="colledtToDP" placeholder="Choose a date" [formControl]="collectedTo"
+              (dateChange)="collTo($event)" />
+            <mat-datepicker-toggle matSuffix [for]="colledtToDP"></mat-datepicker-toggle>
+            <mat-datepicker #colledtToDP></mat-datepicker>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field fxFlex appearance="outline" color="primary">
+            <mat-label>Disposal Method</mat-label>
+            <input type="text" matInput formControlName="disposal_method" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row" *ngIf="Form.value.consumption_category === 'Waste'">
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Consignment Number</mat-label>
+            <input type="text" matInput formControlName="consignment_number" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline" color="primary">
+            <mat-label>Disposal Date</mat-label>
+            <input matInput [matDatepicker]="diposalDP" placeholder="Choose a date" [formControl]="disposalDate"
+              (dateChange)="disDate($event)" />
+            <mat-datepicker-toggle matSuffix [for]="diposalDP"></mat-datepicker-toggle>
+            <mat-datepicker #diposalDP></mat-datepicker>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Disposer</mat-label>
+            <input type="text" matInput formControlName="disposer" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row" *ngIf="Form.value.consumption_category === 'Waste'">
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Carrier</mat-label>
+            <input type="text" matInput formControlName="carrier" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Place of Disposal</mat-label>
+            <input type="text" matInput formControlName="disposal_place" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4"
+        *ngIf="Form.value.consumption_category==='Waste'&&Form.value.source==='Wastewater Sludge'">
+        <mat-form-field fxFlex appearance="outline" color="primary">
+            <mat-label>Method of Tracking</mat-label>
+            <mat-select formControlName="quantity_source">
+                <mat-option value="{{data.attributes.Value}}" *ngFor="let data of quantities">
+                    {{data.attributes.Value}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+      </div>
+      <div class="row" *ngIf="Form.value.consumption_category === 'Air Emission'">
+        <div class="col-md-4" *ngIf="Form.value.consumption_category === 'Air Emission'">
+          <mat-form-field appearance="outline">
+            <mat-label>Concentration </mat-label>
+            <input type="text" matInput formControlName="concentration" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Determined By </mat-label>
+            <input type="text" matInput formControlName="determined_by" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <quill-editor placeholder="Description" [modules]="quillConfig" formControlName="description">
+        </quill-editor>
+      </div>
+      <div class="row mt-3">
+        <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
+          <ngx-dropzone-label>Drop your evidences here. Please ensure the image
+            size is less than 2 MB</ngx-dropzone-label>
+          <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files"
+            [file]="f" (removed)="onRemove(f)">
+          </ngx-dropzone-image-preview>
+        </div>
+      </div>
+      <div class="mb-3">
+        <button type="button" class="btn btn-success btn-icon-text float-end mt-4" (click)="submit()">
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

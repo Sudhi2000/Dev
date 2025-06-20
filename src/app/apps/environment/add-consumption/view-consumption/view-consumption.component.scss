@@ -1,0 +1,42 @@
+.table-responsive {
+    overflow: hidden;
+}
+
+.special-field{
+    align-content:center
+}
+
+#refrigerant {
+    table {
+        counter-reset: no -1;
+    }
+
+    table tr {
+        counter-increment: no;
+    }
+
+    table tr td:first-child:before {
+        content: counter(no);
+    }
+
+    table th.ghg {
+        text-transform: none;
+    }
+}
+#consumption {
+    table {
+        counter-reset: no -1;
+    }
+
+    table tr {
+        counter-increment: no;
+    }
+
+    table tr td:first-child:before {
+        content: counter(no);
+    }
+
+    table th.ghg {
+        text-transform: none;
+    }
+}

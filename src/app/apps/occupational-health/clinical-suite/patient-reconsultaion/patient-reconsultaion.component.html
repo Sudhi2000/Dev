@@ -1,0 +1,729 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Clinical<span>
+                                    Suite</span></a>
+
+                            <p class="mt-1 mb-1">Patient ID: {{Form.value.patient_id}}</p>
+                        </div>
+                        <!-- <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Check In Date & Time</h6>
+                            <h6 class="text-end mb-5 ">{{Form.value.check_in| date:'MMM d, y'}} - {{Form.value.check_in
+                                | date:'h:mm a'}}</h6>
+                        </div> -->
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+                                <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex">
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">article</mat-icon>
+                                            Patient Details
+                                        </ng-template>
+                                        <div class="row ">
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Employee ID</mat-label>
+                                                    <input type="text" matInput formControlName="employee_id">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Employee Name</mat-label>
+                                                    <input type="text" matInput formControlName="employee_name">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-4">
+                                                <mat-form-field fxFlex appearance="outline" color="primary">
+                                                    <mat-label>Gender</mat-label>
+                                                    <input type="text" matInput formControlName="gender">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Age</mat-label>
+                                                    <input type="number" matInput formControlName="age">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Designation</mat-label>
+                                                    <input type="text" matInput formControlName="designation">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-4">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Employee Division</mat-label>
+                                                    <input type="text" matInput formControlName="employee_division">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Department</mat-label>
+                                                    <input type="text" matInput formControlName="department">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Sub Department</mat-label>
+                                                    <input type="text" matInput formControlName="sub_department">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <mat-form-field fxFlex appearance="outline" color="primary">
+                                                    <mat-label>Work Status</mat-label>
+                                                    <mat-select formControlName="work_status">
+                                                        <mat-option *ngFor="let status of workstaus_Data"
+                                                            value="{{ status.attributes.Value }}">
+                                                            {{ status.attributes.Value }}</mat-option>
+                                                    </mat-select>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <mat-form-field fxFlex appearance="outline" color="primary">
+                                                    <mat-label>Symptoms</mat-label>
+                                                    <input type="text" matInput placeholder="Please search here"
+                                                        [matAutocomplete]="autoSymptoms" [formControl]="Symptoms"
+                                                        [value]="displaySelectedSymptoms()" (focus)="onInputFocus()"
+                                                        (input)="onInputChanged($event)" />
+                                                    <mat-autocomplete #autoSymptoms="matAutocomplete">
+                                                        <mat-option *ngFor="let data of filteredSymptoms | async"
+                                                            (click)="toggleSelection(data.attributes.name)">
+                                                            <div class="option-container">
+                                                                <mat-checkbox
+                                                                    [checked]="selectedSymptoms.includes(data.attributes.name)">
+                                                                    {{ data.attributes.name }}
+                                                                </mat-checkbox>
+                                                                <div class="icon-container"
+                                                                    (click)="$event.stopPropagation()">
+                                                                    <i class="feather icon-edit titleicon_edit"
+                                                                        (click)="update_symptom(data.id)"></i>&nbsp;
+                                                                    <i class="feather icon-trash-2 titleicon_delete"
+                                                                        (click)="delete_symptom(data.id)"></i>
+                                                                </div>
+                                                            </div>
+                                                        </mat-option>
+
+                                                        <mat-option (click)="new_symptoms()" class="option-btn">
+                                                            <i class="mdi mdi-plus-circle"></i> Create new Symptom
+                                                        </mat-option>
+                                                    </mat-autocomplete>
+                                                    <mat-error *ngIf="Symptoms.hasError('required')">Required
+                                                        Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                                                (click)="submit()" [disabled]="!Form.valid || !Form.value.symptoms">
+                                                <i class="feather icon-send btn-icon-prepend"></i>
+                                                Submit
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-secondary btn-icon-text float-end mt-4 btn-previous"
+                                                (click)="draft()">
+                                                <i class="feather icon-save btn-icon-prepend"></i>
+                                                Update
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                                (click)="previousStep()">
+                                                <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                                Previous
+                                            </button>
+                                        </div>
+
+                                        <!-- <div class="mb-3">
+                                            <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                                (click)="nextStep()">
+                                                <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                                Next
+                                            </button>
+                                        </div> -->
+                                    </mat-tab>
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">layers</mat-icon>
+                                            Patient History
+                                        </ng-template>
+                                        <div class="row">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Disease</th>
+                                                        <th>Severity Level</th>
+                                                        <!-- <th>Admitted Date</th>
+                                                        <th>Discharged Date</th> -->
+                                                        <th>Consulting Doctor</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let data of patientHistory">
+                                                        <!-- <td>{{data.attributes.document_number}}</td>
+                                                        <td>{{data.attributes.issued_date| date:'dd-MMM-yyyy'}}</td>
+                                                        <td>{{data.attributes.expiry_date| date:'dd-MMM-yyyy'}}</td>
+                                                        <td>{{data.attributes.notify_date| date:'dd-MMM-yyyy'}}</td>
+                                                        <td>
+                                                            <button type="button"
+                                                                class="btn btn-secondary btn-icon btn-xs btn-previous"
+                                                                (click)="view(data)" placement="top" ngbTooltip="View">
+                                                                <i class="feather icon-eye"></i>
+                                                            </button>
+                                                        </td> -->
+                                                        <td>{{data.attributes.disease}}</td>
+                                                        <td>{{data.attributes.severity_level}}</td>
+                                                        <!-- <td>{{data.attributes.admitted_date| date:'dd-MMM-yyyy'}}</td>
+                                                        <td>{{data.attributes.discharged_date| date:'dd-MMM-yyyy'}}</td> -->
+                                                        <td>{{data.attributes.consulting_doctor.data.attributes.first_name}}
+                                                            {{data.attributes.consulting_doctor.data.attributes.last_name}}
+                                                        </td>
+                                                        <td>
+                                                            <button type="button"
+                                                                class="btn btn-secondary btn-icon btn-xs btn-previous"
+                                                                (click)="view(data)" placement="top" ngbTooltip="View">
+                                                                <i class="feather icon-eye"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="mb-3">
+
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                                (click)="previousStep()">
+                                                <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                                Previous
+                                            </button>
+                                        </div>
+                                    </mat-tab>
+
+                                    <!-- <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">receipt</mat-icon>
+                                            Doctor Consultation
+                                        </ng-template>
+
+                                        <div class="row ">
+                                            <div class="col-md-6">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Disease</mat-label>
+                                                    <mat-select formControlName="disease">
+                                                        <mat-option *ngFor="let name of diseases"
+                                                            value="{{ name.attributes.disease_name }}">
+                                                            {{ name.attributes.disease_name }}</mat-option>
+
+                                                        <mat-option (click)="new_disease()" class="option-btn">
+                                                            <i class="mdi mdi-plus-circle"></i> Create New Disease
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Severity Level</mat-label>
+                                                    <mat-select formControlName="severity_level">
+                                                        <mat-option *ngFor="let name of severityLevel"
+                                                            value="{{name.attributes.Value}}">
+                                                            {{name.attributes.Value}}</mat-option>
+                                                    </mat-select>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="row mt-3">
+                                            <quill-editor placeholder="Treatment" [modules]="quillConfig"
+                                                formControlName="treatment">
+                                            </quill-editor>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <h6 class="mb-3">Medical Prescription</h6>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button type="button" class="btn btn-primary btn-icon-text btn-xs"
+                                                    (click)="createPrescription()">
+                                                    <i class="feather icon-plus btn-icon-prepend"></i>
+                                                    Add Medicine
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive pt-3">
+                                                <table mat-table [dataSource]="dataSource" matSort>
+                                                    <ng-container matColumnDef="medicine_name">
+                                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Medicine
+                                                            Name </th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element.attributes.medicine_name}} </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="dosage">
+                                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Dosage
+                                                        </th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element.attributes.dosage}} </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="days">
+                                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Days</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element.attributes.days}} </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="outside_medicine">
+                                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Outside
+                                                        </th>
+                                                        <td class="text-center" mat-cell *matCellDef="let element"
+                                                            innerHTML="{{element.attributes.outside_medicine}}"> </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="status">
+                                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                            sortActionDescription="Status"> Status
+                                                        </th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <button type="button"
+                                                                class="btn btn-secondary status-btn btn-icon-text btn-xs">
+                                                                {{element.attributes.status}}
+                                                            </button>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="actions">
+                                                        <th *matHeaderCellDef class="actions-cell" mat-header-cell
+                                                            mat-sort-header>Actions</th>
+                                                        <td *matCellDef="let row" class="actions-cell" mat-cell>
+                                                            <button type="button "
+                                                                class="btn btn-primary btn-icon btn-xs edit-btn"
+                                                                (click)="view(row)" placement="top" ngbTooltip="View">
+                                                                <i class="feather icon-eye"></i>
+                                                            </button>
+                                                            <button type="button "
+                                                                class="btn btn-danger btn-icon btn-xs edit-btn"
+                                                                (click)="deletePrescription(row)" placement="top"
+                                                                ngbTooltip="Delete">
+                                                                <i class="feather icon-trash-2"></i>
+                                                            </button>
+                                                        </td>
+                                                    </ng-container>
+                                                    <tr mat-header-row *matHeaderRowDef="visibleColumns"></tr>
+                                                    <tr mat-row *matRowDef="let row; columns: visibleColumns;"></tr>
+                                                </table>
+
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="row mt-4 ">
+                                            <div class="col-md-6">
+
+                                                <div class="form-check form-switch mb-2">
+                                                    <input type="checkbox" class="form-check-input" id="formSwitch1"
+                                                        formControlName="follow_up_status">
+                                                    <label class="form-check-label" for="formSwitch1">Required
+                                                        Follow-up</label>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="row mt-2 ">
+                                            <div class="col-md-6">
+                                                <mat-form-field fxFlex appearance="outline" color="warning">
+                                                    <mat-label>Follow Up Date</mat-label>
+                                                    <input matInput [matDatepicker]="followupdate"
+                                                        [formControl]="followupDate" value="date"
+                                                        (dateChange)="followupDateVal($event)">
+                                                    <mat-datepicker-toggle matSuffix
+                                                        [for]="followupdate"></mat-datepicker-toggle>
+                                                    <mat-datepicker #followupdate></mat-datepicker>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2 ">
+                                            <div class="col-md-6">
+                                                <div class="form-check form-switch mb-2">
+                                                    <input type="checkbox" class="form-check-input" id="formSwitch1"
+                                                        formControlName="lift_usage_required"
+                                                        (change)="enable_Lift_Usage($event)">
+                                                    <label class="form-check-label" for="formSwitch1">Lift Usage
+                                                        Required</label>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+
+                                        <div [hidden]="!Form.get('lift_usage_required')?.value">
+                                            <div class="row mt-2">
+                                                <div class="col-md-6">
+                                                    <mat-form-field appearance="outline">
+                                                        <mat-label>Since Complaint</mat-label>
+                                                        <input type="text" matInput formControlName="since_complaint">
+                                                        <mat-error>Required Field</mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <mat-form-field appearance="outline">
+                                                        <mat-label>Recommended Duration</mat-label>
+                                                        <input type="text" matInput
+                                                            formControlName="recommended_duration">
+                                                        <mat-error>Required Field</mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div>
+                                            <div class="col-md-6 mt-2">
+
+                                                <div class="form-check form-switch mb-2">
+                                                    <input type="checkbox" class="form-check-input" id="formSwitch1"
+                                                        formControlName="refer_another_hospital_status"
+                                                        (change)="refer_another_hospital_status($event)">
+                                                    <label class="form-check-label" for="formSwitch1">Refer To Another
+                                                        Hosipital</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div [hidden]="!Form.get('refer_another_hospital_status')?.value" class="mt-3">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <mat-form-field appearance="outline">
+                                                        <mat-label>Hospital Name</mat-label>
+                                                        <input type="text" matInput formControlName="hospital_name">
+                                                        <mat-error>Required Field</mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <mat-form-field appearance="outline">
+                                                        <mat-label>Hospital Location</mat-label>
+                                                        <input type="text" matInput formControlName="hospital_location">
+                                                        <mat-error>Required Field</mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <quill-editor placeholder="Doctor Prescription" [modules]="quillConfig"
+                                                    formControlName="doctor_prescription">
+                                                </quill-editor>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <h6 class="mb-3"> Medicine Details </h6>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <button type="button" class="btn btn-primary btn-icon-text btn-xs"
+                                                        (click)="createMedicalDetails()">
+                                                        <i class="feather icon-plus btn-icon-prepend"></i>
+                                                        Add Medicine
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="table-responsive pt-3">
+                                                    <table mat-table [dataSource]="dataSourceMedical" matSort>
+                                                        <ng-container matColumnDef="medicine_name">
+                                                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                                                Medicine
+                                                                Name </th>
+                                                            <td mat-cell *matCellDef="let element">
+                                                                {{element.attributes.medicine_name}} </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="dosage">
+                                                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                                                Dosage
+                                                            </th>
+                                                            <td mat-cell *matCellDef="let element">
+                                                                {{element.attributes.dosage}} </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="days">
+                                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Days
+                                                            </th>
+                                                            <td mat-cell *matCellDef="let element">
+                                                                {{element.attributes.days}} </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="outside_medicine">
+                                                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                                                Outside
+                                                            </th>
+                                                            <td class="text-center" mat-cell *matCellDef="let element"
+                                                                innerHTML="{{element.attributes.outside_medicine}}">
+                                                            </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="status">
+                                                            <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                                sortActionDescription="Status"> Status
+                                                            </th>
+                                                            <td mat-cell *matCellDef="let element">
+                                                                <button type="button"
+                                                                    class="btn btn-secondary status-btn btn-icon-text btn-xs">
+                                                                    {{element.attributes.status}}
+                                                                </button>
+                                                            </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="actions">
+                                                            <th *matHeaderCellDef class="actions-cell" mat-header-cell
+                                                                mat-sort-header>Actions</th>
+                                                            <td *matCellDef="let row" class="actions-cell" mat-cell>
+                                                                <button type="button "
+                                                                    class="btn btn-primary btn-icon btn-xs edit-btn"
+                                                                    (click)="view(row)" placement="top"
+                                                                    ngbTooltip="View">
+                                                                    <i class="feather icon-eye"></i>
+                                                                </button>
+                                                                <button type="button "
+                                                                    class="btn btn-danger btn-icon btn-xs edit-btn"
+                                                                    (click)="deletePrescription(row)" placement="top"
+                                                                    ngbTooltip="Delete">
+                                                                    <i class="feather icon-trash-2"></i>
+                                                                </button>
+                                                            </td>
+                                                        </ng-container>
+                                                        <tr mat-header-row *matHeaderRowDef="visibleColumns"></tr>
+                                                        <tr mat-row *matRowDef="let row; columns: visibleColumns;"></tr>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3 ">
+                                                <div class="col-md-6">
+                                                    <mat-form-field fxFlex appearance="outline" color="warning">
+                                                        <mat-label>Admitted Date</mat-label>
+                                                        <input matInput [matDatepicker]="admitted_date"
+                                                            [formControl]="admittedDate" value="date"
+                                                            (dateChange)="admittedDateVal($event)">
+                                                        <mat-datepicker-toggle matSuffix
+                                                            [for]="admitted_date"></mat-datepicker-toggle>
+                                                        <mat-datepicker #admitted_date></mat-datepicker>
+                                                        <mat-error>Required Field</mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <mat-form-field fxFlex appearance="outline" color="warning">
+                                                        <mat-label>Discharged Date</mat-label>
+                                                        <input matInput [matDatepicker]="discharged_date"
+                                                            [formControl]="dischargedDate" value="date"
+                                                            (dateChange)="dischargedDateVal($event)">
+                                                        <mat-datepicker-toggle matSuffix
+                                                            [for]="discharged_date"></mat-datepicker-toggle>
+                                                        <mat-datepicker #discharged_date></mat-datepicker>
+                                                        <mat-error>Required Field</mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2 ">
+                                                <div class="col-md-6">
+
+                                                    <div class="form-check form-switch mb-2">
+                                                        <input type="checkbox" class="form-check-input" id="formSwitch1"
+                                                            formControlName="sent_via_ambulance">
+                                                        <label class="form-check-label" for="formSwitch1">Sent via
+                                                            Ambulance</label>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                                                (click)="submit()" [disabled]="!Form.valid">
+                                                <i class="feather icon-send btn-icon-prepend"></i>
+                                                Complete
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-secondary btn-icon-text float-end mt-4 btn-previous"
+                                                (click)="draft()">
+                                                <i class="feather icon-save btn-icon-prepend"></i>
+                                                Save as Draft
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                                (click)="previousStep()">
+                                                <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                                Previous
+                                            </button>
+                                        </div>
+                                    </mat-tab> -->
+
+                                </mat-tab-group>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-3">
+                        <button class="btn btn-primary" mat-icon-button aria-label="Example icon-button with a menu">
+                            {{Form.value.status}}
+                        </button>
+                        <button (click)="navigate()" class="btn btn-success ms-2" mat-icon-button
+                            aria-label="Example icon-button with a menu">
+                            <i class="feather icon-chevron-left"></i> Back to
+                            History
+
+                        </button>
+                    </div>
+
+                    <!-- <div class="mt-3">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Created By:</label>
+
+
+                        <p class="text-muted">{{Form.value.created_by}}, {{Form.value.creator_designation}}</p>
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Consulting Doctor:</label>
+                        <p class="text-muted">{{Form.value.doctor_name}}, {{Form.value.doctor_designation}}</p>
+                    </div> -->
+
+                    <div class="mt-3">
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Check-In Date</mat-label>
+                            <input matInput [matDatepicker]="accdp" placeholder="Choose a date"
+                                [formControl]="checkinDate" (dateChange)="checkinDateVal($event)" />
+                            <mat-datepicker-toggle matSuffix [for]="accdp"></mat-datepicker-toggle>
+                            <mat-datepicker #accdp></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                        <mat-form-field fxFlex appearance="outline" color="warning">
+                            <mat-label>Check-In Time</mat-label>
+                            <input matTimepicker #t="matTimepicker" [strict]="false" id="timepicker-example" mode="12h"
+                                placeholder="Please select time..." name="time" [formControl]="checkinTime"
+                                (timeChange)="checkinTimeValue($event)" />
+                            <mat-icon matSuffix (click)="t.showDialog()">access_time</mat-icon>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mt-3">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Clinic Division:</label>
+                        <p class="text-muted">{{Form.value.clinic_division}}</p>
+                    </div>
+
+
+                    <div class="mt-3">
+                        <label class="tx-11 fw-bolder mb-3 text-uppercase">Preliminary Checkup:</label>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Body Temperature (°F)</mat-label>
+                            <input type="number" matInput formControlName="body_temperature">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label> Weight (KG)</mat-label>
+                            <input type="number" matInput formControlName="weight">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" [hidden]="Form.get('use_feet_inches')?.value">
+                            <mat-label> Height (M)</mat-label>
+                            <input type="number" matInput formControlName="height">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+                        <div class="col-md-6 mt-2">
+                            <div class="form-check form-switch mb-2">
+                                <input type="checkbox" class="form-check-input" id="formSwitch2"
+                                    formControlName="use_feet_inches" (change)="UseFeetAndInches($event)">
+                                <label class="form-check-label" for="formSwitch2">Use Feet and Inches</label>
+                            </div>
+                        </div>
+
+                        <div [hidden]="!Form.get('use_feet_inches')?.value" class="mt-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Feet</mat-label>
+                                        <input type="number" matInput formControlName="feet"
+                                            (change)="findHeight(Form.value.feet,Form.value.inches)">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Inches</mat-label>
+                                        <input type="number" matInput formControlName="inches"
+                                            (change)="findHeight(Form.value.feet,Form.value.inches)">
+                                        <mat-error>Required Field</mat-error>
+
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Blood Pressure (mm Hg)</mat-label>
+                            <input type="text" matInput formControlName="blood_pressure">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Random Blood Sugar</mat-label>
+                            <input type="text" matInput formControlName="random_blood_sugar">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Consulting Doctor</mat-label>
+                            <mat-select formControlName="consulting_doctor">
+                                <mat-option *ngFor="let user of userList" [value]="user.id">
+                                    <img style="vertical-align: middle; margin-right: 4px"
+                                        src="{{ user?.attributes?.image?.data?.attributes?.image }}" height="30" />
+                                    <span>{{ user.attributes.first_name }} {{ user.attributes.last_name }}</span>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+
+
+                        <div id="bmi-chart">
+                            <p class="mt-1 mb-1">Body Mass Index (BMI)</p>
+                            <button type="button" class="btn {{ btnStyle }}">
+                                {{ bmiText }}
+                                <span class="badge text-dark">{{ bmiValue }}</span>
+                            </button>
+                            <div id="gaugeArea"></div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

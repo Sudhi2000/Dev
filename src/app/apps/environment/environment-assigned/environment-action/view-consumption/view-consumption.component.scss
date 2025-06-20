@@ -1,0 +1,36 @@
+.table-responsive {
+    overflow: hidden;
+}
+
+.evi-image{
+    padding-left: 10px;
+}
+
+.special-field{
+    align-content:center
+}.pdf-css {
+    color: #78787a;
+    min-height: 73px;
+    border-radius: 5px;
+    background-color: #e6e6e7;
+}
+
+.pdf-container {
+    // width: 150px;
+    height: 68px;
+    background-color: #f0f0f0;
+
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+}
+
+.pdf-text {
+    font-size: 9px;
+    text-align: center;
+    color: #333;
+    padding: 14px;
+}

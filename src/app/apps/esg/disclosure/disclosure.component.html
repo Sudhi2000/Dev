@@ -1,0 +1,213 @@
+<div [formGroup]="generalForm" *ngIf="mode==='modify'" class="container-fluid" id="disclosures">
+    <div class="row">
+        <div class="col-lg-8">
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">ESG<span>
+                                    Disclosure</span></a>
+                            <p class="mt-1 mb-1"><b>Modify Disclosure</b></p>
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <!-- <h6 class="fw-bold text-end mt-4 mb-2">Reporting Date</h6> -->
+                            <!-- <h6 class="text-end mb-5 ">{{Form.value.reported_date| date:'MMM d, y'}}</h6> -->
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+                                <mat-tab-group mat-align-tabs="start">
+                                    <mat-tab *ngIf="isTabVisible('Environment')" [formGroup]="govDisclosureForm">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">eco</mat-icon> Environment Disclosure
+                                        </ng-template>
+                                        <app-environment-disclosure [year]="yearData" [month]="monthData"
+                                            [userID]="userID" [data]="environmentTitles" [esgHead]="esgHead"
+                                            [notes]="environmentNotes" [currentTitles]="currentENVTitles"
+                                            [lov]="envDisclosureLOV" [roles]="environmentRoles" [refID]="refID"
+                                            [status]="status"></app-environment-disclosure>
+                                    </mat-tab>
+                                    <mat-tab *ngIf="isTabVisible('Social')" [formGroup]="socialDisclosureForm">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon ">groups</mat-icon>
+                                            Social Disclosure
+                                        </ng-template>
+                                        <app-social-disclosure [userID]="userID" [year]="yearData" [month]="monthData"
+                                            [esgHead]="esgHead" [currentTitles]="currentSOCTitles" [notes]="socialNotes"
+                                            [data]="socialTitles" [lov]="socDisclosureLOV" [refID]="refID"
+                                            [roles]="socialRoles" [status]="status"></app-social-disclosure>
+                                    </mat-tab>
+                                    <mat-tab *ngIf="isTabVisible('Governance')" [formGroup]="envDisclosureForm">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon disc-mat-icon">account_balance</mat-icon>
+                                            Governance Disclosure </ng-template>
+                                        <app-governance-disclosure [year]="yearData" [month]="monthData"
+                                            [disclosureMode]="mode" [esgHead]="esgHead"
+                                            [currentGOVTitles]="currentGOVTitles" [notes]="governanceNotes"
+                                            [data]="governanceTitles" [lov]="govDisclosureLOV" [refID]="refID"
+                                            [roles]="governanceRoles" [status]="status"></app-governance-disclosure>
+                                    </mat-tab>
+                                </mat-tab-group>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <button class="btn btn-success status-btn" (click)="navigate()" aria-label="Back to History">
+                        <i class="feather icon-chevron-left"></i> Back to History
+                    </button>
+
+                    <div class="mt-3">
+
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Year</mat-label>
+                            <input type="text" matInput [value]="yearData" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div class="mt-3">
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Month</mat-label>
+                            <input type="text" matInput [value]="monthData" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div class="mt-3">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Created By:</label>
+                        <p class="text-muted">{{ createdUser }}</p>
+                    </div>
+                    <div class="mt-3">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Divisions:</label>
+                        <p class="text-muted">{{ divisionNames || 'No divisions available' }}</p>
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Team Members:</label>
+                        <p class="text-muted">
+                            <ng-container *ngIf="teamMembers.length; else noMembers">
+                                {{ formattedTeamMembers }}
+                            </ng-container>
+                            <ng-template #noMembers>No team members</ng-template>
+                        </p>
+                    </div>
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-primary btn-icon-text btn-xs mb-2"
+                            *ngIf="createdUserID==userID" (click)="addTeamMember()">
+                            <i class="feather icon-plus btn-icon-prepend"></i>
+                            Add Team Member
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div [formGroup]="generalForm" *ngIf="mode==='view'" class="container-fluid" id="disclosures">
+    <div class="row">
+        <div class="col-lg-8">
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">ESG<span>
+                                    Disclosure</span></a>
+                            <p class="mt-1 mb-1"><b>View Disclosure</b></p>
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <!-- <h6 class="fw-bold text-end mt-4 mb-2">Reporting Date</h6> -->
+                            <!-- <h6 class="text-end mb-5 ">{{Form.value.reported_date| date:'MMM d, y'}}</h6> -->
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+                                <mat-tab-group mat-align-tabs="start">
+                                    <mat-tab *ngIf="isTabVisible('Environment')" [formGroup]="govDisclosureForm">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon ">article</mat-icon>
+                                            Environment Disclosure </ng-template>
+                                        <app-environment-disclosure [userID]="userID" [disclosureMode]="mode"
+                                            [data]="environmentTitles" [notes]="environmentNotes"
+                                            [currentTitles]="currentENVTitles" [lov]="envDisclosureLOV"
+                                            [roles]="environmentRoles" [refID]="refID"
+                                            [status]="status"></app-environment-disclosure>
+                                    </mat-tab>
+                                    <mat-tab *ngIf="isTabVisible('Social')" [formGroup]="socialDisclosureForm">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon ">groups</mat-icon>
+                                            Social Disclosure
+                                        </ng-template>
+                                        <app-social-disclosure [disclosureMode]="mode" [userID]="userID"
+                                            [currentTitles]="currentSOCTitles" [notes]="socialNotes"
+                                            [data]="socialTitles" [lov]="socDisclosureLOV" [refID]="refID"
+                                            [roles]="socialRoles" [status]="status"></app-social-disclosure>
+                                    </mat-tab>
+                                    <mat-tab *ngIf="isTabVisible('Governance')" [formGroup]="envDisclosureForm">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon disc-mat-icon">account_balance</mat-icon>
+                                            Governance Disclosure </ng-template>
+                                        <app-governance-disclosure [disclosureMode]="mode"
+                                            [currentGOVTitles]="currentGOVTitles" [notes]="governanceNotes"
+                                            [data]="governanceTitles" [lov]="govDisclosureLOV" [refID]="refID"
+                                            [roles]="governanceRoles" [status]="status"></app-governance-disclosure>
+                                    </mat-tab>
+                                </mat-tab-group>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <button class="btn btn-success status-btn" (click)="navigate()" aria-label="Back to History">
+                        <i class="feather icon-chevron-left"></i> Back to History
+                    </button>
+
+
+                    <div class="mt-3">
+
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Year</mat-label>
+                            <input type="text" matInput [value]="yearData" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div class="mt-3">
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Month</mat-label>
+                            <input type="text" matInput [value]="monthData" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div class="mt-3">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Created By:</label>
+                        <p class="text-muted">{{ createdUser }}</p>
+                    </div>
+                    <div class="mt-3">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Divisions:</label>
+                        <p class="text-muted">{{ divisionNames || 'No divisions available' }}</p>
+                    </div>
+                    <div class="mt-3">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Team Members:</label>
+                        <p class="text-muted">
+                            <ng-container *ngIf="teamMembers.length; else noMembers">
+                                {{ formattedTeamMembers }}
+                            </ng-container>
+                            <ng-template #noMembers>No team members</ng-template>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

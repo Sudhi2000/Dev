@@ -1,0 +1,89 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-12">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Team Member</mat-label>
+                        <input type="text" matInput formControlName="teamMember" readonly>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Environment Disclosure Role</mat-label>
+                        <mat-select [formControl]="environmentRoleControl" multiple
+                            (selectionChange)="setEnvironmentRoles($event)">
+                            <mat-option *ngFor="let role of roleList" [value]="role.Value">{{role.Value}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Environment Disclosure Themes</mat-label>
+                        <mat-select [formControl]="environmentThemesControl" multiple
+                            (selectionChange)="setEnvironmentThemes($event)">
+                            <mat-option *ngFor="let theme of environmentThemeList"
+                                [value]="theme.Value">{{theme.Value}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Social Disclosure Role</mat-label>
+                        <mat-select [formControl]="socialRoleControl" multiple
+                            (selectionChange)="setSocialRoles($event)">
+                            <mat-option *ngFor="let role of roleList" [value]="role.Value">{{role.Value}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Social Disclosure Themes</mat-label>
+                        <mat-select [formControl]="socialThemesControl" multiple
+                            (selectionChange)="setSocialThemes($event)">
+                            <mat-option *ngFor="let theme of socialThemeList"
+                                [value]="theme.Value">{{theme.Value}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Governance Disclosure Role</mat-label>
+                        <mat-select [formControl]="governanceRoleControl" multiple
+                            (selectionChange)="setGovernanceRoles($event)">
+                            <mat-option *ngFor="let role of roleList" [value]="role.Value">{{role.Value}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Governance Disclosure Themes</mat-label>
+                        <mat-select [formControl]="governanceThemesControl" multiple
+                            (selectionChange)="setGovernanceThemes($event)">
+                            <mat-option *ngFor="let theme of goverananceThemeList"
+                                [value]="theme.Value">{{theme.Value}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mb-3">
+             
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4 " [disabled]="!Form.valid"
+                    [disabled]="!enableSubmit || !Form.valid" (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                   <button type="button" class=" btn btn-secondary btn-icon-text float-end mt-4 me-2" (click)="close()">
+                  Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

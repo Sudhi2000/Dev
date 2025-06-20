@@ -1,0 +1,253 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">External<span>
+                                    Audit</span></a>
+                            <p class="mt-1 mb-1"><b># {{Form.value.reference_number}}</b></p>
+
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Date</h6>
+                            <h6 class="text-end mb-5 ">{{Form.value.date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+
+                                <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex">
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">article</mat-icon>
+                                            Audit Details
+                                        </ng-template>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Type</mat-label>
+                                                    <input type="text" matInput formControlName="audit_type">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Category</mat-label>
+                                                    <input type="text" matInput formControlName="audit_category">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Customer</mat-label>
+                                                    <input type="text" matInput formControlName="customer">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-md-12">
+
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Standard</mat-label>
+                                                    <input type="text" matInput formControlName="audit_standard">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Firm</mat-label>
+                                                    <input type="text" matInput formControlName="audit_firm">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Division</mat-label>
+                                                    <input type="text" matInput formControlName="division">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+
+                                            </div>
+                                            <!-- <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Audit Fee</mat-label>
+                                                    <input type="number" matInput formControlName="audit_fee">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+            
+                                            </div> -->
+
+
+
+                                        </div>
+
+
+                                    </mat-tab>
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">warning</mat-icon>
+                                            Action
+                                        </ng-template>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+                                                <label class="tx-11 fw-bolder mb-0 text-uppercase">Announcement
+                                                    Type:</label><br>
+                                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style"
+                                                    formControlName="announcement" #group="matButtonToggleGroup">
+                                                    <mat-button-toggle value="Announced">Announced</mat-button-toggle>
+                                                    <mat-button-toggle value="Semi-announced">Semi
+                                                        Announced</mat-button-toggle>
+                                                    <mat-button-toggle
+                                                        value="Un-announced">Un-Announced</mat-button-toggle>
+                                                </mat-button-toggle-group>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mt-4">
+                                            <quill-editor placeholder="Remarks" [modules]="quillConfig"
+                                                formControlName="remarks">
+                                            </quill-editor>
+                                        </div>
+
+                                    </mat-tab>
+
+                                </mat-tab-group>
+
+
+                            </div>
+
+
+
+
+
+                            <!-- <div class="mb-3">
+                                <button type="button" class="btn btn-success btn-icon-text float-end mt-4 "
+                                    (click)="create_reference_number('Submit')" [disabled]="!Form.valid">
+                                    <i class="feather icon-send btn-icon-prepend"></i>
+                                    Submit
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-icon-text float-end mt-4 action-btn"
+                                    (click)="create_reference_number('Save')" [disabled]="!Form.valid">
+                                    <i class="feather icon-save btn-icon-prepend"></i>
+                                    Save as Draft
+                                </button>
+
+                            </div> -->
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary">{{Form.value.status}}</button>
+                        <div class="btn-group" ngbDropdown role="group">
+                            <button class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle></button>
+                            <div ngbDropdownMenu>
+                                <button ngbDropdownItem (click)="action('Approved')">Approve</button>
+                                <button ngbDropdownItem (click)="action('Rejected')">Reject</button>
+                                <button ngbDropdownItem (click)="action('Hold')">Hold</button>
+                                <button ngbDropdownItem (click)="action('Change Requested')">Change Request</button>
+
+                            </div>
+                            <button class="btn btn-success status-btn ms-2" mat-icon-button
+                                aria-label="Example icon-button with a menu" (click)="navigate()">
+                                <i class="feather icon-chevron-left"></i> Back to History
+
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <!-- <div class="mt-3">
+                        <button class="btn btn-primary" mat-icon-button aria-label="Example icon-button with a menu">
+                            {{Form.value.status}}
+                        </button>
+                    </div> -->
+                    <div class="mt-3">
+
+                        <mat-form-field appearance="outline" color="primary" id="dashboard">
+                            <mat-label>Audit Date</mat-label>
+                            <mat-date-range-input [formGroup]="auditDateRange" [rangePicker]="picker">
+                                <input matStartDate formControlName="start" placeholder="Start date"
+                                    (dateChange)="startDateChange($event)">
+                                <input matEndDate formControlName="end" placeholder="End date"
+                                    (dateChange)="endDateChange($event)">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                            <mat-error *ngIf="auditDateRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                                start date</mat-error>
+                            <mat-error *ngIf="auditDateRange.controls.end.hasError('matEndDateInvalid')">Invalid end
+                                date
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-3">
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Date for Approval</mat-label>
+                            <input matInput [matDatepicker]="dpApproval" placeholder="Choose a date"
+                                [formControl]="approvalDate" (dateChange)="approval_date($event)">
+                            <mat-datepicker-toggle matSuffix [for]="dpApproval"></mat-datepicker-toggle>
+                            <mat-datepicker #dpApproval></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+
+
+                    <div>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Approver</mat-label>
+                            <input type="text" matInput formControlName="approver">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+
+                    </div>
+
+                    <div>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Management Representative</mat-label>
+                            <input type="text" matInput formControlName="audit_representative">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

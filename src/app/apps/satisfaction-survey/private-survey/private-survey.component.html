@@ -1,0 +1,432 @@
+<div class="container-fluid" [formGroup]="Form">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-10 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Satisfaction<span>
+                                    Survey</span></a>
+                            <p class="mt-1 mb-1"><b>{{SurveyReference}} : Private Survey</b></p>
+                        </div>
+                        <div class="col-lg-2 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Created Date</h6>
+                            <h6 class="text-end mb-3 pb-2">{{SurveyCreatedDate| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100 mt-5">
+                        <div class="table-responsive w-100">
+
+                            <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndexCon">
+                                <mat-tab>
+                                    <ng-template mat-tab-label>
+                                        <mat-icon class="example-tab-icon">archive</mat-icon>
+                                        Survey Details
+                                    </ng-template>
+                                    <p [innerHTML]="'<b>Survey Title:</b> ' + SurveyTitle"></p>
+                                    <p [innerHTML]="'<b>Survey Description:</b> ' + SurveyDescription"></p>
+                                </mat-tab>
+
+                                <!-- <mat-tab>
+
+                                    <ng-template mat-tab-label>
+                                        <mat-icon class="example-tab-icon">archive</mat-icon>
+                                        Participants
+                                    </ng-template>
+
+                                </mat-tab> -->
+                                <mat-tab *ngIf="AddNewparticipants">
+                                    <ng-template mat-tab-label>
+                                        <mat-icon class="example-tab-icon">article</mat-icon>
+                                        Participants
+                                    </ng-template>
+                                    <div class="row">
+                                        <button type="button" class="btn btn-primary btn-icon-text"
+                                            (click)="addParticipants()">
+                                            Add Participants
+                                            <i class="feather icon-box btn-icon-append"></i>
+                                        </button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="table-responsive pt-3" id="language">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 15px;">SlNo</th>
+                                                        <th>Name</th>
+                                                        <th>Email</th>
+                                                        <th style="width: 130px;"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let data of participants; let i = index">
+                                                        <td>{{ i + 1 }}</td>
+                                                        <td>{{data.Employee}}</td>
+                                                        <td>{{data.Email}}</td>
+                                                        <td>
+                                                            <button type="button"
+                                                                class="btn btn-success btn-icon btn-xs  action-btn"
+                                                                (click)="updateParticipants(data)" placement="top"
+                                                                ngbTooltip="Modify">
+                                                                <i class="feather icon-edit"></i>
+                                                            </button>
+
+                                                            <button type="button"
+                                                                class="btn btn-primary btn-icon btn-xs action-btn "
+                                                                (click)="viewParticipants(data)" ngbTooltip="View">
+                                                                <i class="feather icon-eye"></i>
+                                                            </button>
+
+
+                                                            <button type="button"
+                                                                class="btn btn-danger btn-icon btn-xs action-btn"
+                                                                (click)="deleteParticipants(data)" ngbTooltip="Delete">
+                                                                <i class="feather icon-trash-2"></i>
+                                                            </button>
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="mb-3">
+                                        <button type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                                        [disabled]="!(Form.valid && sub)" (click)="submit()">
+                                        <i class="feather icon-send btn-icon-prepend"></i>
+                                        Submit
+                                    </button>
+                                    &nbsp; <button type="button"
+                                        class="btn btn-secondary btn-icon-text float-end mt-4 action-btn"
+                                        (click)="saveAsDraft()">
+                                        <i class="feather icon-save btn-icon-prepend"></i>
+                                        Save as Draft
+                                    </button>
+                                    &nbsp; <button type="button"
+                                        class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                        (click)="previousStep()">
+                                        <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                        Previous
+                                    </button>
+                                    </div> -->
+                                </mat-tab>
+                            </mat-tab-group>
+
+
+                        </div>
+                    </div>
+                    <div class="mb-3">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card summary-card">
+                <div class="card-body">
+
+                    <div class="mt-2">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Created By:</label>
+                        <p innerHTML="{{SurveyCreatedBy}}"></p>
+                    </div>
+
+                    <div class="mt-2">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Participants Count:</label>
+                        <p innerHTML="{{SurveyParticipantCount}}"></p>
+                    </div>
+
+                    <div class="mt-2">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Survey Category:</label>
+                        <p innerHTML="{{SurveyCategory}}"></p>
+                    </div>
+
+                    <div class="mt-2">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Survey Duration:</label>
+                        <p innerHTML="{{survey_start_date |
+                            date:'dd-MMM-yyyy'}} -
+                            {{survey_end_date
+                            | date:'dd-MMM-yyyy'}}"></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--ddsadsadsadsad-->
+
+    <div class="row mt-3">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Survey</a>
+                            <!-- <p class="mt-1 mb-1"><b>Private Survey</b></p> -->
+                            <!-- <h6 class=" mb-5"># {{Form.value.reference_number}}</h6> -->
+                        </div>
+
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100 mt-2">
+                        <div class="table-responsive w-100">
+
+                            <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex"
+                                id="surveyMatTabHeader">
+                                <!-- Language Selection Tab -->
+                                <mat-tab label="Language">
+                                    <div class="row">
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-4">
+                                            <mat-form-field fxFlex appearance="outline">
+                                                <mat-label>Select Language</mat-label>
+                                                <mat-select>
+                                                    <mat-option (click)="onLanguageSelectionChange(language)"
+                                                        *ngFor="let language of languages" [value]="language.name">
+                                                        {{ language.name }}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-error>Required Field</mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4"></div>
+                                    </div>
+                                </mat-tab>
+
+                                <!-- Questions and Submit Tab -->
+                                <mat-tab *ngIf="Questions.length > 0">
+                                    <div class="row justify-content-center">
+                                        <div *ngFor="let q of Questions" class="col-md-10">
+                                            <mat-card class="question-card">
+                                                <mat-card-header>
+                                                    <mat-card-title>{{ q.question }}</mat-card-title>
+                                                </mat-card-header>
+                                                <mat-card-content>
+
+                                                    <!-- Star Rating -->
+                                                    <div *ngIf="q.response_options == 'Star Rating'"
+                                                        class="response-section">
+                                                        <ngb-rating [max]="5" class="star"
+                                                            (rateChange)="onRatingChange($event, q)">
+                                                        </ngb-rating>
+                                                    </div>
+
+                                                    <!-- Descriptive Answer -->
+                                                    <div *ngIf="q.response_options == 'Descriptive'"
+                                                        class="response-section">
+                                                        <quill-editor placeholder="Type your answer..."
+                                                            [modules]="quillConfig"
+                                                            (onContentChanged)="onEditorInput($event, q)">
+                                                        </quill-editor>
+                                                    </div>
+
+                                                    <!-- Multiple Choice -->
+                                                    <div *ngIf="q.response_options == 'Multiple Choice'"
+                                                        class="response-section">
+                                                        <mat-form-field appearance="outline">
+                                                            <mat-label>Select options</mat-label>
+                                                            <mat-select multiple
+                                                                (selectionChange)="onSelectionChange($event, q)">
+                                                                <mat-option *ngFor="let opt of q.options" [value]="opt">
+                                                                    {{ opt }}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                            <mat-error>Required Field</mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+
+                                                    <!-- Single Choice -->
+                                                    <div *ngIf="q.response_options == 'Single Choice'"
+                                                        class="response-section">
+                                                        <mat-form-field appearance="outline">
+                                                            <mat-label>Choose one</mat-label>
+                                                            <mat-select
+                                                                (selectionChange)="onSingleSelectionChange($event, q)">
+                                                                <mat-option *ngFor="let opt of q.options" [value]="opt">
+                                                                    {{ opt }}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                            <mat-error>Required Field</mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+
+
+                                                    <!-- Yes or No -->
+                                                    <div *ngIf="q.response_options == 'Yes or No'"
+                                                        class="response-section text-center">
+                                                        <mat-button-toggle-group name="yesNoGroup"
+                                                            (change)="onToggleChange($event, q)">
+                                                            <mat-button-toggle value="Yes">Yes</mat-button-toggle>
+                                                            <mat-button-toggle value="No">No</mat-button-toggle>
+                                                        </mat-button-toggle-group>
+                                                    </div>
+
+                                                </mat-card-content>
+                                            </mat-card>
+                                        </div>
+
+                                        <div class="col-md-10 d-flex justify-content-end mt-4">
+                                            <button type="button" class="btn btn-primary me-2" (click)="previousStep()">
+                                                <i class="feather icon-arrow-left-circle"></i> Previous
+                                            </button>
+                                            <button type="button" class="btn btn-success"
+                                                [disabled]="answers.length === 0" (click)="submit()">
+                                                Submit <i class="feather icon-send"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </mat-tab>
+                            </mat-tab-group>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center align-items-center w-100">
+        <div class="table-responsive w-100" style="overflow: hidden;">
+            <div class="row ">
+                <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex">
+                    <mat-tab disabled>
+                        <div class="row ">
+                            <div class="col-md-4">
+
+                            </div>
+                            <div class="col-md-4" style="margin-top: 15%;">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Select Language</mat-label>
+                                    <mat-select formControlName="language"
+                                        (selectionChange)="onLanguageSelectionChange($event)">
+                                        <mat-option *ngFor="let language of languages" value="{{language.name}}">
+                                            {{language.name}}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+
+                            </div>
+
+                        </div>
+                    </mat-tab>
+                    <mat-tab *ngFor="let q of Questions" disabled>
+                        <p>{{ q.question }}</p>
+
+                        <div class="col-md-12" *ngIf="q.response_options == 'Star Rating'">
+                            <ngb-rating [max]="5" class="star" (rateChange)="onRatingChange($event,q.question)">
+                            </ngb-rating>
+                        </div>
+                        <div class="col-md-12" *ngIf="q.response_options == 'Descriptive'">
+                            <quill-editor placeholder="Answer" [modules]="quillConfig" (input)="onEditorInput($event,q.question)">
+                            </quill-editor>
+                        </div>
+                        <div class="col-md-12" *ngIf="q.response_options == 'Multiple Choice'">
+                            <mat-form-field fxFlex appearance="outline" color="primary">
+                                <mat-select multiple (selectionChange)="onSelectionChange($event,q.question)">
+                                    <mat-select-trigger>
+                                        {{ selectedOptionsDisplay }}
+                                    </mat-select-trigger>
+                                    <mat-option *ngFor="let opt of options"
+                                        [value]="opt.option">{{opt.option}}</mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-12" *ngIf="q.response_options == 'Single Choice'">
+                            <mat-form-field fxFlex appearance="outline" color="primary">
+                                <mat-select (selectionChange)="onSingleSelectionChange($event,q.question)">
+                                    <mat-select-trigger>
+                                        {{ singleselectedOptionsDisplay }}
+                                    </mat-select-trigger>
+                                    <mat-option *ngFor="let opt of options"
+                                        [value]="opt.option">{{opt.option}}</mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-12" *ngIf="q.response_options == 'Yes or No'">
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style"
+                                #group="matButtonToggleGroup" class="announce" (change)="onToggleChange($event,q.question)">
+                                <mat-button-toggle value="Yes" class="announceOption">
+                                    Yes
+                                </mat-button-toggle>
+                                <mat-button-toggle value="No" class="announceOption">
+                                    No
+                                </mat-button-toggle>
+
+                            </mat-button-toggle-group>
+                        </div>
+                        <div class="mb-3">
+                            <button *ngIf="maxNumberOfTabs !== selectedIndex" type="button"
+                                class="btn btn-primary btn-icon-text float-end mt-4"
+                                (click)="nextStep(q.question)">
+                                <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                Next
+                            </button>
+                            &nbsp;<button type="button" class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                (click)="previousStep()">
+                                <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                Previous
+                            </button>
+
+                        </div>
+                    </mat-tab>
+                    <mat-tab>
+                        <div *ngFor="let response of answers">
+                            <p><strong>Question:</strong> {{ response.Question }}</p>
+                            <p><strong>Answer:</strong> {{ response.answer }}</p>
+                        </div>
+                      
+                        <div>
+                            <p><strong>{{ Disclaimer }}</strong></p>
+                        </div>
+                        <div class="mb-3">
+                            <button type="button"
+                            class="btn btn-primary btn-icon-text float-end mt-4" (click)="submit()">
+                            <i class="feather icon-send btn-icon-prepend"></i>
+                            Submit
+                        </button>
+                        &nbsp;<button type="button" class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                (click)="previousStep()">
+                                <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                Previous
+                            </button>
+
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
+    </div>
+</div> -->

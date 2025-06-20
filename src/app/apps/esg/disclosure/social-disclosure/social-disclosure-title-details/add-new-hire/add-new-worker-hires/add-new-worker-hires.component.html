@@ -1,0 +1,86 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Region</mat-label>
+                        <mat-select formControlName="region">
+                            <mat-option *ngFor="let data of lov[0]?.value" [value]="data.region">
+                                <span class="option-container">{{ data.region }}
+                                    <span>
+                                        <i class="feather icon-edit modifyicon" (click)="modifyRegion(data)"></i>
+                                        <i class="feather icon-trash-2 deleteicon" (click)="deleteRegion(data)"></i>
+                                    </span>
+                                </span>
+                            </mat-option>
+                            <mat-option (click)="new_region()" class="option-btn"> <i class=" mdi mdi-plus-circle"></i>
+                                Create New Region
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>New Worker Hires</mat-label>
+                        <mat-select formControlName="new_worker_hires">
+                            <mat-option *ngFor="let data of lov[4]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Age Group</mat-label>
+                        <mat-select formControlName="age_group">
+                            <mat-option *ngFor="let data of lov[2]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Male</mat-label>
+                        <input type="number" matInput formControlName="male">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Female</mat-label>
+                        <input type="number" matInput formControlName="female">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Other</mat-label>
+                        <input type="number" matInput formControlName="other">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <button *ngIf="data.mode!=='view'" type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                    [disabled]="!Form.valid" (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                <button *ngIf="data.mode==='view'" type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                    (click)="close()">
+                    <i class="feather icon-x-circle btn-icon-prepend"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

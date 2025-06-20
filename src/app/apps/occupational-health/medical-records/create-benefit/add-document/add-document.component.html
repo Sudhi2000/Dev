@@ -1,0 +1,106 @@
+<!-- <div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Document Type</mat-label>
+                        <mat-select formControlName="document_type">
+                            <mat-option *ngFor="let data of documentTypeList" value="{{data.attributes.Value}}">
+                                {{data.attributes.Value}}</mat-option>
+                                
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Upload Date</mat-label>
+                        <input matInput [matDatepicker]="ntcdp" placeholder="Choose a date" [formControl]="uploadDate"
+                            (dateChange)="uploadDateVal($event)">
+                        <mat-datepicker-toggle matSuffix [for]="ntcdp"></mat-datepicker-toggle>
+                        <mat-datepicker #ntcdp></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row mt-3" width="1200">
+                <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)" >
+                    <ngx-dropzone-label>Drop your document here. Please ensure the image
+                        size is less than 2 MB</ngx-dropzone-label>
+                    <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" [removable]="true"
+                        *ngFor="let f of files" [file]="f" (removed)="onRemove(f)">
+                    </ngx-dropzone-image-preview>
+                </div>
+            </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                    (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+<h2 mat-dialog-title>Document</h2>
+<mat-dialog-content class="mat-typography" [formGroup]="Form" style="width: 600px;">
+    <div class="row ">
+        <div class="col-md-6">
+            <mat-form-field fxFlex appearance="outline">
+                <mat-label>Document Type</mat-label>
+                <mat-select formControlName="document_type">
+                    <mat-option *ngFor="let data of documentTypeList" value="{{data.attributes.Value}}">
+                        {{data.attributes.Value}}</mat-option>
+                        
+                </mat-select>
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="col-md-6">
+            <!-- <mat-form-field appearance="outline" color="primary">
+                <mat-label>Upload Date</mat-label>
+                <input matInput [matDatepicker]="ntcdp" placeholder="Choose a date" [formControl]="uploadDate"
+                    (dateChange)="uploadDateVal($event)">
+                <mat-datepicker-toggle matSuffix [for]="ntcdp"></mat-datepicker-toggle>
+                <mat-datepicker #ntcdp></mat-datepicker>
+                <mat-error>Required Field</mat-error>
+            </mat-form-field> -->
+        </div>
+    </div>
+    <!-- <div class="row mt-3">
+        <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)" >
+            <ngx-dropzone-label>Drop your document here. Please ensure the image
+                size is less than 2 MB</ngx-dropzone-label>
+            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" [removable]="true"
+                *ngFor="let f of files" [file]="f" (removed)="onRemove(f)">
+            </ngx-dropzone-image-preview>
+        </div>
+    </div> -->
+    <div class="row mt-3">
+        <div class="custom-dropzone" ngx-dropzone [accept]="
+            'application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, image/jpeg, image/png'
+          " (change)="onSelect($event)">
+          <ngx-dropzone-label>Drop your document here. Please ensure that the document
+            size is less than 5 MB</ngx-dropzone-label>
+          <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files" [file]="f"
+            (removed)="onRemove(f)">
+            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+          </ngx-dropzone-preview>
+        </div>
+      </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button type="button" class="btn btn-primary btn-icon-text" (click)="submit()">
+        <i class="feather icon-send btn-icon-prepend"></i>
+        Submit
+    </button>
+    &nbsp;<button type="button" class="btn btn-secondary" mat-dialog-close>
+        Cancel
+    </button>
+</mat-dialog-actions>

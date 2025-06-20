@@ -1,0 +1,253 @@
+.table-responsive {
+    overflow: hidden;
+}
+
+.option-btn {
+    color: white;
+    cursor: pointer;
+}
+
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile+label {
+
+    color: white;
+    background-color: red;
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+}
+
+.inputfile:focus+label,
+.inputfile+label:hover {
+    background-color: red;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+
+}
+
+.inputfile+label {
+    cursor: pointer;
+    /* "hand" cursor */
+}
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+table {
+    thead {
+        tr {
+            th {
+                padding-left: 20px;
+            }
+        }
+
+    }
+
+    tbody {
+        tr {
+            td {
+                padding-left: 20px;
+
+            }
+        }
+    }
+}
+
+.btn-previous {
+    margin-right: 2px;
+}
+
+.action-btn {
+    margin-right: 5px;
+}
+
+
+mat-chip {
+    background-color: #05A34A !important;
+    color: white !important;
+}
+
+.hide {
+    display: none;
+}
+
+.mat-chip.mat-standard-chip.mat-chip-disabled {
+    background-color: #05A34A !important;
+    color: white !important;
+}
+
+.titleicon_delete {
+    color: red;
+}
+
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon-container {
+    margin-left: 8px;
+    /* Adjust the margin as needed to control the spacing between the title and the icon */
+}
+
+.titleicon_edit {
+    color: green;
+}
+
+.warning-font-size {
+    font-size: 12px;
+}
+
+.option-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .icon-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .titleicon_edit{
+    cursor: pointer;
+    color: green;;
+  }
+  
+  .titleicon_delete{
+  color: red;
+  }
+ 
+  .mat-input-element {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    height: auto;
+  }
+  .mat-chip-list-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  
+  .mat-chip {
+    max-width: 100%; // Prevents overflow
+    white-space: normal; // Allows wrapping
+    word-wrap: break-word; // Ensures breaking within words if necessary
+    padding: 6px 12px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    background: #008000;
+    color: white;
+    font-size: 14px;
+  }
+  
+  // Handling Long Text with Line Clamp (Cross-Browser Support)
+  .mat-chip span {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; // Limits text to 2 lines
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  
+    display: -moz-box;
+    -moz-line-clamp: 2;
+    -moz-box-orient: vertical;
+  
+    display: -ms-flexbox;
+    -ms-line-clamp: 2;
+    -ms-box-orient: vertical;
+  
+    display: box;
+    line-clamp: 2;
+    box-orient: vertical;
+  }
+  
+  .mat-chip .close-icon {
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+
+
+  .storage-condition-field {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    min-height: auto;
+    padding-bottom: 10px; // Adds space at the bottom
+  
+    .mat-chip-list-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      max-width: 100%;
+      padding-bottom: 5px; // Ensures space for input
+    }
+  
+    .mat-chip {
+      max-width: 100%;
+      white-space: normal;
+      word-wrap: break-word;
+      padding: 6px 12px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      background: #008000;
+      color: white;
+      font-size: 14px;
+    }
+  
+    .mat-form-field-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      min-height: auto; // Allows dynamic expansion
+    }
+  
+    .mat-input-element {
+      min-height: 40px !important; // Ensures the input field remains visible
+      flex-grow: 1; // Makes it expand as needed
+      white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
+          height: auto;
+    }
+  }
+  
+  
+

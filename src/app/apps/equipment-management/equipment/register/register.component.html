@@ -1,0 +1,112 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-8">
+        <nav aria-label="breadcrumb ">
+          <a routerLink="." class="nobleui-logo d-block mt-3">Equipment <span>Details</span></a>
+          <ol class="breadcrumb breadcrumb-dot">
+            <li class="breadcrumb-item"><a routerLink="/apps/insight">Home</a></li>
+            <li class="breadcrumb-item"><a routerLink="/apps/equipment-management/equipment/register">Equipment</a></li>
+            <li class="breadcrumb-item"><a routerLink="/apps/equipment-management/equipment/register">Register</a></li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-md-4 search">
+        <div>
+          <div class="input-group">
+            <div class="input-group-text">
+              <i class="feather icon-search"></i>
+            </div>
+            <input type="text" class="form-control" id="navbarForm" placeholder="Search here..."
+              (keyup)="applyFilter($event)">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 stretch-card">
+    <div class="card">
+      <div class="card-body table-card">
+        <div class="table-responsive">
+          <ng-container *ngIf="isLoading">
+            <app-loading-screen [rows]="9"></app-loading-screen>
+          </ng-container>
+          <ng-container *ngIf="!isLoading">
+            <table mat-table [dataSource]="dataSource" matSort>
+              <ng-container matColumnDef="reference_number">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Reference Number </th>
+                <td mat-cell *matCellDef="let element"> {{element.reference_number}} </td>
+              </ng-container>
+              <ng-container matColumnDef="equipment_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Equipment Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.equipment_name}} </td>
+              </ng-container>
+              <ng-container matColumnDef="equipment_type">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Equipment Type </th>
+                <td mat-cell *matCellDef="let element"> {{element.equipment_type}} </td>
+              </ng-container>
+              <ng-container matColumnDef="fuel_type">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Fuel Type </th>
+                <td mat-cell *matCellDef="let element"> {{element.fuel_type}} </td>
+              </ng-container>
+              <ng-container matColumnDef="last_odometer_reading">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Odometer Reading </th>
+                <td mat-cell *matCellDef="let element"> {{element.last_odometer_reading}} </td>
+              </ng-container>
+              <ng-container matColumnDef="last_inspection_date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Last Inspection Date">Last
+                  Inspection Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.last_inspection_date | date:'dd-MMM-yyyy'}}</td>
+              </ng-container>
+              <!-- <ng-container matColumnDef="client_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Client/Project </th>
+                <td mat-cell *matCellDef="let element"> {{element.client_name}} </td>
+              </ng-container>
+              <ng-container matColumnDef="current_location">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Current Location </th>
+                <td mat-cell *matCellDef="let element"> {{element.current_location}} </td>
+              </ng-container> -->
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Status"> Status
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <button type="button" class="btn {{statusButton(element.status)}} status-btn btn-icon-text">
+                    {{element.status}}
+                  </button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th *matHeaderCellDef class="actions-cell" mat-header-cell mat-sort-header>Actions</th>
+                <td *matCellDef="let row" class="actions-cell" mat-cell>
+                  <button type="button" class="btn btn-success btn-icon btn-xs" (click)="action(row)" placement="top"
+                    ngbTooltip="Action">
+                    <i class="feather icon-zap"></i>
+                  </button>
+                  <button type="button" class="btn btn-primary btn-icon btn-xs hide" id="{{row.document_number}}_1">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="visually-hidden">Loading...</span>
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-icon btn-xs" (click)="view(row)" placement="top"
+                    ngbTooltip="View">
+                    <i class="feather icon-eye"></i>
+                  </button>
+                  <button type="button" class="btn btn-primary btn-icon btn-xs" placement="top"
+                    ngbTooltip="Live Location" (click)="location(row)">
+                    <i class="feather icon-map-pin"></i>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="visibleColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: visibleColumns;"></tr>
+            </table>
+          </ng-container>
+          <mat-paginator [pageSize]="pageSize" showFirstLastButtons [showFirstLastButtons]="true" [length]="totalItems"
+            (page)="get_equipment_register($event)" aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+.table-responsive {
+    overflow: hidden;
+}
+.preview-text {
+    white-space: normal; 
+    overflow: visible;  
+    text-overflow: clip; 
+    width: 100%;         
+    display: block;      
+    text-align: center;  
+  }
+  

@@ -1,0 +1,140 @@
+.question-card {
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+}
+.table-responsive {
+    overflow: unset;
+}
+.response-section {
+    margin-top: 15px;
+}
+
+// mat-card-title {
+//     font-size: 18px;
+//     font-weight: bold;
+// }
+
+.mat-button-toggle-group {
+    margin-top: 10px;
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+.logo {
+    img {
+        width: 200px;
+    }
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #0d6efd;
+    color: white;
+  }
+
+
+
+// new
+.number-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 12px;
+  margin-bottom: 4px;
+}
+.label {
+  width: 24px;
+  text-align: center;
+  font-size: 12px;
+}
+
+/* Dynamic colors using ::ng-deep */
+::ng-deep .slider-red .mat-slider-track-fill,
+::ng-deep .slider-red .mat-slider-thumb {
+  background-color: #f44336 !important;
+}
+::ng-deep .slider-orange .mat-slider-track-fill,
+::ng-deep .slider-orange .mat-slider-thumb {
+  background-color: #ff9800 !important;
+}
+::ng-deep .slider-yellow .mat-slider-track-fill,
+::ng-deep .slider-yellow .mat-slider-thumb {
+  background-color: #ffeb3b !important;
+}
+::ng-deep .slider-lightgreen .mat-slider-track-fill,
+::ng-deep .slider-lightgreen .mat-slider-thumb {
+  background-color: #8bc34a !important;
+}
+::ng-deep .slider-green .mat-slider-track-fill,
+::ng-deep .slider-green .mat-slider-thumb {
+  background-color: #4caf50 !important;
+}
+
+/* Slider overall size */
+.custom-slider {
+  width: 100%; /* Or set a fixed size like 300px */
+  max-width: 500px;
+  margin: 0 auto; /* Center it horizontally */
+}
+
+/* Track thickness */
+::ng-deep .custom-slider .mat-slider-wrapper {
+  height: 12px !important; /* Default is ~2px, increase as needed */
+}
+
+/* Thumb size (optional) */
+::ng-deep .custom-slider .mat-slider-thumb {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50%;
+}
+
+::ng-deep .mat-slider-thumb {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 50%;
+}
+
+  
+.mat-slider {
+  margin-bottom: 0; /* Reduce gap between slider and labels */
+}
+
+.highlight-number {
+  color: #007bff; /* Bootstrap primary color or change as needed */
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+// .low-value {
+//   color: #e53935; /* Red */
+// }
+// .medium-value {
+//   color: #fb8c00; /* Orange */
+// }
+// .high-value {
+//   color: #43a047; /* Green */
+// }
+
+// /* Optional: visually dim unselected numbers */
+// .text-muted {
+//   opacity: 0.5;
+// }
+
+.low-value {
+  color: #e53935; /* Red */
+}
+.medium-value {
+  color: #fb8c00; /* Orange */
+}
+.high-value {
+  color: #43a047; /* Green */
+}
+
+/* Optional: visually dim unselected numbers */
+.text-muted {
+  opacity: 0.5;
+}

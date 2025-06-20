@@ -1,0 +1,81 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Engagements<span>
+                                    </span></a>
+                            <p class="mt-1 mb-1"><b>Create an engagement</b></p>
+                            <!-- <h6 class=" mb-5"># {{Form.value.reference_number}}</h6> -->
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Date</h6>
+                            <h6 class="text-end mb-5 ">{{Form.value.reported_date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                             
+                            <div class="row ">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Event Title</mat-label>
+                                        <input type="text" matInput formControlName="event_title">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <quill-editor placeholder="Description" [modules]="quillConfig"
+                                    formControlName="description">
+                                </quill-editor>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary btn-icon-text float-end mt-4" (click)="submit()" [disabled]="!Form.valid">
+                            <i class="feather icon-send btn-icon-prepend"></i>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-3">
+                        <button class="btn btn-primary" mat-icon-button
+                            aria-label="Example icon-button with a menu">
+                            <i class="feather icon-more-horizontal btn-icon-prepend"></i> {{Form.value.status}}
+                        </button>
+                    </div>
+                     
+                    <div class="mt-3">
+
+                        <mat-form-field appearance="outline" color="primary" id="dashboard">
+                            <mat-label>Event Date</mat-label>
+                            <mat-date-range-input [formGroup]="eventDateRange" [rangePicker]="picker">
+                                <input matStartDate formControlName="start" placeholder="Start date"
+                                    (dateChange)="startDateChange($event)">
+                                <input matEndDate formControlName="end" placeholder="End date"
+                                    (dateChange)="endDateChange($event)">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                            <mat-error *ngIf="eventDateRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                                start date</mat-error>
+                            <mat-error *ngIf="eventDateRange.controls.end.hasError('matEndDateInvalid')">Invalid end date
+                            </mat-error>
+                        </mat-form-field>
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,713 @@
+<div class="container-fluid" id="dashboard">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a routerLink="." class="nobleui-logo d-block ">Hazard & Risk <span>
+                            Management</span></a>
+                    
+                </li>
+
+
+
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                 
+                    <span class="badge ">
+                        <form class="d-flex my-2 my-lg-0" [formGroup]="filterForm">
+                            <div class="input-group me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Period</mat-label>
+                                    <mat-select formControlName="period" (selectionChange)="onPeriodChange($event)">
+                                        <mat-option [value]="data.attributes.Value"
+                                            *ngFor="let data of periodValues">{{data.attributes.Value}}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field appearance="outline" color="primary" id="dashboard">
+                                    <mat-label>Enter a date range</mat-label>
+                                    <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+                                        <input matStartDate formControlName="start" placeholder="Start date"
+                                            (dateChange)="startDateChange($event)">
+                                        <input matEndDate formControlName="end" placeholder="End date"
+                                            (dateChange)="endDateChange($event)">
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                                    <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                                        start date</mat-error>
+                                    <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end
+                                        date
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0" *ngIf="(divisions.length > 1)">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Division</mat-label>
+                                    <mat-select formControlName="division">
+                                        <mat-option [value]="data.division_uuid"
+                                            *ngFor="let data of divisions">{{data.division_name}}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Category</mat-label>
+                                    <mat-select formControlName="category">
+                                        <mat-option [value]="data.attributes.Value"
+                                            *ngFor="let data of categories">{{data.attributes.Value}}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-primary btn-icon" (click)="search()">
+                                    <i class="feather icon-search btn-icon-prepend"></i>
+                                </button>
+
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+
+                                <button type="button" class="btn btn-danger btn-icon" (click)="reset()">
+                                    <i class="feather icon-rotate-cw btn-icon-prepend"></i>
+                                </button>
+                            </div>
+                        </form>
+
+                    </span>
+                </li>
+
+
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12 col-xl-12 stretch-card">
+            <div class="row flex-grow-1">
+                <div class="col-md-3 grid-margin stretch-card" *ngFor="let data of summaryCardData">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline mb-3">
+                                <h6 class="card-title mb-0"><i class="feather {{data.icon}}"></i> {{data.title}}</h6>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-12 col-xl-12">
+                                    <h3 class="mb-2">{{data.value}}</h3>
+                                    <div class="d-flex align-items-baseline">
+                                        <p class="{{data.attri_bg}}">
+                                            <span>{{data.attrition}}</span>
+                                            <i class="feather {{data.attri_icon}} icon-sm mb-1"></i>
+                                            From previous period
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7 col-xl-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Division</h6>
+                        <!-- <div ngbDropdown class="mb-2">
+                            <button ngbDropdownToggle class="btn p-0 no-dropdown-toggle-icon" type="button"
+                                id="dropdownMenuButton5">
+                                <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal" appFeatherIcon></i>
+                            </button>
+                            <div ngbDropdownMenu aria-labelledby="dropdownMenuButton5">
+                                <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><span
+                                        class="">This Week</span></a>
+                                <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><span
+                                        class="">This Month</span></a>
+                                <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><span
+                                        class="">This Year</span></a>
+                            </div>
+                        </div> -->
+                    </div>
+                    <apx-chart [series]="divisionChart.series" [chart]="divisionChart.chart"
+                        [dataLabels]="divisionChart.dataLabels" [plotOptions]="divisionChart.plotOptions"
+                        [legend]="divisionChart.legend" [colors]="divisionChart.colors" [fill]="divisionChart.fill"
+                        [stroke]="divisionChart.stroke" [tooltip]="divisionChart.tooltip" [xaxis]="divisionChart.xaxis">
+                    </apx-chart>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5 col-xl-4 grid-margin stretch-card">
+            <div class="card" *ngFor="let data of statusCardData">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Status</h6>
+                    </div>
+                    <apx-chart [series]="[data.comPercentage]" [chart]="statusChart.chart"
+                        [plotOptions]="statusChart.plotOptions" [labels]="statusChart.labels"></apx-chart>
+                    <div class="row mb-3">
+
+                        <div class="col-12 status">
+                            <div>
+                                <label class="align-items-center tx-10 text-uppercase fw-bold status-label">This
+                                    Month</label>
+                                <h5 class="fw-bolder mb-0">{{data.completed}} Cases</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid text-center">
+                        <p class="text-success">
+                            <span>{{data.attrition}}</span>
+                            <i class="feather {{data.attritionIcon}} icon-sm mb-1"></i> From
+                            Previous Period
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-xl-12 stretch-card">
+            <div class="row flex-grow-1">
+                <div class="col-md-4 grid-margin stretch-card" *ngFor="let data of riskLevelCardData">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline mb-2">
+                                <h6 class="card-title mb-0">{{data.title}}</h6>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-12 col-xl-5">
+                                    <h3 class="mb-2">{{data.total}}</h3>
+                                    <div class="d-flex align-items-baseline">
+                                        <p class="text-success">
+                                            <span>{{data.attrition}}</span>
+                                            <i class="feather {{data.attritionIcon}} icon-sm mb-1"></i>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-12 col-xl-7 align-right">
+                                    <div class="mt-md-3 mt-xl-0 level">
+                                        <apx-chart [series]="[data.currTotal]" [chart]="totalLevelChart.chart"
+                                            [plotOptions]="totalLevelChart.plotOptions" [colors]="[data.colors]"
+                                            [labels]="totalLevelChart.labels"></apx-chart>
+
+                                        <apx-chart [series]="[data.currComp]" [chart]="comLevelChart.chart"
+                                            [plotOptions]="comLevelChart.plotOptions" [colors]="comLevelChart.colors"
+                                            [labels]="comLevelChart.labels"></apx-chart>
+                                    </div>
+                                    
+                                     
+                                </div>
+                                <div class="row mb-3 tat-status justify-content-center">
+                                    <div class="col-12 mt-4" *ngIf="data.currTotal">
+                                      <div class="ml-5 d-flex justify-content-center"> <!-- Added justify-content-center class -->
+                                        <label class="d-flex align-items-center tx-10 text-uppercase fw-bold tat-label">{{data.label}}
+                                          <span class="p-1 ms-1 rounded-circle" [ngStyle]="{'background-color': data.colors}"></span>
+                                        </label>
+                                        <span class="mx-2"></span>
+                                        <label class="d-flex align-items-center tx-10 text-uppercase fw-bold tat-label">{{data.label2}}
+                                          <span class="p-1 ms-1 rounded-circle" [ngStyle]="{'background-color': comLevelChart.colors}"></span>
+                                        </label>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7 col-xl-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">TAT Status</h6>
+                    </div>
+
+                    <p *ngIf="tatStatusCard.length==0">There is no enough data to populate this chart.
+                        {{tatStatusCard.length}}</p>
+                    <apx-chart [series]="TatChart.series" [chart]="TatChart.chart" [plotOptions]="TatChart.plotOptions"
+                        [labels]="TatChart.labels" [legend]="TatChart.legend" [colors]="TatChart.colors"
+                        [responsive]="TatChart.responsive"></apx-chart>
+                    <div class="row mb-3 tat-status">
+                        <div class="col-4 " *ngFor="let data of tatStatusCard">
+                            <div class="ml-5">
+                                <label
+                                    class="d-flex align-items-center  tx-10 text-uppercase fw-bold tat-label">{{data.title}}
+                                    <span class="p-1 ms-1 rounded-circle bg-secondary"></span></label>
+                                <h5 class="fw-bolder align-items-center  mb-0 ">{{data.count}} Cases</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7 col-xl-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Risk Category</h6>
+                    </div>
+                    <p *ngIf="risk_category_card.length===0">There is no enough data to populate ths chart.</p>
+                    <div class="d-flex flex-column mt-5">
+                        <a href="" (click)="false" class="d-flex align-items-center border-bottom pb-3"
+                            *ngFor="let data of risk_category_card">
+                            <div class="me-3">
+                                <apx-chart [series]="[data.percentage]" [chart]="totalLevelChart.chart"
+                                    [plotOptions]="totalLevelChart.plotOptions" [colors]="totalLevelChart.colors"
+                                    [labels]="totalLevelChart.labels"></apx-chart>
+                            </div>
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="text-body mb-2">{{data.category}}</h6>
+                                </div>
+                                <p class="text-muted tx-13">Total: {{data.count}}</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7 col-xl-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Hierarchy of Controls</h6>
+                    </div>
+                    <p *ngIf="risk_control_card.length===0">There is no enough data to populate ths chart.</p>
+                    <div class="d-flex flex-column mt-5">
+
+                        <a href="" (click)="false" class="d-flex align-items-center border-bottom pb-3"
+                            *ngFor="let data of risk_control_card">
+                            <div class="me-3">
+                                <apx-chart [series]="[data.percentage]" [chart]="totalLevelChart.chart"
+                                    [plotOptions]="totalLevelChart.plotOptions" [colors]="totalLevelChart.colors"
+                                    [labels]="totalLevelChart.labels"></apx-chart>
+                            </div>
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="text-body mb-2">{{data.control}}</h6>
+                                </div>
+                                <p class="text-muted tx-12">Total:{{data.count}}</p>
+
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-4  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0">Unsafe Act and Unsafe Condition</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="unsafeActConditionChart.series"
+                        [chart]="unsafeActConditionChart.chart" [colors]="unsafeActConditionChart.colors"
+                        [plotOptions]="unsafeActConditionChart.plotOptions" [legend]="unsafeActConditionChart.legend"
+                        [labels]="unsafeActConditionChart.labels">
+                    </apx-chart>
+                    <div class="row mb-3">
+                        <div class="col-6 d-flex justify-content-end">
+                            <div>
+                                <label
+                                    class="d-flex align-items-center justify-content-end tx-10 text-uppercase fw-bold">Unsafe
+                                    Act
+                                    <span class="p-1 ms-1 rounded-circle bg-primary"></span></label>
+                                <h6 class="fw-bolder mb-0 text-end">{{unsafeAct}} </h6>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div>
+                                <label class="d-flex align-items-center tx-10 text-uppercase fw-bold"><span
+                                        class="p-1 me-1 rounded-circle bg-success"></span> Unsafe Condition</label>
+                                <h6 class="fw-bolder mb-0">{{unsafeCondition}} </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8  grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Latest Cases</h6>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="pt-0">#</th>
+                                    <th class="pt-0">Date</th>
+                                    <th class="pt-0">Category</th>
+                                    <th class="pt-0">Division</th>
+                                    <th class="pt-0">Due Date</th>
+                                    <th class="pt-0">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of transactionData">
+                                    <td>{{data.attributes.reference_number}}</td>
+                                    <td>{{data.attributes.reported_date | date:'dd-MMM-yyyy'}}</td>
+                                    <td>{{data.attributes.category}}</td>
+                                    <td>{{data.attributes.business_unit.data.attributes.division_name}}</td>
+                                    <td>{{data.attributes.due_date | date:'dd-MMM-yyyy'}}</td>
+                                    <td><span
+                                            class="badge {{statusButton(data.attributes.status)}} ">{{data.attributes.status}}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="row mt-3">  
+        <div class="col-xl-7">
+            <div class="card custom-height ">
+                <div class="card-body custom-height">
+                    <h4 class="card-title mb-4">Monthly Summary</h4>
+                    <div>
+                        <apx-chart [series]="hazardMonthlyChart.series" [chart]="hazardMonthlyChart.chart"
+                            [dataLabels]="hazardMonthlyChart.dataLabels" [plotOptions]="hazardMonthlyChart.plotOptions" [yaxis]="hazardMonthlyChart.yaxis"
+                            [legend]="hazardMonthlyChart.legend" [fill]="hazardMonthlyChart.fill" [stroke]="hazardMonthlyChart.stroke"
+                            [tooltip]="hazardMonthlyChart.tooltip" [xaxis]="hazardMonthlyChart.xaxis"></apx-chart>
+                    </div> 
+                </div>
+            </div>
+        </div> 
+    </div>  -->
+</div>
+
+<!-- <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+    <div>
+        <h4 class="mb-3 mb-md-0">Hazard or Risk Management</h4>
+    </div>
+    <div class="d-flex align-items-center flex-wrap text-nowrap">
+        <div class="input-group wd-250 me-2 mb-2 mb-md-0">
+            <mat-form-field appearance="outline" color="primary" id="dashboard">
+                <mat-label>Enter a date range</mat-label>
+                <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+                    <input matStartDate formControlName="start" placeholder="Start date"
+                        (dateChange)="startDateChange($event)">
+                    <input matEndDate formControlName="end" placeholder="End date" (dateChange)="endDateChange($event)">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+                <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                    start date</mat-error>
+                <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end date
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div ngbDropdown class="params">
+            <button class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle>{{filterForm.value.period}}</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" (click)="period($event)">
+                <button ngbDropdownItem id="This Week">This Week</button>
+                <button ngbDropdownItem id="Last Week">Last Week</button>
+                <button ngbDropdownItem id="This Month">This Month</button>
+                <button ngbDropdownItem id="Last Month">Last Month</button>
+                <button ngbDropdownItem id="This Year">This Year</button>
+                <button ngbDropdownItem id="Last Year">Last Year</button>
+            </div>
+        </div>
+        <div ngbDropdown class="params">
+            <button class="btn btn-secondary" id="dropdownBasic1" ngbDropdownToggle>{{filterForm.value.division}}</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" (click)="division($event)">
+                <button ngbDropdownItem *ngFor="let division of divisions"
+                    id="{{division.attributes.division_name}}">{{division.attributes.division_name}}</button>
+            </div>
+        </div>
+        <div ngbDropdown class="params">
+            <button class="btn btn-info" id="dropdownBasic1" ngbDropdownToggle>{{filterForm.value.riskCategory}}</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" (click)="category($event)">
+                <button ngbDropdownItem *ngFor="let category of categories"
+                    id="{{category.attributes.category_name}}">{{category.attributes.category_name}}</button>
+            </div>
+        </div>
+        <button type="button" class="btn btn-success btn-icon-text params" (click)="applyFilter()">
+            <i class="feather icon-search btn-icon-prepend"></i>
+            Apply Filter
+        </button>
+        <button type="button" class="btn btn-warning btn-icon-text" (click)="reset()">
+            <i class="feather icon-zap btn-icon-prepend"></i>
+            Reset
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-xl-12 stretch-card">
+        <div class="row flex-grow-1">
+            <div class="col-md-3 grid-margin stretch-card" *ngFor="let data of summaryCardData">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-baseline mb-3">
+                            <h6 class="card-title mb-0"><i class="feather {{data.icon}}"></i> {{data.title}}</h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-12 col-xl-12">
+                                <h3 class="mb-2">{{data.value}}</h3>
+                                <div class="d-flex align-items-baseline">
+                                    <p class="{{data.attri_bg}}">
+                                        <span>{{data.attrition}}</span>
+                                        <i class="feather {{data.attri_icon}} icon-sm mb-1"></i>
+                                        From previous period
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-7 col-xl-8 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-baseline mb-2">
+                    <h6 class="card-title mb-0">Division</h6>
+                    <div ngbDropdown class="mb-2">
+                        <button ngbDropdownToggle class="btn p-0 no-dropdown-toggle-icon" type="button"
+                            id="dropdownMenuButton5">
+                            <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal" appFeatherIcon></i>
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownMenuButton5">
+                            <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><span
+                                    class="">This Week</span></a>
+                            <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><span
+                                    class="">This Month</span></a>
+                            <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><span
+                                    class="">This Year</span></a>
+                        </div>
+                    </div>
+                </div>
+                <apx-chart [series]="divisionChart.series" [chart]="divisionChart.chart"
+                    [dataLabels]="divisionChart.dataLabels" [plotOptions]="divisionChart.plotOptions"
+                    [legend]="divisionChart.legend" [colors]="divisionChart.colors" [fill]="divisionChart.fill"
+                    [stroke]="divisionChart.stroke" [tooltip]="divisionChart.tooltip" [xaxis]="divisionChart.xaxis">
+                </apx-chart>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5 col-xl-4 grid-margin stretch-card">
+        <div class="card" *ngFor="let data of statusCardData">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-baseline mb-2">
+                    <h6 class="card-title mb-0">Status</h6>
+                </div>
+                <apx-chart [series]="[data.comPercentage]" [chart]="statusChart.chart"
+                    [plotOptions]="statusChart.plotOptions" [labels]="statusChart.labels"></apx-chart>
+                <div class="row mb-3">
+             
+                    <div class="col-12 status">
+                        <div>
+                            <label class="align-items-center tx-10 text-uppercase fw-bold status-label"><span
+                                    class="p-1 me-1 rounded-circle bg-primary"></span> This Month</label>
+                            <h5 class="fw-bolder mb-0">{{data.completed}} Cases</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid text-center">
+                    <p class="text-success">
+                        <span>{{data.attrition}}</span>
+                        <i class="feather {{data.attritionIcon}} icon-sm mb-1"></i> From
+                        Previous Period
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-xl-12 stretch-card">
+        <div class="row flex-grow-1">
+            <div class="col-md-4 grid-margin stretch-card" *ngFor="let data of riskLevelCom">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-baseline mb-2">
+                            <h6 class="card-title mb-0">{{data.title}}</h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-12 col-xl-5">
+                                <h3 class="mb-2">{{data.total}}</h3>
+                                <div class="d-flex align-items-baseline">
+                                    <p class="text-success">
+                                        <span>{{data.attrition}}</span>
+                                        <i class="feather {{data.attritionIcon}} icon-sm mb-1"></i>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-12 col-xl-7 align-right">
+                                <div class="mt-md-3 mt-xl-0 level">
+                                    <apx-chart [series]="[data.currTotal]" [chart]="totalLevelChart.chart"
+                                        [plotOptions]="totalLevelChart.plotOptions" [colors]="totalLevelChart.colors"
+                                        [labels]="totalLevelChart.labels"></apx-chart>
+                                    <apx-chart [series]="[data.currComp]" [chart]="comLevelChart.chart"
+                                        [plotOptions]="comLevelChart.plotOptions" [colors]="comLevelChart.colors"
+                                        [labels]="comLevelChart.labels"></apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-7 col-xl-4 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-baseline mb-2">
+                    <h6 class="card-title mb-0">TAT Status</h6>
+                </div>
+
+                <p *ngIf="tatStatusCard.length==0">There is no enough data to populat this chart. {{tatStatusCard.length}}</p>
+                <apx-chart [series]="TatChart.series" [chart]="TatChart.chart" [plotOptions]="TatChart.plotOptions"
+                    [labels]="TatChart.labels" [legend]="TatChart.legend" [colors]="TatChart.colors"
+                    [responsive]="TatChart.responsive"></apx-chart>
+                <div class="row mb-3 tat-status">
+                    <div class="col-4 " *ngFor="let data of tatStatusCard">
+                        <div class="ml-5">
+                            <label
+                                class="d-flex align-items-center  tx-10 text-uppercase fw-bold tat-label">{{data.title}}
+                                <span class="p-1 ms-1 rounded-circle bg-secondary"></span></label>
+                            <h5 class="fw-bolder align-items-center  mb-0 ">{{data.count}} Cases</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7 col-xl-4 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-baseline mb-2">
+                    <h6 class="card-title mb-0">Risk Category</h6>
+                </div>
+                <p *ngIf="risk_category_card.length===0">There is no enough data to populat ths chart.</p>
+                <div class="d-flex flex-column mt-5">
+                    <a href="" (click)="false" class="d-flex align-items-center border-bottom pb-3"
+                        *ngFor="let data of risk_category_card">
+                        <div class="me-3">
+                            <apx-chart [series]="[data.percentage]" [chart]="totalLevelChart.chart"
+                                [plotOptions]="totalLevelChart.plotOptions" [colors]="totalLevelChart.colors"
+                                [labels]="totalLevelChart.labels"></apx-chart>
+                        </div>
+                        <div class="w-100">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="text-body mb-2">{{data.category}}</h6>
+                            </div>
+                            <p class="text-muted tx-13">Total: {{data.count}}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7 col-xl-4 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-baseline mb-2">
+                    <h6 class="card-title mb-0">Controls</h6>
+                </div>
+                <p *ngIf="risk_control_card.length===0">There is no enough data to populat ths chart.</p>
+                <div class="d-flex flex-column mt-5">
+
+                    <a href="" (click)="false" class="d-flex align-items-center border-bottom pb-3"
+                        *ngFor="let data of risk_control_card">
+                        <div class="me-3">
+                            <apx-chart [series]="[data.percentage]" [chart]="totalLevelChart.chart"
+                                [plotOptions]="totalLevelChart.plotOptions" [colors]="totalLevelChart.colors"
+                                [labels]="totalLevelChart.labels"></apx-chart>
+                        </div>
+                        <div class="w-100">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="text-body mb-2">{{data.control}}</h6>
+                            </div>
+                            <p class="text-muted tx-12">Total:{{data.count}}</p>
+
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12 col-xl-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-baseline mb-2">
+                    <h6 class="card-title mb-0">Latest Cases</h6>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th class="pt-0">#</th>
+                                <th class="pt-0">Date</th>
+                                <th class="pt-0">Category</th>
+                                <th class="pt-0">Division</th>
+                                <th class="pt-0">Due Date</th>
+                                <th class="pt-0">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of transactionData">
+                                <td>{{data.attributes.reference_number}}</td>
+                                <td>{{data.attributes.reported_date | date:'dd-MMM-yyyy'}}</td>
+                                <td>{{data.attributes.category}}</td>
+                                <td>{{data.attributes.division}}</td>
+                                <td>{{data.attributes.due_date | date:'dd-MMM-yyyy'}}</td>
+                                <td><span class="badge bg-danger">{{data.attributes.status}}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

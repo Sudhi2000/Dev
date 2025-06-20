@@ -1,0 +1,40 @@
+<table class="table table-bordered" *ngIf="materialityData && materialityData.length > 0">
+  <thead>
+    <tr>
+      <th>Materiality Topic</th>
+      <th>Materiality Subtopic</th>
+      <th>Category</th>
+      <th>Impact Materiality Value</th>
+      <th>Financial Materiality Value</th>
+      <th>Colour Code</th>
+      <th>Score</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of materialityData">
+      <td>{{ item?.attributes?.materiality_topic }}</td>
+      <td>{{ item?.attributes?.materiality_subtopic }}</td>
+      <td>{{ item?.attributes?.category }}</td>
+      <td>{{ item?.attributes?.impact_materiality_value }}</td>
+      <td>{{ item?.attributes?.financial_materiality_value }}</td>
+      <td>
+        <div 
+          class="status-bar w-100" 
+          [ngClass]="getStatusColor(item.attributes.total_value)"
+          [attr.title]="getStatusTooltip(item.attributes.total_value)"
+          matTooltipPosition="above">
+        </div>
+      </td>
+      <td>{{ item?.attributes?.total_value }}</td>
+
+      
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="materialityData && materialityData.length === 0">
+  Noone has attended the survey.
+</div>
+
+  

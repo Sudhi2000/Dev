@@ -1,0 +1,223 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-2">
+        <nav aria-label="breadcrumb ">
+          <a routerLink="." class="nobleui-logo d-block mt-3">RAG <span>Details</span></a>
+          <ol class="breadcrumb breadcrumb-dot">
+            <li class="breadcrumb-item"><a routerLink="/apps/insight">Home</a></li>
+            <li class="breadcrumb-item"><a routerLink="/apps/rag/dashboard">RAG</a></li>
+            <li class="breadcrumb-item"><a routerLink="/apps/rag/register">History</a></li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-md-2  search">
+        <mat-form-field fxFlex appearance="outline" color="primary" class="custom-padding">
+          <mat-label>Country</mat-label>
+          <mat-select [formControl]="countries" multiple (selectionChange)="filterData()">
+            <mat-select-trigger>
+              {{countries.value ? countries.value[0] : ''}}
+              <span *ngIf="countries.value?.length > 1" class="example-additional-selection">
+                (+{{countries.value.length - 1}}
+                {{countries.value?.length === 2 ?
+                'other' :
+                'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let type of allCountries" [value]="type.attributes.
+                  country_name
+                  ">{{type.attributes.
+              country_name
+              }}</mat-option>
+          </mat-select>
+          <mat-error>Required Field</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-2  search">
+        <mat-form-field fxFlex appearance="outline" color="primary" class="custom-padding">
+          <mat-label>State</mat-label>
+          <mat-select [formControl]="states" multiple (selectionChange)="filterData()" (focus)="onFocus()">
+            <mat-select-trigger>
+              {{states.value?.length > 0 ? states.value[0].state_name : ''}}
+              <span *ngIf="states.value?.length > 1" class="example-additional-selection">
+                (+{{states.value.length - 1}}
+                {{states.value?.length === 2 ? 'other' : 'others'}})
+              </span>
+            </mat-select-trigger>
+
+            <mat-option *ngFor="let type of filteredStates" [value]="{state_name: type.attributes.state_name, country: type.attributes.country}
+                  ">{{type.attributes.
+              state_name
+              }}</mat-option>
+          </mat-select>
+          <mat-error>Required Field</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-2 search">
+        <mat-form-field fxFlex appearance="outline" color="primary" class="custom-padding">
+            <mat-label>Division</mat-label>
+            <mat-select [formControl]="Division" multiple (selectionChange)="filterData()">
+                <mat-select-trigger>
+                    {{Division.value[0]?.division_name? Division.value[0]?.division_name : ''}}
+                    <span *ngIf="Division?.value?.length > 1" class="example-additional-selection">
+                        (+{{Division.value.length - 1}}
+                        {{Division.value?.length === 2 ?
+                        'other' :
+                        'others'}})
+                    </span>
+                </mat-select-trigger>
+                <mat-option *ngFor="let division of divisions"
+                    [value]="division">{{division.division_name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+      <div class="col-md-2 search">
+        <div>
+          <div class="input-group">
+            <div class="input-group-text">
+              <i class="feather icon-search"></i>
+            </div>
+            <input type="text" class="form-control" id="navbarForm" placeholder="Search here..."
+              (keyup)="applyFilter($event)">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2 search">
+        <button type="button" class="btn btn-primary btn-icon-text me-2" (click)="create()" id="env_report">
+          <i class="btn-icon-prepend" data-feather="plus-circle"></i>
+          CREATE
+        </button>
+        <button type="button" class="btn btn-secondary btn-icon me-2 " (click)="generateReport()" id="rag_report">
+          <i class="feather icon-printer btn-icon-prepend"></i>
+        </button>
+        <button type="button" class="btn btn-secondary btn-icon hide" id="rag_report_loader">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 stretch-card">
+    <div class="card">
+      <div class="card-body table-card">
+        <div class="table-responsive">
+          <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="reference_number">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Reference Number </th>
+              <td mat-cell *matCellDef="let element"> {{element.reference_number}} </td>
+            </ng-container>
+            <ng-container matColumnDef="employee_type">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee Type </th>
+              <td mat-cell *matCellDef="let element"> {{element.employee_type}} </td>
+            </ng-container>
+            <ng-container matColumnDef="employee_id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee ID </th>
+              <td mat-cell *matCellDef="let element"> {{element.employee_id}} </td>
+            </ng-container>
+            <ng-container matColumnDef="division">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Division </th>
+              <td mat-cell *matCellDef="let element"> {{element.division}} </td>
+            </ng-container>
+            <ng-container matColumnDef="employee_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee Name</th>
+              <td mat-cell *matCellDef="let element"> {{element.employee_name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="date_of_join">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Date of Join">Date of Join
+              </th>
+              <td mat-cell *matCellDef="let element"> {{element.date_of_join | date:'dd-MMM-yyyy'}}</td>
+            </ng-container>
+            <ng-container matColumnDef="designation">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Designation </th>
+              <td mat-cell *matCellDef="let element"> {{element.designation}} </td>
+            </ng-container>
+            <ng-container matColumnDef="department">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Department </th>
+              <td mat-cell *matCellDef="let element"> {{element.department}} </td>
+            </ng-container>
+            <ng-container matColumnDef="gender">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>
+              <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+            </ng-container>
+            <ng-container matColumnDef="country">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Country </th>
+              <td mat-cell *matCellDef="let element"> {{element.country}} </td>
+            </ng-container>
+            <ng-container matColumnDef="rag">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header text-center> </th>
+              <td mat-cell *matCellDef="let element" class="priorityIcon"> <i
+                  class="material-icons {{riskStatus(element.rag)}}">bookmark</i> </td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Status"> Status
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <button type="button" class="btn {{statusButton(element.status)}} status-btn btn-icon-text">
+                    {{element.status}}
+                  </button>
+                </td>
+              </ng-container> -->
+
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Status"> Status
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <button type="button" class="btn {{statusButton(element.status)}} status-btn btn-icon-text btn-xs">
+                  {{element.status}}
+                </button>
+              </td>
+            </ng-container>
+
+
+
+
+
+
+            <ng-container matColumnDef="actions">
+              <th *matHeaderCellDef class="actions-cell" mat-header-cell mat-sort-header>Actions</th>
+              <td *matCellDef="let row" class="actions-cell" mat-cell>
+                <!-- <button type="button" class="btn btn-primary btn-icon btn-xs" id="{{row.reference_number}}"
+                  (click)="print(row.reference_number)" placement="top" ngbTooltip="Print">
+                  <i class="feather icon-printer"></i>
+                </button> -->
+
+                <button type="button" class="btn btn-success btn-icon btn-xs" (click)="modify(row)" placement="top"
+                  ngbTooltip="Modify" *ngIf="row.status==='Active'">
+                  <i class="feather icon-edit"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn-icon btn-xs hide" id="{{row.document_number}}_1">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span class="visually-hidden">Loading...</span>
+                </button>
+                <button type="button" class="btn btn-secondary btn-icon btn-xs" (click)="view(row)" placement="top"
+                  ngbTooltip="View">
+                  <i class="feather icon-eye"></i>
+                </button>
+                <button type="button" class="btn btn-danger btn-icon btn-xs" (click)="resign(row)" placement="top"
+                  ngbTooltip="Mark as resigned" *ngIf="row.status==='Active'">
+                  <i class="feather icon-user-minus"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn-icon btn-xs" id="{{row.reference_number}}"
+                  (click)="print(row.reference_number)" placement="top" ngbTooltip="Print">
+                  <i class="feather icon-printer"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn-icon btn-xs hide" id="{{row.reference_number}}_1">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span class="visually-hidden">Loading...</span>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="visibleColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: visibleColumns;"></tr>
+          </table>
+          <mat-paginator [pageSize]="10" showFirstLastButtons [showFirstLastButtons]="true"
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,436 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use "@angular/material" as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$sattva-primary: mat.define-palette(mat.$indigo-palette);
+$sattva-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$sattva-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$sattva-theme: mat.define-light-theme((color: (primary: $sattva-primary,
+        accent: $sattva-accent,
+        warn: $sattva-warn,
+      ),
+    ));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($sattva-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+// Global icon font
+@import "./assets/fonts/feather/style.css";
+
+// // 3rd party plugins
+@import "~@mdi/font/css/materialdesignicons.min.css";
+@import "~perfect-scrollbar/css/perfect-scrollbar.css";
+@import "~highlight.js/styles/googlecode.css";
+@import "~ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.carousel.min.css";
+@import "~ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.theme.default.min.css";
+@import "~animate.css/animate.min.css";
+@import "~@fullcalendar/common/main.min.css";
+@import "~@fullcalendar/daygrid/main.min.css";
+@import "~@fullcalendar/timegrid/main.min.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "~simplemde/dist/simplemde.min.css";
+@import "~metismenujs/scss/metismenujs";
+@import "~dropzone/dist/min/dropzone.min.css";
+@import "~quill/dist/quill.snow.css";
+@import "~angular-archwizard/styles/archwizard.css";
+@import "~simple-datatables/dist/style.css";
+@import "~@swimlane/ngx-datatable/index.css";
+@import "~@swimlane/ngx-datatable/themes/bootstrap.css";
+@import "~@swimlane/ngx-datatable/assets/icons.css";
+
+// NobleUI styles for LTR
+@import "./assets/scss/style";
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+.error {
+  font-size: 12px;
+  color: #cd5c5c;
+}
+
+.mat-paginator {
+  background: #f1f1f1;
+  height: 52px;
+  padding-top: 5px;
+}
+
+table {
+  width: 100%;
+}
+
+.evidenceImg {
+  width: 375px;
+}
+
+.ql-container {
+  height: auto !important;
+}
+
+#esgDisclosure {
+  .ql-container {
+    height: 300px !important;
+    overflow: auto;
+    // width: 655px !important;
+  }
+}
+
+#grievance {
+  .ql-container {
+    height: 300px !important;
+    overflow: auto;
+    width: 655px !important;
+  }
+}
+
+#grievance-modify {
+  .ql-container {
+    height: 210px !important;
+    overflow: auto;
+    width: 100% !important;
+  }
+}
+
+#surveyMatTabHeader {
+
+  .mat-tab-header {
+    display: none !important;
+  }
+
+  // display: none;
+}
+
+.list-card {
+  padding: 0px !important;
+}
+
+tr.mat-header-row {
+  background: #f1f1f1;
+
+  border-bottom: solid 1px #f1f1f1;
+}
+
+th.mat-header-cell {
+  font-weight: 500;
+}
+
+tr.mat-row,
+tr.mat-footer-row {
+  border-bottom: solid 2px #f1f1f1;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+td.mat-cell {
+  border: solid 1px #f1f1f1;
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+}
+
+th.mat-header-cell {
+  padding-left: 5px !important;
+  border: solid 1px #ece9e9;
+}
+
+.mat-tab-label {
+  justify-content: left !important;
+  // padding-left: 2px !important;
+}
+
+.mat-tab-body-content {
+  overflow: hidden !important;
+  margin-top: 20px;
+  // height: 100%;
+}
+
+.mat-tab-body.mat-tab-body-active {
+  overflow: hidden !important;
+}
+
+.mat-tab-label-content {
+  mat-icon {
+    margin-right: 5px;
+  }
+}
+
+.mat-ink-bar {
+  height: 3px !important;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  background-color: #d93025 !important;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected .ng-option-label,
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked .ng-option-label {
+  font-weight: 500;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+  color: #000865 !important;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-form-field.mat-form-field.mat-form-field-appearance-outline>div.mat-form-field-wrapper>div.mat-form-field-flex>div.mat-form-field-infix {
+  padding: 0.7em 0px;
+}
+
+mat-form-field.mat-form-field.mat-form-field-appearance-outline>div.mat-form-field-wrapper>div.mat-form-field-flex>div.mat-form-field-infix>span.mat-form-field-label-wrapper {
+  top: -1.3em;
+}
+
+.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  transform: translateY(-1.1em) scale(0.95);
+  width: 133.33333%;
+  font-size: 10px;
+}
+
+.mat-input-element:disabled {
+  color: black;
+}
+
+.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  color: rgb(45, 45, 45);
+}
+
+.mat-select-disabled .mat-select-value {
+  color: black;
+}
+
+body.swal2-shown>[aria-hidden="true"] {
+  transition: 0.1s filter;
+  filter: blur(3px);
+}
+
+#dashboard .mat-form-field-wrapper {
+  padding-bottom: 0px !important;
+}
+
+td.mat-cell:first-of-type {
+  padding-left: 24px !important;
+}
+
+th.mat-header-cell:first-of-type {
+  padding-left: 24px !important;
+}
+
+.mat-row:hover {
+  box-shadow: 0 3px 1px -1px #0003, 0px 1px 10px #00000024, 0 1px 8px #0000001f;
+  // transform: scale(1);
+  cursor: pointer;
+}
+
+.ql-container {
+  height: 500px !important;
+}
+
+.mat-form-field-suffix {
+  align-self: center !important;
+}
+
+.option-btn {
+  background: #6471fe !important;
+  color: white !important;
+  cursor: progress;
+
+  .mat-option-text {
+    color: white !important;
+  }
+
+  .mat-pseudo-checkbox {
+    display: none;
+  }
+}
+
+.option-btn:hover {
+  background: #6471fe !important;
+  color: white !important;
+}
+
+.mat-date-range-input-start-wrapper .mat-date-range-input-inner,
+.mat-date-range-input-end-wrapper .mat-date-range-input-inner {
+  color: black;
+}
+
+.sidebar-dark .sidebar .sidebar-body .sidebar-nav .nav-item.mm-active>.nav-link .link-title {
+  color: #40fd9f !important;
+}
+
+.sidebar-dark .sidebar .sidebar-body .sidebar-nav .nav-item.mm-active>.nav-link .link-icon {
+  color: #40fd9f !important;
+}
+
+.sidebar-dark .sidebar .sidebar-body .sidebar-nav .nav-item.mm-active>.nav-link::before {
+  background-color: #40fd9f !important;
+}
+
+// .mat-form-field-appearance-outline .mat-form-field-infix{
+//   height: 40px;
+//   padding: 0px;
+// }
+
+// .mat-form-field-appearance-outline .mat-form-field-outline-thick{
+//   height: 40px;
+// }
+
+// .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex{
+//   height: 40px;
+// }
+
+// .mat-form-field-appearance-outline .mat-form-field-wrapper{
+//   height: 40px;
+//   margin: 0px;
+// }
+
+// .ng-select.ng-select-single .ng-select-container,.form-control{
+//   border:1px solid rgb(58, 58, 58) !important
+// }
+// NobleUI styles For RTL
+// @import "./assets/scss/style.rtl.css";
+
+html,
+body {
+  height: 100%;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.nobleui-logo {
+  font-weight: 600;
+}
+
+.mat-select,
+.mat-form-field,
+.ql-container,
+.mat-table,
+.mat-tab-group {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.name {
+  color: white !important;
+}
+
+.sidebar-light {
+  .name {
+    color: black !important;
+  }
+}
+
+.sidebar .sidebar-body .sidebar-nav .nav-item.nav-category {
+  font-weight: 600;
+}
+
+.breadcrumb-item {
+  a {
+    color: black;
+  }
+}
+
+.breadcrumb {
+  padding-top: 11px !important;
+  margin-bottom: 0p !important;
+}
+
+.mat-row:hover {
+  background: #eaf7e4;
+}
+
+ngb-rating {
+  .ng-star-inserted {
+    margin-right: 3px !important;
+    color: #289c1d !important;
+  }
+}
+
+#audit_checklist {
+  .accordion-button {
+    padding-left: 0px;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    .custom-header {
+      padding-top: 10px !important;
+      padding-bottom: 10px !important;
+      padding-left: 15px !important;
+      padding-right: 15px !important;
+    }
+  }
+
+  .collapsed {
+    .accordion-button {
+      background-color: white !important;
+      color: black;
+    }
+  }
+
+  pdf-viewer {
+    .ng2-pdf-viewer-container {
+      overflow-x: hidden !important;
+    }
+  }
+
+  #gaugeArea {
+    svg {
+      height: 220px !important;
+    }
+  }
+}
+
+#disclosures {
+  .accordion-button {
+    padding-left: 0px;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    .custom-header {
+      padding-top: 10px !important;
+      padding-bottom: 10px !important;
+      padding-left: 15px !important;
+      padding-right: 15px !important;
+    }
+  }
+
+  .collapsed {
+    .accordion-button {
+      background-color: white !important;
+      color: black;
+    }
+  }
+}
+
+.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  font-size: 12px !important;
+}
+
+.ng2-pdf-viewer-container {
+  overflow-x: hidden !important
+}

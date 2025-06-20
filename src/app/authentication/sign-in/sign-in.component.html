@@ -1,0 +1,93 @@
+<!-- <div class="container-fluid background"> -->
+<div class="container-fluid background">
+    <div class="row content">
+        <div class="col-lg-7 welcome">
+
+            <ngb-carousel *ngIf="images" [showNavigationArrows]="false" [showNavigationIndicators]="false">
+                <ng-template ngbSlide *ngFor="let image of images">
+                    <div class="picsum-img-wrapper">
+                        <img [src]="image" class="d-block" alt="Random slide" width="400"> 
+                    </div>
+                </ng-template>
+            </ngb-carousel>
+
+            <!-- <img src="../../../assets/images/welcome.png" width="400"> -->
+            <h1>Welcome Back</h1>
+            <span class="copyright">{{copyright}}</span>
+            <p class="warning">
+                By logging into this application, you acknowledge being Authorised to do so and hence you shall abide by all the Policies & Procedures associated with this Application.  Any violation or misuse of this Authorisation shall attract strict action, including legal recourse.
+            </p>
+
+
+            <div id="bottom">
+                <img src="assets/images/b_leaf_l.svg" width="150">
+            </div>
+
+            <div id="bottom-right">
+                <img src="assets/images/b_leaf_r.svg" width="150">
+            </div>
+
+        </div>
+        <div class="col-lg-5 auth-form center center">
+            <div id="icon"><img id="wicon" src="{{iconURL}}" width="50"><span class="wheatherName" fxHide
+                    fxShow.gt-sm>{{temp}}&#8451; | {{condition}}</span></div>
+
+
+            <div class="logo">
+                <img src="assets/images/sattva-logo-dark.png">
+                <a routerLink="/" class="sidebar-brand client-logo" *ngIf="client_logo_status">
+                    <img src="{{client_logo}}" alt="logo">
+                  </a>
+            </div>
+            <p class="auth-description">Please sign-in to your account. Don't have an account? please contact the
+                application administrator.</p>
+
+            <form class="row g-3" [formGroup]="authForm">
+                <div class="auth-credentials m-b-xxl">
+                    <div class="mb-3">
+                        <label for="signInEmail" class="form-label">Email address</label>
+                        <input type="email" class="form-control " id="signInEmail" aria-describedby="signInEmail"
+                            placeholder="example@neptune.com" formControlName="email">
+                        <div class="error" *ngIf="f['email'].touched && f['email'].errors">
+                            <div *ngIf="f['email'].errors?.['required']"> Required Field</div>
+                            <div *ngIf="f['email'].errors?.['email']"> Please provide a valid email</div>
+                        </div>
+                    </div>
+                    <label for="signInPassword" class="form-label m-t-md">Password</label>
+                    <input type="password" class="form-control" id="signInPassword" aria-describedby="signInPassword"
+                        placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                        formControlName="password">
+                    <div class="error" *ngIf="f['password'].touched && f['password'].errors">
+                        <div *ngIf="f['password'].errors?.['required']"> Required Field</div>
+                    </div>
+
+                    <div class="form-check mb-3 mt-4">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1" (click)="showPass()">
+                        <label class="form-check-label" for="exampleCheck1">
+                            Show Password
+                        </label>
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="auth-submit">
+                <button *ngIf="signinbtn" type="button" class="btn btn-primary btn-icon-text" (click)="signIn()">
+                    <i class="feather icon-log-in btn-icon-prepend"></i>
+                    Sign In
+                </button>
+
+
+                <button *ngIf="signinLoading" class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Loading...
+                </button>
+
+                <a href="javascript:void(0)" class="auth-forgot-password float-end" (click)="forgetPassword()">Forgot
+                    password?</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- </div> -->

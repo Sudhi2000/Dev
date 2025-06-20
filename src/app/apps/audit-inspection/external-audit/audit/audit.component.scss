@@ -1,0 +1,152 @@
+.table-responsive {
+    overflow: hidden;
+}
+.action-btn {
+    margin-right: 5px;
+}
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+table {
+    thead {
+        tr {
+            th {
+                padding-left: 20px;
+            }
+        }
+
+    }
+
+    tbody {
+        tr {
+            td {
+                padding-left: 20px;
+
+            }
+        }
+    }
+}
+.table-responsive {
+    overflow: hidden;
+}
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+ 
+    color: white;
+    background-color: red;
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: red;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+
+}
+
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
+}
+
+.save-btn{
+    margin-right: 5px;
+}
+
+
+#auditActionPlan{
+    table
+    {
+        counter-reset: rowNumber;
+    }
+    
+    table tr > td:first-child
+    {
+        counter-increment: rowNumber;
+    }
+    
+    table tr td:first-child::before
+    {
+        content: counter(rowNumber);
+        min-width: 1em;
+        margin-right: 0.5em;
+    }
+    tr{
+        vertical-align: middle;
+    }
+}
+/* Style for the text container */
+.text-container {
+    text-align: center;
+    margin-bottom: 10px; /* Add spacing between text and uploaded files */
+  }
+  
+  /* Style for the container of uploaded files */
+  .uploaded-files-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  /* Style for image previews */
+  .image-preview {
+    max-width: 100px; /* Adjust the maximum width as needed */
+    max-height: 100px; /* Adjust the maximum height as needed */
+    margin: 10px; /* Add margin around each image */
+  }
+  
+  /* Style for download links */
+  .download-link {
+    font-size: 14px; /* Adjust the font size as needed */
+    text-decoration: none;
+    color: #007bff; /* Adjust the link color as needed */
+    display: block;
+    margin-top: 5px; /* Add margin to separate download links */
+  }
+  
+  .pdf-viewer-container {
+    margin-bottom: 20px; /* Add space at the bottom of each PDF viewer */
+    width: 100%;
+    height: 500px;
+  }
+  .preview-text {
+    font-size: small;
+    text-align: center;
+  }
+  

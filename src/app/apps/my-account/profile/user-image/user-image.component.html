@@ -1,0 +1,72 @@
+
+<mat-card>
+    <!-- <mat-card-header>
+  
+      <mat-card-title>Profile Image</mat-card-title>
+    </mat-card-header> -->
+
+    
+    <mat-card-actions>
+
+    
+    
+        <div fxLayout="row">
+            
+            <input type="file" name="file" id="file" class="inputfile" (change)="fileChangeEvent($event)"/>
+        <label for="file"><p style="margin-bottom: 0px;">Choose an Image <mat-icon  style="vertical-align:middle">image</mat-icon></p></label>
+           
+        
+            
+          </div>
+    
+    </mat-card-actions>
+
+ 
+
+    <mat-card-content>
+
+        
+
+
+          <div class="row" style="margin-top: 15px;">
+
+            <div class="text-center col-md-8">
+
+                <image-cropper 
+                [imageChangedEvent]="imageChangedEvent" 
+                [maintainAspectRatio]="true" 
+                [aspectRatio]="4 / 4"
+                [resizeToWidth]="256" 
+                format="png" 
+                (imageCropped)="imageCropped($event)" 
+                (imageLoaded)="imageLoaded()"
+                (cropperReady)="cropperReady()" 
+                (loadImageFailed)="loadImageFailed()"></image-cropper>
+
+            </div>
+
+            <div class="text-center col-md-4">
+                <img [src]="croppedImage" />
+                <mat-card-actions>
+         
+                    <button mat-raised-button  class="btn btn-success mt-4 btn-sub"   *ngIf="save" (click)="submit()">Submit</button>
+                    <button mat-raised-button class="btn btn-primary mt-4" *ngIf="save" (click)="cancel()">Cancel</button>
+             
+                </mat-card-actions>
+            </div>
+
+
+
+            </div>
+
+        <!-- <input type="file" name="file" id="file" class="inputfile" (change)="fileChangeEvent($event)"/>
+<label for="file"><p style="margin-bottom: 0px;">Choose an Image <mat-icon  style="vertical-align:text-bottom">cloud_upload</mat-icon></p></label> -->
+
+      
+    </mat-card-content>
+    
+    
+  </mat-card>
+
+
+

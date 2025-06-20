@@ -1,0 +1,112 @@
+.table-responsive {
+  overflow-x: unset;
+}
+
+.btn-xs {
+  margin-right: 5px;
+}
+
+tr {
+  height: 35px !important;
+  vertical-align: middle;
+}
+
+th {
+  height: 40px;
+}
+
+.table-card {
+  padding: 0px;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+.action-btn {
+  margin-right: 5px;
+}
+
+
+.card-body {
+  padding-top: 1%;
+  padding-bottom: 1%;
+}
+
+.hide {
+  display: none;
+}
+
+.status-btn {
+  width: 100%;
+  // text-align: left;
+  // padding-left: 0px;
+}
+
+.input-group .input-group-text {
+  background: #fff;
+  color: #7987a1;
+}
+
+.search {
+  align-self: center;
+}
+
+#bmi-chart {
+  text-align: center;
+}
+
+.Obesity{
+  background-color: #FFB200;
+}
+.Mordibly{
+  background-color: #EA9093;
+
+}
+
+.Overweight{
+  background-color: #FFDD75;
+}
+
+.Normal{
+  background-color: #9BD29E;
+}
+.Underweight{
+  background-color: #55B5EF;
+
+}
+// .titleicon_delete
+// {
+// color: red;
+// //margin-left: 80%;
+// }
+// .titleicon_edit{
+//    color: green;
+// }
+// .title-container {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+// }
+
+// .icon-container {
+//     margin-left: 8px; /* Adjust the margin as needed to control the spacing between the title and the icon */
+// }
+.option-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.titleicon_edit{
+  cursor: pointer;
+  color: green;;
+}
+
+.titleicon_delete{
+color: red;
+}
+

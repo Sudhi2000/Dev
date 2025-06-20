@@ -1,0 +1,53 @@
+<div mat-dialog-content [formGroup]="form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Year</mat-label>
+                        <mat-select formControlName="year">
+                            <mat-option *ngFor="let year of years" value="{{year.year}}">
+                                {{year.year}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Actual Savings</mat-label>
+                        <input type="number" matInput formControlName="actual_savings"
+                            (change)="target_consumption($event)">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Targeted Consumption</mat-label>
+                        <input type="number" matInput formControlName="targeted_consumption">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-12">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Actual GHS Emission</mat-label>
+                        <input type="number" matInput formControlName="actual_ghs_emission">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row mb-4 mt-2">
+                <quill-editor placeholder="Remarks" [modules]="quillConfig" formControlName="remarks">
+                </quill-editor>
+            </div>
+            <div class="mb-3 action">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4 " (click)="submit()"
+                    [disabled]="!form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

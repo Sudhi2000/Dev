@@ -1,0 +1,176 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Equipment<span>
+                                    Management</span></a>
+                            <p class="mt-1 mb-1">Add an equipment</p>
+                            <!-- <h6 class=" mb-5"># {{Form.value.reference_number}}</h6> -->
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Date</h6>
+                            <h6 class="text-end mb-5 ">{{Form.value.reported_date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row ">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Equipment Name </mat-label>
+                                        <input type="text" matInput formControlName="equipment_name">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Equipment Type</mat-label>
+                                        <mat-select formControlName="equipment_type">
+                                            <mat-option *ngFor="let name of equipmentTypes"
+                                                value="{{name.attributes.name}}">
+                                                {{name.attributes.name}}</mat-option>
+                                            <mat-option (click)="new_equipment_type()" class="option-btn"> <i
+                                                    class=" mdi mdi-plus-circle"></i> Create a new Equipment Type
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-6">
+                                    <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Manufacturer</mat-label>
+                                        <mat-select formControlName="manufacturer">
+                                            <mat-option *ngFor="let name of manufacturers"
+                                                value="{{name.attributes.name}}">
+                                                {{name.attributes.name}}</mat-option>
+                                            <mat-option (click)="new_manufacturer()" class="option-btn"> <i
+                                                    class=" mdi mdi-plus-circle"></i> Create a new manufacturer
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Model</mat-label>
+                                        <input type="text" matInput formControlName="model">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Serial Number</mat-label>
+                                        <input type="text" matInput formControlName="serial_number">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Purchase Price</mat-label>
+                                        <input type="text" matInput formControlName="amount" (change)="cost($event)"
+                                            OnlyNumber="true">
+                                        <!-- <input type="number" matInput formControlName="purchase_price" {{costSymbolTotal(expenseTotal)}}> -->
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Fuel Type</mat-label>
+                                        <mat-select formControlName="fuel_type">
+                                            <mat-option *ngFor="let fuel of fuelTypes" [value]="fuel.attributes.Value">
+                                                {{ fuel.attributes.Value }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Fuel Capacity</mat-label>
+                                        <input type="number" matInput formControlName="fuel_capacity">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Oil Capacity</mat-label>
+                                        <input type="number" matInput formControlName="oil_capacity">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary btn-icon-text float-end mt-4" (click)="submit()"
+                            [disabled]="!Form.valid">
+                            <i class="feather icon-send btn-icon-prepend"></i>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-3">
+                        <button [disabled]="Form.value.status==='Completed'" class="btn btn-secondary" mat-icon-button
+                            aria-label="Example icon-button with a menu">
+                            {{Form.value.status}}
+                        </button>
+                    </div>
+
+                    <div class="mt-3">
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Purchase Date</mat-label>
+                            <input matInput [matDatepicker]="dp" placeholder="Choose a date"
+                                [formControl]="purchasedate" (dateChange)="purchaseDate($event)">
+                            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                            <mat-datepicker #dp></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+                        <!-- <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Last Inspection Date</mat-label>
+                            <input matInput [matDatepicker]="ip" placeholder="Choose a date"
+                                [formControl]="inspectiondate" (dateChange)="inspectionDate($event)">
+                            <mat-datepicker-toggle matSuffix [for]="ip"></mat-datepicker-toggle>
+                            <mat-datepicker #ip></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field> -->
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Last Odometer Reading</mat-label>
+                            <input type="number" matInput formControlName="last_odometer_reading">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                        
+                        <mat-form-field appearance="outline">
+                            <mat-label>GEO Tag ID</mat-label>
+                            <mat-select formControlName="geo_tag_id">
+                                <mat-option *ngFor="let tag of tags" value="{{tag.id}}">
+                                    {{tag.attributes.tag_id}}</mat-option>
+
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

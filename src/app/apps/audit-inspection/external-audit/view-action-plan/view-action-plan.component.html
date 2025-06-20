@@ -1,0 +1,282 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+
+            <div class="row mt-3">
+                <p class="mt-1 mb-1">Finding?</p>
+
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <quill-editor placeholder="Please provide your findings" [modules]="quillConfig"
+                        formControlName="finding">
+                    </quill-editor>
+                </div>
+            </div>
+
+            <div class="row mt-3" *ngIf="Form.value.status !== 'Open'">
+                <p class="mt-1 mb-1">Recommendations for Sustainable Solution?</p>
+
+            </div>
+            <div class="row mb-5" *ngIf="Form.value.status !== 'Open'">
+                <quill-editor placeholder="Recommendation for sustainable solution" [modules]="quillConfig"
+                    formControlName="sustainable_solution">
+                </quill-editor>
+            </div>
+            <div class="row mt-3" *ngIf="Form.value.status !== 'Open'">
+                <p class="mt-1 mb-1">Recommendations For Root Cause?</p>
+
+            </div>
+            <div class="row mt-3" *ngIf="Form.value.status !== 'Open'">
+                <div class="col-md-12">
+                    <quill-editor placeholder="Please provide the root cause" [modules]="quillConfig"
+                        formControlName="root_cause">
+                    </quill-editor>
+                </div>
+            </div>
+
+            <div class="row mt-3" *ngIf="Form.value.status !== 'Open'">
+                <p class="mt-1 mb-1">Barriers/Challenges</p>
+
+            </div>
+            <div class="row mt-3" *ngIf="Form.value.status !== 'Open'">
+                <div class="col-md-12">
+                    <quill-editor placeholder="Please provide the root cause" [modules]="quillConfig"
+                        formControlName="barriers_challenges">
+                    </quill-editor>
+                </div>
+            </div>
+
+            <div class="row mt-3" *ngIf="Form.value.status !== 'Open'">
+                <p class="mt-1 mb-1">Assignee Action Plan</p>
+
+            </div>
+            <div class="row mt-3" *ngIf="Form.value.status !== 'Open'">
+                <div class="col-md-12">
+                    <quill-editor placeholder="Please provide your action plan" [modules]="quillConfig"
+                        formControlName="remarks">
+                    </quill-editor>
+                </div>
+            </div>
+
+            <div class="row mt-3" *ngIf="Form.value.status === 'Approved'|| Form.value.status === 'Implemented ' || Form.value.status === 'Rejected'|| Form.value.status === 'Completed' || Form.value.status === 'Under Implementation'">
+                <p class="mt-1 mb-1">Approver Remarks</p>
+
+            </div>
+            <div class="row mt-3" *ngIf="Form.value.status === 'Approved'|| Form.value.status === 'Implemented' || Form.value.status === 'Rejected' || Form.value.status === 'Completed' || Form.value.status === 'Under Implementation'">
+                <div class="col-md-12">
+                    <quill-editor placeholder="Please provide the root cause" [modules]="quillConfig"
+                        formControlName="corporateuser_remark">
+                    </quill-editor>
+                </div>
+            </div>
+
+            <div class="row mt-3"  *ngIf="Form.value.status === 'Approved'|| Form.value.status === 'Implemented' || Form.value.status === 'Completed'|| Form.value.status === 'Under Implementation'">
+                <p class="mt-1 mb-1">Implemented Actions</p>
+
+            </div>
+            <div class="row mt-3" *ngIf="Form.value.status === 'Approved' || Form.value.status === 'Implemented' || Form.value.status === 'Completed' || Form.value.status === 'Under Implementation'">
+                <div class="col-md-12">
+                    <quill-editor placeholder="Please provide your remarks" [modules]="quillConfig"
+                        formControlName="implemented_actions">
+                    </quill-editor>
+                </div>
+            </div>
+
+            
+            <div class="row mt-3"  *ngIf="Form.value.status === 'Approved'|| Form.value.status === 'Implemented'|| Form.value.status === 'Completed'|| Form.value.status === 'Under Implementation'">
+                <p class="mt-1 mb-1">Lessons Learned</p>
+
+            </div>
+            <div class="row mt-3" *ngIf="Form.value.status === 'Approved'|| Form.value.status === 'Implemented' || Form.value.status === 'Completed'|| Form.value.status === 'Under Implementation'">
+                <div class="col-md-12">
+                    <quill-editor placeholder="Please provide your remarks" [modules]="quillConfig"
+                        formControlName="lessons_learned">
+                    </quill-editor>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Severity</mat-label>
+                        <mat-select formControlName="priority">
+                            <mat-option *ngFor="let value of priority_dropdown" value="{{value}}">
+                                {{value}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Due Date</mat-label>
+                        <input matInput [matDatepicker]="dpApproval" placeholder="Choose a date"
+                            [formControl]="dueDate">
+                        <mat-datepicker-toggle matSuffix [for]="dpApproval"></mat-datepicker-toggle>
+                        <mat-datepicker #dpApproval></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Reported Date</mat-label>
+                        <input matInput [matDatepicker]="dpReport" placeholder="Choose a date"
+                            [formControl]="reportedDate">
+                        <mat-datepicker-toggle matSuffix [for]="dpReport"></mat-datepicker-toggle>
+                        <mat-datepicker #dpReport></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Assignee</mat-label>
+                        <input type="text" matInput formControlName="assignee">
+                        <mat-error>Required Field</mat-error>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row mt-3" *ngIf="Form.value.status !== 'Open'">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Target Completion Date</mat-label>
+                        <input matInput [matDatepicker]="acComDatedp" placeholder="Choose a date"
+                            [formControl]="comDatedp">
+                        <mat-datepicker-toggle matSuffix [for]="acComDatedp"></mat-datepicker-toggle>
+                        <mat-datepicker #acComDatedp></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Hierarchy of Control</mat-label>
+                        <mat-select formControlName="heirarchy_control">
+                            <mat-option *ngFor="let value of heirarchy_dropdown" value="{{value}}">
+                                {{value}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row mt-3" *ngIf="Form.value.status === 'Completed'">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Actual Completion Date</mat-label>
+                        <input matInput [matDatepicker]="acComDatedp" placeholder="Choose a date"
+                            [formControl]="AcCompDate">
+                        <mat-datepicker-toggle matSuffix [for]="acComDatedp"></mat-datepicker-toggle>
+                        <mat-datepicker #acComDatedp></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!-- <div class="row mt-3">
+                <button type="button" class="btn btn-icon-text btn-outline-twitter"
+                    (click)="view_action_plan_document()" *ngIf="Form.value.document_id">
+                    <i class="feather icon-file-text btn-icon-prepend"></i>
+                    Download Action Plan Evidence  ({{Form.value.document_name}}.{{Form.value.document_format}}) 
+                </button>
+            </div>
+            <div class="row mt-3">
+                <button type="button" class="btn btn-icon-text btn-outline-twitter"
+                    (click)="view_action_plan_after_document()" *ngIf="Form.value.document_id_after">
+                    <i class="feather icon-file-text btn-icon-prepend"></i>
+                    Download Action Plan Evidence After ({{Form.value.document_name_after}}.{{Form.value.document_format_after}})
+                </button>
+            </div> -->
+            <div class="col-md-12" *ngIf="Form.value.evidence!==0">
+                <div class="row mt-3">
+                    <p class="mt-1 mb-1">Evidence Before</p>
+
+                </div>
+                <div class="custom-dropzone-container">
+                    <div *ngFor="let file of DocumentFiles; let i = index;" class="custom-dropzone">
+                        <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [file]="file"
+                            (click)="openDocument(i); $event.stopPropagation();">
+                            <ngx-dropzone-label class="preview-text">
+                                <div class="preview-text">{{ file.name }}</div>
+                            </ngx-dropzone-label>
+                        </ngx-dropzone-preview>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mt-3" *ngIf="multiple_evidence_Before">
+                <div>
+                    <p>Multiple Evidence Before</p>
+    
+                </div>
+                <div class="custom-dropzone-container">
+                    <div *ngFor="let file of MultipleDoumentBeforeFiles; let i = index;" class="custom-dropzone">
+                        <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [file]="file" (click)="openMultipeBeforeDocument(i); $event.stopPropagation();">
+                            <ngx-dropzone-label class="preview-text">
+                                <div class="preview-text">{{ file.name }}</div>
+                            </ngx-dropzone-label>
+                        </ngx-dropzone-preview>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-md-12" *ngIf="Form.value.evidence_after!==0">
+                <div class="row mt-3">
+                    <p class="mt-1 mb-1">Evidence After</p>
+
+                </div>
+                <div class="custom-dropzone-container">
+                    <div *ngFor="let file of evidenceAfterFiles; let i = index;" class="custom-dropzone">
+                        <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [file]="file"
+                            (click)="openEvidenceAfter(i); $event.stopPropagation();">
+                            <ngx-dropzone-label class="preview-text">
+                                <div class="preview-text">{{ file.name }}</div>
+                            </ngx-dropzone-label>
+                        </ngx-dropzone-preview>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-12">
+                <div class="row mt-3" >
+                    <p class="mt-1 mb-1" *ngIf="multiple_evidence_After">Multiple Evidence After</p>
+    
+                </div>
+                <div class="custom-dropzone-container">
+                    <div *ngFor="let file of MultipleDoumentAfterFiles; let i = index;" class="custom-dropzone">
+                        <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [file]="file" (click)="openmultipleEvidenceAfter(i); $event.stopPropagation();">
+                            <ngx-dropzone-label class="preview-text">
+                                <div class="preview-text">{{ file.name }}</div>
+                            </ngx-dropzone-label>
+                        </ngx-dropzone-preview>
+                    </div>
+                </div>
+                
+            </div>
+            <!-- <div class="col-md-12" *ngIf="Form.value.evidence_after!==0">
+                <div class="row mt-3" >
+                    <p class="mt-1 mb-1">Evidence After</p>
+    
+                </div>
+                <ngx-dropzone >
+                    <ngx-dropzone-label>
+                        Drop your Evidence After here
+                    </ngx-dropzone-label>
+                    <div *ngFor="let file of evidenceAfterFiles; let i = index;" >
+                        <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true"
+                            [file]="file" [file]="file"
+                            (click)="openEvidenceAfter(i); $event.stopPropagation();">
+                            <ngx-dropzone-label class="preview-text">
+                                <div class="preview-text">
+                                    {{ file.name }}
+                                </div>
+                            </ngx-dropzone-label>
+                        </ngx-dropzone-preview>
+                    </div>
+                </ngx-dropzone>
+            </div> -->
+        </div>
+    </div>
+</div>

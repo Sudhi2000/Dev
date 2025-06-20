@@ -1,0 +1,18 @@
+.table-responsive {
+    overflow-x: unset;
+}
+.deleteicon {
+    color: red;
+    margin-left: 15px;
+}
+
+.modifyicon {
+    color: green;
+}
+
+
+.option-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

@@ -1,0 +1,73 @@
+.table-responsive {
+    overflow: visible;
+}
+
+.btn-icon-text {
+    margin-right: 3px;
+}
+
+
+.question-container {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.question-container p {
+    margin-right: 3px;
+    margin-bottom: 15px;
+    overflow-wrap: break-word;
+}
+
+.table-responsive {
+    overflow: hidden;
+}
+
+.padd {
+    padding-bottom: 2%;
+}
+
+.hide {
+    display: none;
+}
+
+.preview-text {
+    font-size: small;
+    text-align: center;
+}
+
+.custom-dropzone-container-multiple {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.custom-dropzone-multiple {
+    width: calc(33.33% - 20px);
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.custom-dropzone-multiple:last-child {
+    margin-right: 0;
+}
+
+::ng-deep ngx-dropzone-image-preview img {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 160px;
+    /* or whatever fits your table */
+    border-radius: 4px;
+}
+
+::ng-deep table ngx-dropzone-image-preview {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+::ng-deep table .custom-dropzone {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+}

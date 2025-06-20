@@ -1,0 +1,264 @@
+<!-- <div mat-dialog-content [formGroup]="Form" >
+  <div class="container-fluid d-flex justify-content-center w-100">
+    <div class="table-responsive w-100">
+      <div class="row padd">
+        <p class="mt-1 mb-1"><b>Create Action Plan 12</b></p>
+      </div>
+      <div class="row mt-3">
+        <p class="mt-1 mb-1">Finding?</p>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <quill-editor placeholder="Please provide your findings" [modules]="quillConfig" formControlName="finding">
+          </quill-editor>
+        </div>
+      </div>
+      <div class="row mt-3 mb-4 text-center">
+        <div class="d-grid gap-2">
+
+          <button type="button" class="btn btn-secondary" id="ai-suggest" (click)="checkFindings()">AI - Suggest
+            Sustainable Solution</button>
+          <p class="error hide" id="error-text">Please provide your findings in findings field</p>
+          <button type="button" class="btn btn-success hide" id="ai-loader">
+            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+            Please wait our AI is looking recommendations for sustainable solution.
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="row mt-3">
+        <p class="mt-1 mb-1">Recommendations for Sustainable Solution?</p>
+      </div>
+
+      <div class="row mb-5">
+        <quill-editor placeholder="Recommendation for sustainable solution" [modules]="quillConfig"
+          formControlName="sustainable_solution">
+        </quill-editor>
+
+      </div>
+
+
+      <div class="row mt-3">
+        <p class="mt-1 mb-1">Corrective Action Plan?</p>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <quill-editor placeholder="Please provide the corrective action plan" [modules]="quillConfig"
+            formControlName="corrective_action_plan">
+          </quill-editor>
+        </div>
+      </div>
+      <div class="row mt-3 mb-4 text-center">
+        <div class="d-grid gap-2">
+          <button type="button" class="btn btn-secondary" id="root-cause-ai-suggest" (click)="checkRootCause()">AI -
+            Suggest Root Cause</button>
+          <p class="error hide" id="root-cause-error-text">Please provide your findings in findings field</p>
+          <button type="button" class="btn btn-success hide" id="root-cause-ai-loader">
+            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+            Please wait our AI is looking recommendations for Root Cause.
+          </button>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <p class="mt-1 mb-1">Recommendations For Root Cause?</p>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <quill-editor placeholder="Please provide the root cause" [modules]="quillConfig"
+            formControlName="root_cause">
+          </quill-editor>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <mat-form-field fxFlex appearance="outline" color="primary">
+            <mat-label>Hierarchy of Control</mat-label>
+            <mat-select formControlName="heirarchy_control" (selectionChange)="onDropdownSelectionChange($event)">
+              <mat-option *ngFor="let value of heirarchy_dropdown" value="{{ value }}">
+                {{ value }}</mat-option>
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Priority</mat-label>
+            <mat-select formControlName="priority">
+              <mat-option *ngFor="let value of priority_dropdown" value="{{ value }}">
+                {{value}}</mat-option>
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+
+
+
+
+
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field fxFlex appearance="outline" color="primary">
+            <mat-label>Responsible Person</mat-label>
+            <mat-select formControlName="responsible">
+              <mat-option *ngFor="let people of peopleList" [value]="people.id"
+                (onSelectionChange)="responsible(people)">
+                <img style="vertical-align:middle; margin-right: 4px;"
+                  src={{people?.attributes?.image?.data?.attributes?.image}} height="30" />
+                <span>{{ people.attributes.first_name }} {{people.attributes.last_name}}</span>
+              </mat-option>
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+
+
+
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline" color="primary">
+            <mat-label>Due Date</mat-label>
+            <input matInput [matDatepicker]="dpApproval" placeholder="Choose a date" [formControl]="dueDate"
+              (dateChange)="due_date($event)" />
+            <mat-datepicker-toggle matSuffix [for]="dpApproval"></mat-datepicker-toggle>
+            <mat-datepicker #dpApproval></mat-datepicker>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="outline" color="primary">
+            <mat-label>Actual Completion Date</mat-label>
+            <input matInput [matDatepicker]="acComDatedp" placeholder="Choose a date" [formControl]="completeDate"
+              (dateChange)="actual_completion_date($event)" />
+            <mat-datepicker-toggle matSuffix [for]="acComDatedp"></mat-datepicker-toggle>
+            <mat-datepicker #acComDatedp></mat-datepicker>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+
+
+      </div>
+      <div class="row mb-2 hide" id="ai-loader">
+        <button class="btn btn-success" type="button">
+          <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+          Please wait our AI is looking into the actions has to taken care.
+        </button>
+      </div>
+
+      <div class="row mt-3">
+        <div class="custom-dropzone" ngx-dropzone [accept]="
+            'application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, image/jpeg, image/png'
+          " (change)="onSelect($event)">
+          <ngx-dropzone-label>Drop your Action Plan evidence. Please ensure that the document
+            size is less than 5 MB</ngx-dropzone-label>
+          <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files" [file]="f"
+            (removed)="onRemove(f)">
+            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+          </ngx-dropzone-preview>
+        </div>
+      </div>
+      <div class="mb-3">
+        <button type="button" class="btn btn-success btn-icon-text float-end mt-4" (click)="submit()"
+          [disabled]="!Form.valid">
+          <i class="feather icon-send btn-icon-prepend"></i>
+          Create
+        </button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div mat-dialog-content [formGroup]="Form">
+  <div class="container-fluid  d-flex justify-content-center w-100">
+      <div class="table-responsive w-100">
+          <div class="row padd">
+              <p class="mt-1 mb-1"><b>Create Action Plan</b></p>
+
+          </div>
+          <div class="row mt-3">
+              <p class="mt-1 mb-1">Finding?</p>
+
+          </div>
+          <div class="row mt-3">
+              <div class="col-md-12">
+                  <quill-editor placeholder="Please provide your findings" [modules]="quillConfig"
+                      formControlName="finding">
+                  </quill-editor>
+              </div>
+          </div>
+          <div class="row mt-3">
+              <div class="col-md-6">
+                  <mat-form-field appearance="outline">
+                      <mat-label>Severity</mat-label>
+                      <mat-select formControlName="priority">
+                          <mat-option *ngFor="let value of priority_dropdown"
+                          value="{{value}}">
+                          {{value}}</mat-option>
+                      </mat-select>
+                      <mat-error>Required Field</mat-error>
+                  </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                  <mat-form-field appearance="outline" color="primary">
+                      <mat-label>Reported Date</mat-label>
+                      <input matInput [matDatepicker]="RpApproval" placeholder="Choose a date" formControlName="date"
+                      (dateChange)="report_Date($event)">
+                      <mat-datepicker-toggle matSuffix [for]="RpApproval"></mat-datepicker-toggle>
+                      <mat-datepicker #RpApproval></mat-datepicker>
+                      <mat-error>Required Field</mat-error>
+                  </mat-form-field>
+              </div>
+          </div>
+
+          <div class="row mt-3">
+              <div class="col-md-6">
+                  <mat-form-field appearance="outline" color="primary">
+                      <mat-label>Due Date</mat-label>
+                      <input matInput [matDatepicker]="dpApproval" placeholder="Choose a date" [formControl]="dueDate"
+                      (dateChange)="due_date($event)">
+                  <mat-datepicker-toggle matSuffix [for]="dpApproval"></mat-datepicker-toggle>
+                  <mat-datepicker #dpApproval></mat-datepicker>
+                  <mat-error>Required Field</mat-error>
+                  </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                  <mat-form-field fxFlex appearance="outline" color="primary">
+                      <mat-label>Assignee</mat-label>
+                      <mat-select formControlName="assignee">
+                          <mat-option *ngFor="let assignee of peopleList" [value]="assignee.id">
+                              <span>{{ assignee?.attributes?.first_name }}
+                                  {{assignee?.attributes?.last_name}}</span>
+                          </mat-option>
+                      </mat-select>
+                      <mat-error>Required Field</mat-error>
+                  </mat-form-field>
+              </div>
+          </div>
+          <div class="row mt-3">
+            <div class="custom-dropzone" ngx-dropzone [accept]="
+                'application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, image/jpeg, image/png'
+              " (change)="onSelect($event)">
+              <ngx-dropzone-label>Drop your Action Plan evidence. Please ensure that the document
+                size is less than 5 MB</ngx-dropzone-label>
+              <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files" [file]="f"
+                (removed)="onRemove(f)">
+                <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+            </div>
+          </div>
+          <div class="mb-3">
+            <button type="button" class="btn btn-success btn-icon-text float-end mt-4" (click)="submit()"
+              [disabled]="!Form.valid">
+              <i class="feather icon-send btn-icon-prepend"></i>
+              Create
+            </button>
+          </div>
+      </div>
+  </div>
+</div>

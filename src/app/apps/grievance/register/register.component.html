@@ -1,0 +1,295 @@
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-7">
+                <nav aria-label="breadcrumb ">
+                    <a routerLink="." class="nobleui-logo d-block mt-3">Employee<span> Grievance</span></a>
+                    <ol class="breadcrumb breadcrumb-dot">
+                        <li class="breadcrumb-item"><a routerLink="/apps/insight">Home</a></li>
+                        <li class="breadcrumb-item"><a routerLink="/apps/grievance/register">Grievance</a>
+                        </li>
+                        <li class="breadcrumb-item"><a routerLink="/apps/grievance/register">History</a></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="row">
+                <div class="col-md-4 search">
+
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-text">
+                                <i class="feather icon-search"></i>
+                            </div>
+                            <input type="text" class="form-control" id="navbarForm" placeholder="Search here..."
+                                (keyup)="applyFilter($event)">
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="(corporateUser === true) || (divisions.length > 1)" class="col-2 search mt-3 ">
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Division</mat-label>
+                        <mat-select [formControl]="Division" multiple (selectionChange)="grievDiv($event)">
+                            <mat-select-trigger>
+                                {{Division.value[0]?.division_name? Division.value[0]?.division_name : ''}}
+                                <span *ngIf="Division?.value?.length > 1" class="example-additional-selection">
+                                    (+{{Division.value.length - 1}}
+                                    {{Division.value?.length === 2 ?
+                                    'other' :
+                                    'others'}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let division of divisions"
+                                [value]="division">{{division.division_name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-3 search">
+                    <div class="input-group  me-2 mb-2 mb-md-0">
+                        <mat-form-field appearance="outline" color="primary" id="dashboard">
+                            <mat-label>Enter a date range</mat-label>
+                            <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+                                <input matStartDate formControlName="start" placeholder="Start date"
+                                    (dateChange)="startDateChange($event)">
+                                <input matEndDate formControlName="end" placeholder="End date"
+                                    (dateChange)="endDateChange($event)">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                            <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                                start date</mat-error>
+                            <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end
+                                dateee
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-1 search">
+                    <div class="row">
+
+                        <button type="button" class="btn btn-primary btn-icon me-2" (click)="search(initialPage)">
+                            <i class="feather icon-search btn-icon-prepend"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-icon me-2" (click)="reset()">
+                            <i class="feather icon-rotate-cw btn-icon-prepend"></i>
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="col-md-2 search">
+                    <!-- <button type="button" class="btn btn-primary btn-icon-text" (click)="create()" >
+                    <i class="btn-icon-prepend" data-feather="plus-circle"></i>
+                    CREATE
+                </button> -->
+                    <div class="d-inline-block me-2" ngbDropdown>
+                        <button class="btn btn-primary btn-icon-text" id="dropdownButtonPrimary" ngbDropdownToggle><i
+                                class="btn-icon-prepend" data-feather="plus-circle"></i>
+                            CREATE</button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownButtonPrimary">
+                            <button ngbDropdownItem (click)="create_non_grievance('Question')">Question</button>
+                            <button ngbDropdownItem (click)="create_non_grievance('Suggestion')">Suggestion</button>
+                            <button ngbDropdownItem (click)="create_non_grievance('Appreciation')">Appreciation</button>
+                            <button ngbDropdownItem (click)="create_complaint('Complaint')">Complaint</button>
+                            <button ngbDropdownItem (click)="create_grievance('Grievance')">Grievance</button>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-secondary btn-icon me-2 " (click)="generateReport()"
+                        id="grievance_report">
+                        <i class="feather icon-printer btn-icon-prepend"></i>
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-icon hide" id="grievance_report_loader">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 stretch-card">
+        <div class="card">
+            <div class="card-body table-card">
+                <div class="table-responsive">
+                    <ng-container *ngIf="isLoading">
+                        <app-loading-screen [rows]="9"></app-loading-screen>
+                    </ng-container>
+                    <ng-container *ngIf="!isLoading">
+                        <table mat-table [dataSource]="dataSource" matSort>
+                            <ng-container matColumnDef="case_id">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Case ID </th>
+                                <td mat-cell *matCellDef="let element"> {{element.case_id}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="type">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+                                <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="submission_date">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Submission Date">
+                                    Submission Date </th>
+                                <td mat-cell *matCellDef="let element"> {{element.submission_date | date:'dd-MMM-yyyy'}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="anonymous">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Anonymous </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <ng-container *ngIf="element.anonymous !== null">
+                                        {{ element.anonymous ? 'Yes' : 'No' }}
+                                    </ng-container>
+                                </td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="employee_id">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee ID </th>
+                                <td mat-cell *matCellDef="let element"> {{element.employee_id}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name</th>
+                                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="gender">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>
+                                <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="business_unit">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Business Unit </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.business_unit.data?.attributes.division_name}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="department">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Department </th>
+                                <td mat-cell *matCellDef="let element"> {{element.department}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="category">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Grievance Category </th>
+                                <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="severity_score">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Severity Score </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button type="button"
+                                        class="btn {{scoreButton(element.severity_score)}} status-btn btn-icon-text btn-xs">
+                                        {{element.severity_score}}
+                                    </button>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="rating">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee Rating </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <ngb-rating [(rate)]="element.rating" [max]="5" [readonly]="true"
+                                        (hover)="currentRate = $event" class="star">
+
+                                    </ngb-rating>
+
+                            </ng-container>
+
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Status">
+                                    Status
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button type="button"
+                                        class="btn {{statusButton(element.status)}} status-btn btn-icon-text btn-xs">
+                                        {{element.status}}
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="tat_status">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Status">
+                                    TAT
+                                    Status
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button type="button"
+                                        class="btn {{tatButton(element.tat_status)}} status-btn btn-icon-text btn-xs">
+                                        {{element.tat_status}}
+                                    </button>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="actions">
+                                <th *matHeaderCellDef class="actions-cell" mat-header-cell mat-sort-header>Actions</th>
+                                <td *matCellDef="let row" class="actions-cell" mat-cell>
+                                    <button type="button" class="btn btn-danger btn-icon btn-xs" (click)="modify(row)"
+                                        placement="top" ngbTooltip="Modify" *ngIf="row.status==='Draft'">
+                                        <i class="feather icon-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-icon btn-xs"
+                                        (click)="feedback(row)" placement="top" ngbTooltip="Employee Feedback"
+                                        *ngIf="!row.rating && row.status==='Completed'">
+                                        <i class="feather icon-file-text"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-icon btn-xs hide"
+                                        id="{{row.document_number}}_1">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        <span class="visually-hidden">Loading...</span>
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-icon btn-xs" (click)="view(row)"
+                                        placement="top" ngbTooltip="View">
+                                        <i class="feather icon-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-icon btn-xs" id="{{row.case_id}}"
+                                        (click)="print(row.case_id)" placement="top" ngbTooltip="Print">
+                                        <i class="feather icon-printer"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-icon btn-xs hide"
+                                        id="{{row.case_id}}_1">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        <span class="visually-hidden">Loading...</span>
+                                    </button>
+
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="visibleColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: visibleColumns;"></tr>
+                        </table>
+                    </ng-container>
+                    <mat-paginator [pageSize]="pageSize" showFirstLastButtons [showFirstLastButtons]="true"
+                        [length]="totalItems" (page)="
+  (filterForm.value.startDate && filterForm.value.endDate && !filterForm.value.division)
+    ? (unitSpecific 
+        ? (!corporateUser 
+            ? get_unit_specific_periodic_grievance_history($event) 
+            : get_periodic_grievance_register($event)
+          ) 
+        : get_periodic_grievance_register($event)
+      )
+    : (!filterForm.value.startDate && !filterForm.value.endDate && !filterForm.value.division)
+      ? (unitSpecific 
+          ? (!corporateUser 
+              ? get_unit_specific_grievance_history($event) 
+              : get_grievance_history($event)
+            ) 
+          : get_grievance_history($event)
+        )
+      : (!filterForm.value.startDate && !filterForm.value.endDate && filterForm.value.division)
+        ? (unitSpecific 
+            ? (!corporateUser 
+                ? get_division_grievance_register($event) 
+                : get_division_grievance_register($event)
+              ) 
+            : get_division_grievance_register($event)
+          )
+        : (filterForm.value.startDate && filterForm.value.endDate && filterForm.value.division)
+          ? (unitSpecific 
+              ? (!corporateUser 
+                  ? get_periodic_division_grievance_register($event) 
+                  : get_periodic_division_grievance_register($event)
+                ) 
+              : get_periodic_division_grievance_register($event)
+            )
+          : get_grievance_history($event)" aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

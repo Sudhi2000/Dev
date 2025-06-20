@@ -1,0 +1,798 @@
+<div class="container-fluid" id="dashboard">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a routerLink="." class="nobleui-logo d-block ">Accident & Incident <span>
+                            Management</span></a>
+                    <span class="badge ">
+                        <form class="d-flex my-2 my-lg-0" [formGroup]="filterForm">
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field appearance="outline" color="primary" id="dashboard">
+                                    <mat-label>Enter a date range</mat-label>
+                                    <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+                                        <input matStartDate formControlName="start" placeholder="Start date"
+                                            (dateChange)="startDateChange($event)">
+                                        <input matEndDate formControlName="end" placeholder="End date"
+                                            (dateChange)="endDateChange($event)">
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                                    <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                                        start date</mat-error>
+                                    <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end
+                                        date
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+                            <div class="input-group  me-2 mb-2 mb-md-0"  *ngIf="(divisions.length > 1)">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Division</mat-label>
+                                    <mat-select formControlName="division">
+                                        <mat-option [value]="data.division_uuid"
+                                            *ngFor="let data of divisions">{{data.division_name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-primary btn-icon" (click)="applyFilter()">
+                                    <i class="feather icon-search btn-icon-prepend"></i>
+                                </button>
+                            </div>
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-danger btn-icon" (click)="reset()">
+                                    <i class="feather icon-rotate-cw btn-icon-prepend"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12 col-xl-12 stretch-card">
+            <div class="row flex-grow-1">
+                <div class="col-md-2-5 grid-margin stretch-card" *ngFor="let data of summaryCard">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <h5 class=" mb-2">{{data.category}}</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-12 col-xl-5 value">
+                                    <h3 class="mb-2">{{data.count}}</h3>
+                                    <div class="d-flex align-items-baseline">
+                                        <p class="{{data.Attrition_bg}}">
+                                            <span>{{data.Attrition}}</span>
+                                            <i class="feather {{data.Attrition_icon}} icon-sm mb-1"></i>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-12 col-xl-7 icon">
+                                    <div class=" mt-xl-0">
+                                        <img src="../../../../assets/images/accident/{{data.icon}}" width="60">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2-5 grid-margin stretch-card" *ngFor="let data of amountCard">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <h5 class=" mb-0">Amount</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-12 col-xl-5 value">
+                                    <h3 class="mb-2">{{data.amount}}</h3>
+                                    <div class="d-flex align-items-baseline">
+                                        <p class="text-success">
+                                            <span>{{data.Attrition}}</span>
+                                            <i class="feather {{data.Attrition_icon}} icon-sm mb-1"></i>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-12 col-xl-7 icon">
+                                    <div class=" mt-xl-0">
+                                        <img src="../../../../assets/images/accident/amount.png" width="60">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7 col-xl-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Accident & Incident Summary</h6>
+                    </div>
+                    <div class="d-sm-flex flex-wrap">
+                        <div class="ms-auto">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="javascript: void(0);" (click)="accidentDivision_week()"
+                                        id="week">Week</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="javascript: void(0);"
+                                        (click)="accidentDivision_month()" id="month">Month</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " href="javascript: void(0);" (click)="accidentDivision_year()"
+                                        id="year">Year</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <apx-chart dir="ltr" class="apex-charts" [chart]="divisionCategoryChart.chart"
+                        [series]="divisionCategoryChart.series" [legend]="divisionCategoryChart.legend"
+                        [fill]="divisionCategoryChart.fill" [dataLabels]="divisionCategoryChart.dataLabels"
+                        [xaxis]="divisionCategoryChart.xaxis" [plotOptions]="divisionCategoryChart.plotOptions">
+                    </apx-chart>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5 col-xl-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <apx-chart [series]="lastaccidentchart.series" [chart]="lastaccidentchart.chart"
+                        [plotOptions]="lastaccidentchart.plotOptions" [labels]="lastaccidentchart.labels">
+                    </apx-chart>
+                    <div class="row mb-3">
+                        <div class="col-6 d-flex justify-content-end">
+                            <div>
+                                <label
+                                    class="d-flex align-items-center justify-content-end tx-10 text-uppercase fw-bold">Accident
+                                    Date <span class="p-1 ms-1 rounded-circle bg-secondary"></span></label>
+                                <h6 class="fw-bolder mb-0 text-end">{{lastAccidentDate | date:'dd-MMM-yyyy'}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div>
+                                <label class="d-flex align-items-center tx-10 text-uppercase fw-bold"><span
+                                        class="p-1 me-1 rounded-circle bg-primary"></span> Reported Date</label>
+                                <h6 class="fw-bolder mb-0">{{lastReportedDate | date:'dd-MMM-yyyy'}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button class="btn btn-primary" (click)="accRegister()">Accident Register</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-5  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Category</h6>
+                    </div>
+                    <ul ngbNav #categoryNav="ngbNav" [activeId]="1" class="nav-pills bg-light rounded">
+                        <li [ngbNavItem]="1">
+                            <a ngbNavLink>Overview</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of cateData | callback: filterCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In accident category</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="2">
+                            <a ngbNavLink>Health</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of cateData | callback: filterHealthCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In health sub category</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="3">
+                            <a ngbNavLink>Safety</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of cateData | callback: filterSafetyCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In safety sub category</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="4">
+                            <a ngbNavLink>Environmental</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of cateData | callback: filterEnvCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In environmental sub category</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                    <div [ngbNavOutlet]="categoryNav" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7  grid-margin stretch-card">
+            <div class="card custom-height">
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Sub Category</h6>
+                    </div>
+                    <ul ngbNav #subCategoryNav="ngbNav" [activeId]="1" class="nav-pills bg-light rounded">
+                        <li [ngbNavItem]="1">
+                            <a ngbNavLink>Affected Body Parts</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of cateData | callback: filterBodySubCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In body part</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="2">
+                            <a ngbNavLink>Type of Injury</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of cateData | callback: filterTypeSubCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In injury type</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="3">
+                            <a ngbNavLink>Cause of Injury</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of cateData | callback: filterCauseSubCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In injury cause</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="4">
+                            <a ngbNavLink>Damage</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of cateData | callback: filterDamageSubCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In damage</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="5">
+                            <a ngbNavLink>Disease / Illeness</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of cateData | callback: filterIllnessSubCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In disease / illness</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="6">
+                            <a ngbNavLink>Environmental</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of cateData | callback: filterEnvSubCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In environmental</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                    <div [ngbNavOutlet]="subCategoryNav" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="card gender-card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Gender</h4>
+                    <div>
+                        <apx-chart class="apex-charts" dir="ltr" [series]="genderChart.series"
+                            [chart]="genderChart.chart" [colors]="genderChart.colors"
+                            [plotOptions]="genderChart.plotOptions" [legend]="genderChart.legend"
+                            [labels]="genderChart.labels">
+                        </apx-chart>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6 d-flex justify-content-end">
+                            <div>
+                                <label
+                                    class="d-flex align-items-center justify-content-end tx-10 text-uppercase fw-bold">Total
+                                    Female <span class="p-1 ms-1 rounded-circle bg-secondary"></span></label>
+                                <h5 class="fw-bolder mb-0 text-end">{{femaleCount}}</h5>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div>
+                                <label class="d-flex align-items-center tx-10 text-uppercase fw-bold"><span
+                                        class="p-1 me-1 rounded-circle bg-primary"></span> Total Male</label>
+                                <h5 class="fw-bolder mb-0">{{maleCount}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="card age-card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Age</h4>
+                    <div>
+                        <apx-chart class="apex-charts" dir="ltr" [series]="ageChart.series" [chart]="ageChart.chart"
+                            [colors]="ageChart.colors" [stroke]="ageChart.stroke" [dataLabels]="ageChart.dataLabels"
+                            [xaxis]="ageChart.xaxis">
+                        </apx-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="clearfix">
+                        <h4 class="card-title">Time off Work</h4>
+                    </div>
+                    <div class="table-responsive mt-4 route-cause">
+                        <table class="table table-centered mb-0">
+                            <tbody>
+                                <tr *ngFor="let data of timeWorkData">
+                                    <td>
+                                        <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                        <p class="text-muted mb-0">In time of work</p>
+                                    </td>
+                                    <td>
+                                        <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                            [plotOptions]="radialChart.plotOptions" [labels]="radialChart.labels">
+                                        </apx-chart>
+                                    </td>
+                                    <td>
+                                        <p class="text-muted mb-1">Count</p>
+                                        <h5 class="mb-0">{{data.count}}</h5>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-lg-5 col-xl-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Injury Consequences</h6>
+                    </div>
+                    <div class="table-responsive mt-4 route-cause">
+                        <table class="table table-centered mb-0">
+                            <tbody>
+                                <tr *ngFor="let data of consequenceData">
+                                    <td>
+                                        <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                        <p class="text-muted mb-0">In injury consequences</p>
+                                    </td>
+                                    <td>
+                                        <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                            [plotOptions]="radialChart.plotOptions" [labels]="radialChart.labels">
+                                        </apx-chart>
+                                    </td>
+                                    <td>
+                                        <p class="text-muted mb-1">Count</p>
+                                        <h5 class="mb-0">{{data.count}}</h5>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7 col-xl-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Root Cause Summary</h4>
+                    <ul ngbNav #RouteCausenav="ngbNav" [activeId]="1" class="nav-pills bg-light rounded">
+                        <li [ngbNavItem]="1">
+                            <a ngbNavLink>Overview</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of rootCauseData">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In root cause</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="2">
+                            <a ngbNavLink>Unsafe Acts</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of rootCauseData2 | callback: filterUnsafeActs">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In unsafe acts</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="3">
+                            <a ngbNavLink>Unsafe Conditions</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of rootCauseData2 | callback: filterUnsafeCondition">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In unsafe conditions</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="4">
+                            <a ngbNavLink>Personal Factors</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of rootCauseData2 | callback: filterPersonalFactor">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In personal factors</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="5">
+                            <a ngbNavLink>Job Factors</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of rootCauseData2 | callback: filterJobFactor">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In job factors</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                    <div [ngbNavOutlet]="RouteCausenav" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+       
+
+        <div class="row">
+            <div class="col-lg-4 grid-margin stretch-card">
+                <div class="card custom-height" [perfectScrollbar]>
+                    <div class="card-body custom-height" [perfectScrollbar]>
+                        <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                            <h6 class="card-title mb-0">Department</h6>
+                        </div>
+                        <apx-chart class="apex-charts" dir="ltr" [series]="departmentChart.series"
+                            [chart]="departmentChart.chart" 
+                            [plotOptions]="departmentChart.plotOptions" [legend]="departmentChart.legend"
+                            [labels]="departmentChart.labels">
+                        </apx-chart>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4  grid-margin stretch-card">
+                <div class="card custom-height" [perfectScrollbar]>
+                    <div class="card-body custom-height" [perfectScrollbar]>
+                        <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                            <h6 class="card-title mb-0">Incident Severity</h6>
+                        </div>
+                        <apx-chart class="apex-charts" dir="ltr" [series]="severityPieChart.series"
+                            [chart]="severityPieChart.chart" [colors]="severityPieChart.colors"
+                            [plotOptions]="severityPieChart.plotOptions" [labels]="severityPieChart.labels"
+                            [legend]="severityPieChart.legend" [responsive]="severityPieChart.responsive">
+                        </apx-chart>
+    
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12 d-flex justify-content-center">
+                            <div class="markPer">
+                                <label class="d-flex align-items-center  tx-10 text-uppercase fw-bold "><span
+                                        class="p-1 ms-1 rounded-circle bg-extreme"></span>Extreme </label>
+                                <h5 class="fw-bolder mb-0 text-end">{{extremeCount}}</h5>
+                            </div> 
+                            <div class="markPer">
+                                <label class="d-flex align-items-center  tx-10 text-uppercase fw-bold "><span
+                                        class="p-1 ms-1 rounded-circle bg-very-high"></span>Very High </label>
+                                <h5 class="fw-bolder mb-0 text-end">{{veryhighCount}}</h5>
+                            </div> 
+                            <div class="markPer">
+                                <label class="d-flex align-items-center  tx-10 text-uppercase fw-bold "><span
+                                        class="p-1 ms-1 rounded-circle bg-high"></span>High </label>
+                                <h5 class="fw-bolder mb-0 text-end">{{highCount}}</h5>
+                            </div> 
+                            <div class="markPer">
+                                <label class="d-flex align-items-center  tx-10 text-uppercase fw-bold "><span
+                                        class="p-1 ms-1 rounded-circle bg-medium"></span>Medium </label>
+                                <h5 class="fw-bolder mb-0 text-end">{{mediumCount}}</h5>
+                            </div> 
+                            <div class="markPer">
+                                <label class="d-flex align-items-center tx-10 text-uppercase fw-bold"><span
+                                        class="p-1 me-1 rounded-circle bg-low"></span> Low</label>
+                                <h5 class="fw-bolder mb-0">{{lowCount}}</h5>
+                            </div>
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

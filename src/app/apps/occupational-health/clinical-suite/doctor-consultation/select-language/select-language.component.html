@@ -1,0 +1,23 @@
+<mat-dialog-content>
+    <form [formGroup]="form">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Language</mat-label>
+            <mat-select formControlName="language" (selectionChange)="onLanguageChange($event)">
+                <mat-option *ngFor="let lang of languages" [value]="lang.value">
+                    {{ lang.viewValue }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('language')?.hasError('required')">
+                Required Field
+            </mat-error>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+
+    <button type="button" class="btn btn-success btn-icon-text float-end mt-4" (click)="closeDialog()"
+        [disabled]="!form.valid">
+        <i class="feather icon-send btn-icon-prepend"></i>
+        Submit
+    </button>
+</mat-dialog-actions>

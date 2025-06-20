@@ -1,0 +1,49 @@
+<div mat-dialog-content [formGroup]="Form" style="width: 1000px; height: 900px; overflow: auto;">
+
+    <div class="row " *ngIf="defaults.mode === 'create'">
+        <!-- <div class="col-md-4">
+            <mat-form-field appearance="outline">
+                <mat-label>Language</mat-label>
+                <input type="text" matInput formControlName="language">
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div> -->
+        <div class="col-md-4">
+            <mat-form-field fxFlex appearance="outline">
+                <mat-label>Language</mat-label>
+                <mat-select formControlName="language"
+                    (selectionChange)="onLanguageSelectionChange($event)">
+                    <mat-option *ngFor="let language of languages" value="{{language.name}}">
+                        {{language.name}}</mat-option>
+                </mat-select>
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div>
+
+    </div>
+    <div class="row " *ngIf="defaults.mode !== 'create'">
+        <div class="col-md-4">
+            <mat-form-field appearance="outline">
+                <mat-label>Language</mat-label>
+                <input type="text" matInput formControlName="language">
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <quill-editor placeholder="Question" [modules]="quillConfig" formControlName="question"
+            [readOnly]="defaults.mode === 'view'">
+        </quill-editor>
+    </div>
+
+
+
+    <div class="mb-3" [hidden]="defaults.mode === 'view'">
+        <button type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+            (click)="submit()">
+            <i class="feather icon-send btn-icon-prepend"></i>
+            Save
+        </button>
+    </div>
+
+</div>

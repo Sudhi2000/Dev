@@ -1,0 +1,11 @@
+<mat-dialog-content>
+    <div class="list-group">
+        <label class="list-group-item" *ngFor="let factor of job_factor | callback: filterFactor">
+            <input class="form-check-input me-1" type="checkbox" value="{{factor.id}}" (change)="addEvent($event)">
+            {{factor.attributes.title}}
+        </label>
+    </div>
+    <div class="d-grid gap-2 mt-3">
+        <button type="button" class="btn btn-secondary" (click)="complete()">Add Selected Factors</button>
+    </div>
+</mat-dialog-content>

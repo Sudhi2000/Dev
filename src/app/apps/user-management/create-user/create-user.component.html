@@ -1,0 +1,684 @@
+
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>First Name</mat-label>
+                        <input type="text" matInput formControlName="first_name">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Last Name</mat-label>
+                        <input type="text" matInput formControlName="last_name">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-12">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input type="email" matInput formControlName="email">
+                        <mat-error>Please provide a valid email</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-12">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Escalate Email</mat-label>
+                        <input type="email" matInput formControlName="escalate_email">
+                        <mat-error>Please provide a valid email</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Designation</mat-label>
+                        <input type="text" matInput formControlName="designation">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Gender</mat-label>
+                        <mat-select formControlName="gender">
+                            <mat-option value="Male">Male</mat-option>
+                            <mat-option value="Female">Female</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            
+             
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Employee ID</mat-label>
+                        <input type="text" formControlName="employee_id" matInput required
+                         >
+                          
+                      </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Password</mat-label>
+                        <input type="text" formControlName="password" matInput required
+                         >
+                        <mat-error>Your password should be atleast 6 characters long.</mat-error>
+                      </mat-form-field>
+                </div>
+                
+            </div> 
+            
+            <ngb-accordion  >
+                <ngb-panel id="audit" title="Audit and Inspection">
+                  <ng-template ngbPanelContent>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                                                         
+                            <mat-label>Dashboard</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="aud_dashboard"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div> 
+                    </div>
+                    <p class="mt-1 mb-1"><b>Internal Audit</b></p>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                                                         
+                            <mat-label>Register</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="int_aud_history"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                        <div class="col-md-6">                                 
+                            <mat-label>Create</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="int_aud_create"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                                                         
+                            <mat-label>Modify</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="int_aud_modify"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                        <div class="col-md-6">
+                                                         
+                            <mat-label>Tasks</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="int_aud_task"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                                                         
+                            <mat-label>Action</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="int_aud_action"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                        <div class="col-md-6">
+                                                         
+                            <mat-label>Audit</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="int_aud_audit"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                                                         
+                            <mat-label>Queue</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="int_aud_queue"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                         
+                    </div>
+                    <!-- External Audit -->
+                    <p class="mt-1 mb-1"><b>External Audit</b></p>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                                                         
+                            <mat-label>Register</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ext_aud_register"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                        <div class="col-md-6">                                 
+                            <mat-label>Create</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ext_aud_create"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                                                         
+                            <mat-label>Modify</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ext_aud_modify"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                        <div class="col-md-6">
+                                                         
+                            <mat-label>Tasks</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ext_aud_task"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                                                         
+                            <mat-label>Action</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ext_aud_action"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                        <div class="col-md-6">
+                                                         
+                            <mat-label>Audit</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ext_aud_audit"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                                                         
+                            <mat-label>Queue</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ext_aud_queue"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                        <div class="col-md-6">
+                                                         
+                            <mat-label>Action Plan</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="aud_action_plan"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div> 
+                    </div>
+                  </ng-template>
+                </ngb-panel>
+
+                <!-- Sustainability -->
+
+                <ngb-panel id="sustainability" title="Sustainability">
+                    <ng-template ngbPanelContent>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Register</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="sus_register"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                            <div class="col-md-6">                                 
+                                <mat-label>Create</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="sus_create"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Modify</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="sus_modify"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>View</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="sus_view"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+
+                <!-- Environment -->
+
+                <ngb-panel id="environment" title="Environment">
+                    <ng-template ngbPanelContent>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Register</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="env_history"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                            <div class="col-md-6">                                 
+                                <mat-label>Create</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="env_create"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Modify</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="env_modify"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Tasks</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="env_assigned"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+                    </ng-template>
+                  </ngb-panel>
+                  <!-- Hazard and Risk -->
+
+                  <ngb-panel id="hazard" title="Hazard and Risk">
+                    <ng-template ngbPanelContent>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Dashboard</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ehs_dashboard"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                            <div class="col-md-6">                                 
+                                <mat-label>Create</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ehs_create"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Register</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ehs_history"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Tasks</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ehs_tasks"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Action</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ehs_action"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Modify</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ehs_modify"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Verify</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ehs_verify"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>View</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="ehs_view"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+                    </ng-template>
+                  </ngb-panel>
+
+                  <!-- Accident and Incident -->
+
+                  <ngb-panel id="accident" title="Accident and Incident">
+                    <ng-template ngbPanelContent>
+                       
+                      <div class="row mb-3">
+                          <div class="col-md-6">
+                                                           
+                              <mat-label>Dashboard</mat-label> <span style="padding: 4px;"></span>
+                              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="acc_inc_dashboard"
+                                  #group="matButtonToggleGroup">
+                                  <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                  <mat-button-toggle value="0">No</mat-button-toggle>
+                              </mat-button-toggle-group>
+                          </div>
+                          <div class="col-md-6">
+                                                           
+                            <mat-label>Register</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="acc_inc_register"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                          <div class="col-md-6">                                 
+                              <mat-label>Create</mat-label> <span style="padding: 4px;"></span>
+                              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="acc_inc_create"
+                                  #group="matButtonToggleGroup">
+                                  <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                  <mat-button-toggle value="0">No</mat-button-toggle>
+                              </mat-button-toggle-group>
+                          </div>
+                          <div class="col-md-6">
+                                                           
+                            <mat-label>Modify</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="acc_inc_modify"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                                                           
+                            <mat-label>Tasks</mat-label> <span style="padding: 4px;"></span>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="acc_inc_assigned"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                <mat-button-toggle value="0">No</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                          <div class="col-md-6">
+                                                           
+                              <mat-label>Action</mat-label> <span style="padding: 4px;"></span>
+                              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="acc_inc_action"
+                                  #group="matButtonToggleGroup">
+                                  <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                  <mat-button-toggle value="0">No</mat-button-toggle>
+                              </mat-button-toggle-group>
+                          </div>
+                           
+                      </div>
+                       
+                    </ng-template>
+                  </ngb-panel>
+                  
+                  <!-- Document Management -->
+
+                  <ngb-panel id="document" title="Document">
+                    <ng-template ngbPanelContent>
+                       
+                      <div class="row mb-3">
+                          <div class="col-md-6">
+                                                           
+                              <mat-label>Register</mat-label> <span style="padding: 4px;"></span>
+                              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="doc_history"
+                                  #group="matButtonToggleGroup">
+                                  <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                  <mat-button-toggle value="0">No</mat-button-toggle>
+                              </mat-button-toggle-group>
+                          </div>
+                          <div class="col-md-6">                                 
+                              <mat-label>Create</mat-label> <span style="padding: 4px;"></span>
+                              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="doc_create"
+                                  #group="matButtonToggleGroup">
+                                  <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                  <mat-button-toggle value="0">No</mat-button-toggle>
+                              </mat-button-toggle-group>
+                          </div>
+                      </div>
+                      <div class="row mb-3">
+                          <div class="col-md-6">
+                                                           
+                              <mat-label>Modify</mat-label> <span style="padding: 4px;"></span>
+                              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="doc_modify"
+                                  #group="matButtonToggleGroup">
+                                  <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                  <mat-button-toggle value="0">No</mat-button-toggle>
+                              </mat-button-toggle-group>
+                          </div>
+                          <div class="col-md-6">
+                                                           
+                              <mat-label>View</mat-label> <span style="padding: 4px;"></span>
+                              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="doc_view"
+                                  #group="matButtonToggleGroup">
+                                  <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                  <mat-button-toggle value="0">No</mat-button-toggle>
+                              </mat-button-toggle-group>
+                          </div>
+                      </div>
+                       
+                    </ng-template>
+                  </ngb-panel>
+                  
+                  <!-- Chemical Management -->
+
+                  <ngb-panel id="chemical" title="Chemical">
+                    <ng-template ngbPanelContent>
+                        <p class="mt-1 mb-1"><b>Inventory</b></p>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Register</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="chem_inven"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                            <div class="col-md-6">                                 
+                                <mat-label>Create</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="chem_create"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Modify</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="chem_modify"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>View</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="chem_inven_view"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Approve</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="chem_approve"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                             
+                        </div>
+
+                                    <!-- Transaction -->
+
+                        <p class="mt-1 mb-1"><b>Transaction</b></p>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Register</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="chem_trans"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                            <div class="col-md-6">                                 
+                                <mat-label>Create</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="chem_trans_create"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>View</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="chem_trans_view"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+                    </ng-template>
+                  </ngb-panel>
+                  
+                <!-- User -->
+
+                <ngb-panel id="user" title="User">
+                    <ng-template ngbPanelContent>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Register</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="user_history"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                            <div class="col-md-6">                                 
+                                <mat-label>Create</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="user_create"
+                                    #group="matButtonToggleGroup">
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                                             
+                                <mat-label>Modify</mat-label> <span style="padding: 4px;"></span>
+                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="user_modify"
+                                    #group="matButtonToggleGroup" >
+                                    <mat-button-toggle value="1">Yes</mat-button-toggle>
+                                    <mat-button-toggle value="0">No</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                             
+                        </div>
+                    </ng-template>
+                  </ngb-panel>
+              </ngb-accordion>
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4" (click)="submit()" [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Governance Body</mat-label>
+                        <mat-select formControlName="governance_body">
+                            <mat-option *ngFor="let data of lov[0]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                            
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                
+                <div class="col-md-4">
+                <mat-form-field appearance="outline">
+                    <mat-label>Age Group</mat-label>
+                    <mat-select formControlName="age_group">
+                        <mat-option *ngFor="let data of lov[1]?.value" [value]="data.Value">
+                            <span>{{ data.Value }}</span>
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field appearance="outline">
+                    <mat-label>Male</mat-label>
+                    <input type="number" (keydown)="handleNumericInput($event)" matInput formControlName="male">
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+            </div>
+            </div>
+
+            <div class="row">
+           
+                <div class="col-md-4">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Female</mat-label>
+                            <input type="number" (keydown)="handleNumericInput($event)" matInput formControlName="female">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field appearance="outline">
+                                <mat-label>Other</mat-label>
+                                <input type="number" (keydown)="handleNumericInput($event)" matInput formControlName="other">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+ 
+            <div class="mb-3">
+                <button *ngIf="data.mode !== 'view'" type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                    (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                <button *ngIf="data.mode === 'view'" type="button" class="btn btn-secondary btn-icon-text float-end mt-4"
+                    (click)="close()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

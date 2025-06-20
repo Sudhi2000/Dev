@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Command</h2>
+<mat-dialog-content class="mat-typography" [formGroup]="Form">
+    <div class="question-container">
+        <p innerHTML="{{defaults.question || defaults[0].question}}"></p>
+    </div>
+    <div class="row ">
+        <quill-editor placeholder="Please provide command" [modules]="quillConfig" formControlName="command">
+        </quill-editor>
+    </div>
+    <div class="row mt-3" *ngIf="!Form.value.evidence_id">
+        <div class="custom-dropzone" ngx-dropzone
+            [accept]="'application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, image/jpeg, image/png'"
+            (change)="onSelect($event)">
+            <ngx-dropzone-label>Drop your Action Plan evidence. Please ensure that the document size is less
+                than 5 MB</ngx-dropzone-label>
+            <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files"
+                [file]="f" (removed)="onRemove(f)">
+                <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+            </ngx-dropzone-preview>
+        </div>
+
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button type="button" class="btn btn-primary btn-icon-text" (click)="submit()"
+    [disabled]="!Form.valid">
+        <i class="feather icon-send btn-icon-prepend"></i>
+        Submit
+    </button>
+    <button type="button" class="btn btn-secondary" mat-dialog-close >Cancel</button>
+</mat-dialog-actions>

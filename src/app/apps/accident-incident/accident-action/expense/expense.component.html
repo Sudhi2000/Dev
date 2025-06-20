@@ -1,0 +1,49 @@
+<div mat-dialog-title *ngIf="isCreateMode()">Add Expense</div>
+<div mat-dialog-title *ngIf="isUpdateMode()">Edit Expense</div>
+<mat-dialog-content [formGroup]="form">
+    <div class="row ">
+        <div class="col-md-4">
+            <mat-form-field fxFlex appearance="outline">
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="category">
+                    <mat-option *ngFor="let category of categories | callback: filterCategory"
+                        value="{{category.attributes.Value}}">
+                        {{category.attributes.Value}}</mat-option>
+                </mat-select>
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col-md-4">
+            <mat-form-field fxFlex appearance="outline">
+                <mat-label>Particular</mat-label>
+                <mat-select formControlName="particular">
+                    <mat-option *ngFor="let particular of getFilteredParticularValues()"[value]="particular.attributes.Value">
+                        {{particular.attributes.Value}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div>
+        
+        <div class="col-md-4">
+            <mat-form-field appearance="outline">
+                <mat-label>Amount</mat-label>
+                <input type="text" matInput placeholder="Please provide the cost" formControlName="amount"
+                    (change)="cost($event)" OnlyNumber="true">
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="mb-3">
+            <button type="button" class="btn btn-success btn-icon-text float-end mt-4" (click)="create()"
+                [disabled]="!form.valid" *ngIf="isCreateMode()">
+                <i class="feather icon-send btn-icon-prepend"></i>
+                Submit
+            </button>
+            <button type="button" class="btn btn-success btn-icon-text float-end mt-4" (click)="update()"
+                [disabled]="!form.valid" *ngIf="isUpdateMode()">
+                <i class="feather icon-send btn-icon-prepend"></i>
+                Update
+            </button>
+        </div>
+    </div>
+</mat-dialog-content>

@@ -1,0 +1,132 @@
+
+
+
+
+
+
+
+
+<div *ngFor="let data of esgTitles">
+    <p>{{data.theme}}</p>
+    <ngb-accordion [closeOthers]="false" >
+        <ngb-panel [type]="'hidden'" *ngFor="let tData of data.titles">
+
+            <ngb-accordion [closeOthers]="false" >
+                <ngb-panel [type]="'hidden'" >
+                    <ng-template ngbPanelTitle>
+                        <div class="accordion-button custom-header ">
+                            <div class="col-md-4">
+                                <span>fdwfdeffdf</span>    
+                            </div>
+
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!--/completedrepeating content-->
+
+
+
+            <!--static content-->
+
+            <!--/static content-->
+
+
+
+
+
+
+
+
+
+
+
+            <!-- <div class="table-responsive pt-3" id="environmentChecklist">
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Material Details</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Material used</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <ng-container>
+                                    <td class="col-sm-3"></td>
+                                    <td class="col-sm-1"></td>
+                                    <td class="col-sm-1"></td>
+                                    <td class="col-sm-2">
+                                        <button type="button" class="btn btn-success btn-icon btn-xs  action-btn"
+                                            ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn "
+                                            ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button type="button" class="btn btn-danger btn-icon btn-xs action-btn"
+                                            ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+                        <button type="button" class="btn btn-success">
+                            <i class="feather icon-send btn-icon-prepend"></i>
+                            Submit
+                        </button>
+
+
+                    </div>
+
+                </div> -->
+        </ngb-panel>
+    </ngb-accordion>
+
+    <button type="button" class="btn btn-secondary btn-icon-text"><i
+            class="feather icon-check-square btn-icon-prepend"></i>
+        Review</button>
+
+    <button type="button" class="btn btn-secondary btn-icon-text"><i
+            class="feather icon-check-square btn-icon-prepend"></i>
+        Approve</button>
+
+
+</div>
+
+<button type="button" class="btn btn-secondary btn-icon-text"><i class="feather icon-check-square btn-icon-prepend"></i>
+    Review</button>
+
+<button type="button" class="btn btn-secondary btn-icon-text"><i class="feather icon-check-square btn-icon-prepend"></i>
+    Approve</button>

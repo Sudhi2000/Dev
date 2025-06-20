@@ -1,0 +1,266 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Scope 1 (Direct Emission)</mat-label>
+                        <input type="number" matInput formControlName="scope1">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Unit </mat-label>
+                        <mat-select formControlName="scope1_unit">
+                            <mat-option *ngFor="let data of lov[45]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Scope 2 (Indirect Emission)</mat-label>
+                        <input type="number" matInput formControlName="scope2">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Unit</mat-label>
+                        <mat-select formControlName="scope2_unit">
+                            <mat-option *ngFor="let data of lov[45]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Scope 3 (Indirect Emission) (Repeated Values)</mat-label>
+                        <mat-select formControlName="scope3">
+                            <mat-option *ngFor="let data of lov[18]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!-- <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Emission Intensity Base</mat-label>
+                        <mat-select [formControl]="emission" multiple (selectionChange)="EmissionChange($event)">
+                            <mat-select-trigger>
+                                {{emission.value ? emission.value.value[0] : ''}}
+                                <span *ngIf="emission.value?.length > 1" class="example-additional-selection">
+                                    (+{{emission.value.length - 1}}
+                                    {{emission.value?.length === 2 ? 'other' : 'others'}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let data of lov[19]?.value" [value]="data">
+                                <span class="option-container">{{ data.value }}
+                                    <span>
+                                        <i class="feather icon-edit modifyicon"
+                                            (click)="modify_emission_intensity_base(data)"></i>
+                                        <i class="feather icon-trash-2 deleteicon"
+                                            (click)="delete_emission_intensity_base(data)"></i>
+                                    </span>
+                                </span>
+                            </mat-option>
+                            <mat-option (click)="new_emission_intensity_base()" class="option-btn">
+                                <i class="mdi mdi-plus-circle"></i> Create New Emission Intensity Base
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field> -->
+
+
+
+
+            <button type="button" *ngIf="Form.value.scope3=='Upstream'&&data.mode!=='view'"
+                class="btn btn-primary btn-icon-text mb-4" (click)="addUpstreamCategory()">
+                <i class="feather icon-plus btn-icon-prepend"></i>
+                Add Upstream Categories
+            </button>
+
+            <div class="row mb-2" *ngIf="UpstreamCategoriesarray.concat(filteredUpstreamCategoriesarray).length !== 0">
+                <div class="pollutants-table-responsive pt-3" id="consumption">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <!-- <th>#</th> -->
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th *ngIf="data.mode!='view'">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let item of UpstreamCategoriesarray.concat(filteredUpstreamCategoriesarray); let i = index">
+                                <!-- <td></td> -->
+                                <td>{{ item.upstream_category_name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.unit }}</td>
+                                <td *ngIf="data.mode!='view'">
+                                    <button *ngIf="data.mode!=='view'" type="button"
+                                        class="btn btn-primary btn-icon-text btn-xs action-btn float-start me-1"
+                                        (click)="editUpstreamCategory(item, i)">
+                                        <i class="feather icon-edit"></i>
+                                    </button>
+                                    <button *ngIf="data.mode!=='view'" type="button"
+                                        class="btn btn-danger btn-icon-text btn-xs action-btn float-start me-1"
+                                        (click)="deleteUpstreamCategory(item, i)">
+                                        <i class="feather icon-trash-2"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <button type="button" *ngIf="Form.value.scope3=='Downstream'&&data.mode!=='view'"
+                class="btn btn-primary btn-icon-text mb-4" (click)="addDownstreamCategory()">
+                <i class="feather icon-plus btn-icon-prepend"></i>
+                Add Downstream Categories
+            </button>
+
+            <div class="row mb-2"
+                *ngIf="DownstreamCategoriesarray.concat(filteredDownstreamCategoriesarray).length !== 0">
+                <div class="pollutants-table-responsive pt-3" id="consumption">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <!-- <th>#</th> -->
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th *ngIf="data.mode!='view'">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let item of DownstreamCategoriesarray.concat(filteredDownstreamCategoriesarray); let i = index">
+                                <!-- <td></td> -->
+                                <td>{{ item.downstream_category_name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.unit }}</td>
+                                <td *ngIf="data.mode!='view'">
+                                    <button type="button"
+                                        class="btn btn-primary btn-icon-text btn-xs action-btn float-start me-1"
+                                        (click)="editDownstreamCategory(item, i)">
+                                        <i class="feather icon-edit"></i>
+                                    </button>
+                                    <button type="button"
+                                        class="btn btn-danger btn-icon-text btn-xs action-btn float-start me-1"
+                                        (click)="deleteDownstreamCategory(item, i)">
+                                        <i class="feather icon-trash-2"></i>
+                                    </button>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Emission Intensity Base</mat-label>
+                        <mat-select formControlName="emission_intensity_base">
+                            <mat-option (click)="EmissionChange(data)" *ngFor="let data of lov[19]?.value"
+                                [value]="data.value">
+                                <span>{{ data.value }}</span>
+                            </mat-option>
+                            <mat-option (click)="new_emission_intensity_base()" class="option-btn">
+                                <i class="mdi mdi-plus-circle"></i> Create New Emission Intensity Base
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Unit</mat-label>
+                        <input type="text" matInput formControlName="emission_intensity_base_unit">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3">
+                    <button *ngIf="data.mode!=='view'" type="button"
+                        class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                        (click)="submit()">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Submit
+                    </button>
+                    <button *ngIf="data.mode=='view'" type="button" class="btn btn-secondary float-end mt-4"
+                        mat-dialog-close>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Quantity</mat-label>
+                        <input type="number" matInput formControlName="quantity">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Unit</mat-label>
+                        <mat-select formControlName="unit">
+                            <mat-option *ngFor="let data of lov[2]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Emission Intensity Base</mat-label>
+                        <mat-select [formControl]="emission" multiple (selectionChange)="EmissionChange($event)">
+                            <mat-select-trigger>
+                                {{emission.value ? emission.value[0] : ''}}
+                                <span *ngIf="emission.value?.length > 1" class="example-additional-selection">
+                                    (+{{emission.value.length - 1}}
+                                    {{emission.value?.length === 2 ? 'other' : 'others'}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let data of lov[19]?.value" [value]="data.value">
+                                <span class="option-container">{{ data.value }}
+                                    <span>
+                                        <i class="feather icon-edit modifyicon"
+                                            (click)="modify_emission_intensity_base(data)"></i>
+                                        <i class="feather icon-trash-2 deleteicon"
+                                            (click)="delete_emission_intensity_base(data)"></i>
+                                    </span>
+                                </span>
+                            </mat-option>
+                            <mat-option (click)="new_emission_intensity_base()" class="option-btn">
+                                <i class="mdi mdi-plus-circle"></i> Create New Emission Intensity Base
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div> -->
+
+
+    </div>
+</div>

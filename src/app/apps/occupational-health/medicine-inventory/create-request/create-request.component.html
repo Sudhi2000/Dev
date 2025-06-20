@@ -1,0 +1,105 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-12">
+
+            <div class="container-fluid d-flex justify-content-between header">
+                <div class="col-lg-8 ps-0">
+                    <a routerLink="." class="nobleui-logo d-block mt-3">Medicine<span>
+                            Inventory</span></a>
+                    <p class="mt-1 mb-1">Create Request </p>
+                </div>
+                <div class="col-lg-4 pe-0">
+                    <h6 class="fw-bold text-end mt-4 mb-2">Request Date</h6>
+                    <h6 class="text-end mb-5 ">{{Form.value.reported_date| date:'MMM d, y'}}</h6>
+                </div>
+            </div>
+            <div class="container-fluid  d-flex justify-content-center w-100">
+                <div class="table-responsive w-100">
+
+
+
+                    <div class="row ">
+                        <div class="col-md-12">
+                            <mat-form-field fxFlex appearance="outline">
+                                <mat-label>Medicine Name</mat-label>
+                                <mat-select formControlName="medicine_name"
+                                    (selectionChange)="onCommercialNameSelected($event.value)">
+                                    <mat-option *ngFor="let name of medicineName" [value]="name">
+                                        <div class="title-container">
+                                            <span>{{ name.attributes.name }}</span>
+                                            <span class="icon-container">
+                                                <i class="feather icon-edit titleicon_edit"
+                                                    (click)="update_medicineName(name.id)"></i> &nbsp;
+                                                <i class="feather icon-trash-2 titleicon_delete"
+                                                    (click)="delete_medicineName(name.id)"></i>
+                                            </span>
+                                        </div>
+                                    </mat-option>
+                                    <mat-option (click)="new_name()" class="option-btn">
+                                        <i class="mdi mdi-plus-circle"></i> Create a new medicine
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+
+
+                    </div>
+                    <div class="row ">
+
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Generic Name</mat-label>
+                                <input type="text" matInput formControlName="generic_name">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-6">
+                            <mat-form-field fxFlex appearance="outline">
+                                <mat-label>Division</mat-label>
+                                <mat-select (selectionChange)="BusinessUnit($event)" [formControl]="Division">
+                                    <mat-option *ngFor="let division of divisions" [value]="division">
+                                        {{division.division_name}}</mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Requested Quantity</mat-label>
+                                <input type="number" matInput formControlName="requested_quantity">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-12">
+                            <mat-form-field fxFlex appearance="outline" color="primary">
+                                <mat-label>Approver</mat-label>
+                                <mat-select formControlName="approver">
+                                    <mat-option *ngFor="let approver of peopleList" [value]="approver.id">
+                                        <!-- <img style="vertical-align:middle; margin-right: 4px;"
+                                            src={{approver?.attributes?.image?.data?.attributes?.image}} height="30" /> -->
+                                        <span>{{ approver.attributes.first_name }}
+                                            {{approver.attributes.last_name}}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-success btn-icon-text float-end mt-4" (click)="complete()"
+                            [disabled]="!Form.valid">
+                            <i class="feather icon-send btn-icon-prepend"></i>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

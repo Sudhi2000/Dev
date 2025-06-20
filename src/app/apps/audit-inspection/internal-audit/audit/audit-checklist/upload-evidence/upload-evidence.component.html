@@ -1,0 +1,32 @@
+<mat-dialog-content class="mat-typography" [formGroup]="Form">
+    <div class="row">
+        <div class="col-md-6">
+
+            <mat-form-field appearance="outline">
+                <mat-label>Title</mat-label>
+                <input type="text" matInput formControlName="title">
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="custom-dropzone" ngx-dropzone
+            [accept]="'application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, image/jpeg, image/png'"
+            (change)="onSelect($event)">
+            <ngx-dropzone-label>Drop your Action Plan evidence. Please ensure that the document size is less
+                than 10 MB</ngx-dropzone-label>
+            <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files"
+                [file]="f" (removed)="onRemove(f)">
+                <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+            </ngx-dropzone-preview>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button type="button" class="btn btn-primary btn-icon-text" (click)="submit()" [disabled]="!Form.valid">
+        <i class="feather icon-send btn-icon-prepend"></i>
+        Submit
+    </button>
+    <button type="button" class="btn btn-secondary" mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

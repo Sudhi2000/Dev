@@ -1,0 +1,125 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justsify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Medicine</mat-label>
+                        <input type="text" matInput formControlName="medicine">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+
+
+                    
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Available Quantity</mat-label>
+                        <input type="text" matInput formControlName="total_quantity_val">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Division</mat-label>
+                        <mat-select (selectionChange)="BusinessUnit($event)" [formControl]="Division">
+                            <mat-option *ngFor="let division of divisions"
+                                [value]="division">
+                                {{division.attributes.division_name}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                
+                
+            </div>
+            
+            <div class="row ">
+                <div class="col-md-12">
+                 
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Authorised Person</mat-label>
+                        <mat-select formControlName="authorised_person">
+                            <mat-option *ngFor="let approver of peopleList" [value]="approver.id">
+                                <img style="vertical-align:middle; margin-right: 4px;"
+                                    src={{approver?.attributes?.image?.data?.attributes?.image}} height="30" />
+                                <span>{{ approver.attributes.first_name }}
+                                    {{approver.attributes.last_name}}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+
+                </div>
+            </div>
+           
+
+            <div class="row mb-2" *ngIf="stock">
+                <button class="btn btn-warning" type="button">
+                    There is not enough quantity of the selected chemical to issue.
+                </button>
+            </div>
+
+            <div class="row ">
+                
+
+                
+
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Issuing Quantity</mat-label>
+                        <input type="number" matInput formControlName="issuing_quantity" (change)="balCalc($event)" >
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Cost</mat-label>
+                        <input type="text" matInput formControlName="cost_val">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Balance Quantity</mat-label>
+                        <input type="text" matInput formControlName="balance_quantity">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+                
+
+                <!-- <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Issued Quantity</mat-label>.
+                        <input type="text"  matInput formControlName="total_quantity_val" (change)="balCalc($event)">
+                        <mat-error>Required Field, Numbers only</mat-error>
+                    </mat-form-field>
+                </div> -->
+               
+            </div>
+            <div class="row mb-2" *ngIf="unavailable">
+                <button class="btn btn-warning" type="button">
+                    Unable to issue, the quantity is not available.
+                </button>
+            </div>
+            <div class="row ">
+                
+
+                
+               
+                
+            </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4" (click)="confirm()" [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

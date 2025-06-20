@@ -1,0 +1,150 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Benefit Type</mat-label>
+                        <mat-select formControlName="benefit_type">
+                            <mat-option *ngFor="let name of benefitTypeList" value="{{name.attributes.type}}">
+                                {{name.attributes.type}}</mat-option>
+
+                            <mat-option (click)="new_benefitType()" class="option-btn"> <i
+                                    class=" mdi mdi-plus-circle"></i> Create Benefit Type
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                    <!-- <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Benefit Type</mat-label>
+                        <mat-select formControlName="benefit_type">
+                            <mat-option *ngFor="let division of bendfitTypeList" value="{{division.benefit_type}}">
+                                {{division.benefit_type}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field> -->
+                </div>
+
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Amount/Value</mat-label>
+                        <input type="number" matInput formControlName="amount">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Total Days paid</mat-label>
+                        <input type="number" matInput formControlName="total_days_paid">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Amount of 1st Installment</mat-label>
+                        <input type="number" matInput formControlName="first_installment_amount">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Date (1st Installment)</mat-label>
+                        <input matInput [matDatepicker]="fntcdp" placeholder="Choose a date"
+                            formControlName="first_installment_date" (dateChange)="installmentDateVal($event)">
+                        <mat-datepicker-toggle matSuffix [for]="fntcdp"></mat-datepicker-toggle>
+                        <mat-datepicker #fntcdp></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+
+                    <!-- <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Date (1st Installment)</mat-label>
+                        <input matInput [matDatepicker]="ntcdp" placeholder="Choose a date"
+                            [formControl]="installmentDate" (dateChange)="installmentDateVal($event)">
+                        <mat-datepicker-toggle matSuffix
+                            [for]="ntcdp"></mat-datepicker-toggle>
+                        <mat-datepicker #ntcdp></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field> -->
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Amount of 2nd Installment</mat-label>
+                        <input type="number" matInput formControlName="second_installment_amount">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Date (2nd Installment)</mat-label>
+                        <input matInput [matDatepicker]="sntcdp" placeholder="Choose a date"
+                            formControlName="second_installment_date" (dateChange)="secondInstallmentDateVal($event)">
+                        <mat-datepicker-toggle matSuffix [for]="sntcdp"></mat-datepicker-toggle>
+                        <mat-datepicker #sntcdp></mat-datepicker>
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>If Benefit Received someone else</mat-label>
+                        <mat-select formControlName="is_benefit_received_someone">
+                            <mat-option value="Yes">Yes</mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Beneficiary Name</mat-label>
+                        <input type="text" matInput formControlName="beneficiary_name">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Beneficiary Address</mat-label>
+                        <input type="text" matInput formControlName="beneficiary_address">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Beneficiary Total Amount</mat-label>
+                        <input type="number" matInput formControlName="beneficiary_total_amount">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Beneficiary Date</mat-label>
+                        <input matInput [matDatepicker]="bnfdp" placeholder="Choose a date"
+                            [formControl]="beneficiaryDate" (dateChange)="beneficiaryDateVal($event)">
+                        <mat-datepicker-toggle matSuffix [for]="bnfdp"></mat-datepicker-toggle>
+                        <mat-datepicker #bnfdp></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <quill-editor placeholder="Description" [modules]="quillConfig" formControlName="description">
+                    </quill-editor>
+                </div>
+            </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                    (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

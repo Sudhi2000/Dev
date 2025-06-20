@@ -1,0 +1,129 @@
+// .table-responsive {
+//     overflow-x: unset;
+// }
+
+// .btn-xs {
+//     margin-right: 5px;
+// }
+
+// tr {
+//     height: unset !important;
+//     vertical-align: middle;
+// }
+
+// th {
+//     height: 40px;
+// }
+
+// .priorityIcon {
+//     vertical-align: auto;
+//     text-align: center;
+// }
+
+
+
+// .table-card {
+//     padding: 0px;
+//     padding-top: 0px !important;
+//     padding-bottom: 0px !important;
+// }
+
+// .card-body{
+//     // padding-top: 1%;
+//     // padding-bottom: 1%;
+// padding: 10px;
+// }
+
+.table-responsive {
+    overflow-x: unset;
+}
+
+.btn-xs {
+    margin-right: 5px;
+}
+
+tr {
+    height: unset !important;
+    vertical-align: middle;
+}
+
+th {
+    height: 40px;
+}
+
+.priorityIcon {
+    vertical-align: auto;
+    text-align: center;
+}
+
+
+
+.table-card {
+    padding: 0px;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.card-body {
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+
+
+.high {
+    color: red;
+}
+
+.medium {
+    color: orange;
+}
+
+.low {
+    color: green;
+}
+
+.edit-btn {
+    margin-right: 5px;
+    padding-left: 20px;
+}
+
+.view-btn {
+    padding-left: 20px;
+
+}
+
+.status-btn {
+    width: 100%;
+    text-align: center;
+
+}
+
+.hide{
+    display: none;
+}
+
+.search{
+    align-self: center;
+}
+.input-group, .form-select, .btn {
+    margin-bottom: 0 !important; /* Remove margin between elements */
+  }
+  .mat-select {
+    font-size: 14px;
+    color: black;
+}
+
+/* Placeholder styling for mat-select */
+::ng-deep .mat-select-placeholder {
+    font-size: 14px; /* Adjust size as needed */
+    color: black;
+}
+
+/* Override mat-option styles */
+::ng-deep .mat-option {
+    color: black;
+    font-size: 16px;
+}
+
+  

@@ -1,0 +1,174 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <a routerLink="." class="nobleui-logo d-block mt-3">Chemical <span>Management</span></a>
+        <nav aria-label="breadcrumb ">
+          <ol class="breadcrumb breadcrumb-dot">
+            <li class="breadcrumb-item"><a routerLink="/apps/insight">Home</a></li>
+            <li class="breadcrumb-item"><a routerLink="/apps/chemical-management/dashboard">Chemical Management</a></li>
+            <li class="breadcrumb-item"><a routerLink="/apps/chemical-management/inventory">Inventory</a></li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-md-3 search">
+        <div>
+          <div class="input-group">
+            <div class="input-group-text">
+              <i class="feather icon-search"></i>
+            </div>
+            <input type="text" class="form-control" [(ngModel)]="serachReference" id="navbarForm"
+              placeholder="Search Here">
+
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 search">
+        <button type="button" class="btn btn-primary btn-icon-text" (click)="generate()">
+          <i class="btn-icon-prepend" data-feather="search"></i>
+          Search
+        </button>
+
+        <button type="button" class="btn btn-secondary btn-icon-text btn-reset" (click)="reset()">
+          <i class="btn-icon-prepend" data-feather="rotate-cw"></i>
+
+          Reset
+        </button>
+
+        <button type="button" class="btn btn-success btn-icon-text btn-reset" id="che_report"
+          (click)="generateReport()">
+
+          <i class="btn-icon-prepend" data-feather="sidebar"></i>
+
+
+          Generate Report
+        </button>
+
+        <button type="button" class="btn btn-primary btn-icon-text hide btn-reset" id="che_report_loader">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          &nbsp; Please wait...
+        </button>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 stretch-card">
+    <div class="card">
+      <div class="card-body table-card">
+        <div class="table-responsive">
+          <ng-container *ngIf="isLoading">
+            <app-loading-screen [rows]="9"></app-loading-screen>
+          </ng-container>
+          <ng-container *ngIf="!isLoading">
+            <table mat-table [dataSource]="dataSource" matSort>
+              <ng-container matColumnDef="reference_number">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Reference Number </th>
+                <td mat-cell *matCellDef="let element"> {{element.reference_number}} </td>
+              </ng-container>
+              <ng-container matColumnDef="request_date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Request Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.request_date | date:'dd-MMM-yyyy'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="expiry_date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Expiry Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.expiry_date | date:'dd-MMM-yyyy'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="commercial_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Commercial Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.commercial_name}} </td>
+              </ng-container>
+              <ng-container matColumnDef="msds_availability">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>MSDS Availability </th>
+                <td mat-cell *matCellDef="let element"> {{element.msds_sds}} </td>
+              </ng-container>
+              <ng-container matColumnDef="requested_customer">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer</th>
+                <td mat-cell *matCellDef="let element"> {{element.requested_customer}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="reviewer">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Reviewer
+                </th>
+                <td mat-cell *matCellDef="let element">
+
+                  {{element.reviewer?.data?.attributes?.first_name}} {{element.reviewer?.data?.attributes?.last_name}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="approver">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Approver
+                </th>
+                <td mat-cell *matCellDef="let element">
+
+                  {{element.approver?.data?.attributes?.first_name}} {{element.approver?.data?.attributes?.last_name}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="delivered_quantity">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Delivered Quantity</th>
+                <td mat-cell *matCellDef="let element"> {{element.delivered_quantity}} {{element.delivered_unit}}</td>
+              </ng-container>
+              <ng-container matColumnDef="storage_place">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Storage Place</th>
+                <td mat-cell *matCellDef="let element"> {{element.storage_place}}</td>
+              </ng-container>
+              <ng-container matColumnDef="issued">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Issued</th>
+                <td mat-cell *matCellDef="let element"> {{element.issued}} {{element.delivered_unit}}</td>
+              </ng-container>
+              <ng-container matColumnDef="disposed">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Disposed</th>
+                <td mat-cell *matCellDef="let element"> {{element.disposed}} {{element.delivered_unit}}</td>
+              </ng-container>
+              <ng-container matColumnDef="balance">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Balance</th>
+                <td mat-cell *matCellDef="let element"> {{element.balance}} {{element.delivered_unit}}</td>
+              </ng-container>
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Status"> Status
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <button type="button" class="btn {{statusButton(element.status)}} status-btn btn-icon-text btn-xs">
+                    {{element.status}}
+                  </button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th *matHeaderCellDef class="actions-cell" mat-header-cell mat-sort-header>Actions</th>
+                <td *matCellDef="let row" class="actions-cell" mat-cell>
+                  <button type="button" class="btn btn-warning btn-icon btn-xs" (click)="modify(row)" placement="top"
+                    ngbTooltip="Modify" *ngIf="row.status==='Approved'">
+                    <i class="feather icon-edit"></i>
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-icon btn-xs" (click)="view(row)" placement="top"
+                    ngbTooltip="View">
+                    <i class="feather icon-eye"></i>
+                  </button>
+                  <button type="button" class="btn btn-success btn-icon btn-xs" (click)="transaction(row)"
+                    placement="top" ngbTooltip="Transaction" *ngIf="row.status==='Published' && row.balance>0">
+                    <i class="feather icon-plus-circle"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger btn-icon btn-xs" (click)="disposal(row)" placement="top"
+                    ngbTooltip="Disposal" *ngIf="row.status==='Published' && row.balance>0">
+                    <i class="feather icon-trash-2"></i>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="visibleColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: visibleColumns;"></tr>
+            </table>
+          </ng-container>
+          <mat-paginator [pageSize]="pageSize" showFirstLastButtons [showFirstLastButtons]="true" [length]="totalItems"
+            (page)="unitSpecific && !corporateUser ? get_chemical_unit_specific_register($event) : get_chemical_register($event)"
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<!-- <h2 mat-dialog-title>Consultation Requirement</h2>
+
+<mat-dialog-content>
+    <p>Please confirm whether consultation is required for the patient.</p>
+
+    <div class="col-md-6 mt-3">
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" class="form-check-input" id="formSwitch4" [(ngModel)]="consultationRequired">
+            <label class="form-check-label" for="formSwitch4">Consultation Required</label>
+        </div>
+    </div>
+
+   
+
+</mat-dialog-content>
+
+
+<div class="d-flex justify-content-end gap-2 mt-4">
+    <button class="btn btn-success btn-icon-text" (click)="onSubmit()">Submit</button>
+    <button class="btn btn-secondary btn-icon-text btn-previous" (click)="onCancel()">Cancel</button>
+
+</div> -->
+
+<!-- <h2 mat-dialog-title>Consultation Requirement</h2>
+
+<mat-dialog-content>
+    <p>Please confirm whether consultation is required for the patient.</p>
+
+    <div class="col-md-6 mt-3">
+        <div class="mb-2">
+            <label for="consultationSelect" class="form-label">Consultation Required</label>
+            <select class="form-select" id="consultationSelect" [(ngModel)]="consultationRequired">
+                <option [ngValue]="true">Yes</option>
+                <option [ngValue]="false">No</option>
+            </select>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<div class="d-flex justify-content-end gap-2 mt-4">
+    <button class="btn btn-success btn-icon-text" (click)="onSubmit()">Submit</button>
+    <button class="btn btn-secondary btn-icon-text btn-previous" (click)="onCancel()">Cancel</button>
+</div> -->
+
+<h2 mat-dialog-title>Consultation Requirement</h2>
+<mat-dialog-content>
+    <p>Please confirm whether consultation is required for the patient.</p>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+        <mat-label>Is consultation required?</mat-label>
+        <mat-select [(value)]="selectedOption">
+            <mat-option value="yes">Yes</mat-option>
+            <mat-option value="no">No</mat-option>
+        </mat-select>
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="d-flex justify-content-end gap-2 mt-4">
+    <button class="btn btn-secondary btn-icon-text btn-previous" (click)="onCancel()">Cancel</button>
+    <button class="btn btn-success btn-icon-text" (click)="onConfirm()">Confirm</button>
+</mat-dialog-actions>

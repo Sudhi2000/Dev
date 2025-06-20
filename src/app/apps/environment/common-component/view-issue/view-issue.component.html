@@ -1,0 +1,54 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+
+                <div class="col-md-6">
+
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Issued Date</mat-label>
+                        <input matInput [matDatepicker]="collFromDP" placeholder="Choose a date"
+                            formControlName="issued_date" (dateChange)="issued_Date($event)">
+                        <mat-datepicker-toggle matSuffix [for]="collFromDP"></mat-datepicker-toggle>
+                        <mat-datepicker #collFromDP></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Issued Quantity</mat-label>
+                        <input type="number" matInput formControlName="issued_quantity">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>unit</mat-label>
+                        <input type="text" matInput formControlName="unit">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Issued To</mat-label>
+                        <mat-select formControlName="issued_to">
+                            <mat-option *ngFor="let name of issuedUserList" value="{{name.attributes.name}}">
+                                {{name.attributes.name}}</mat-option>
+                            <!-- <mat-option (click)="create_issuedUser()" class="option-btn"> <i
+                                    class=" mdi mdi-plus-circle"></i> Create a new Issued User
+                            </mat-option> -->
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+            </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4" (click)="close()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

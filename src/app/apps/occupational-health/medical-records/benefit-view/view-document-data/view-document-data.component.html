@@ -1,0 +1,24 @@
+<div class="pdf-viewer-container" *ngIf="!Image">
+    <pdf-viewer [src]="documentSrc" [render-text]="true" [original-size]="false"
+      style="width: 100%; height: 500px"></pdf-viewer>
+  </div>
+  
+  <div mat-dialog-content class="row" *ngIf="Image">
+    <div class="col-md-12">
+      <div class="d-flex flex-column">
+        <ng-container>
+          <div class="p-1">
+            <figure class="mb-2 figwidth">
+              <img class="img-fluid rounded figwidth" [src]="documentSrc" alt="">
+            </figure>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <button type="button" class="btn btn-icon-text btn-outline-twitter" (click)="view_action_plan_document()">
+      <i class="feather icon-file-text btn-icon-prepend"></i>
+      Download Document
+    </button>
+  </div>

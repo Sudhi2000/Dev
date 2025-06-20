@@ -1,0 +1,253 @@
+<div class="container-fluid" id="dashboard">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a routerLink="." class="nobleui-logo d-block ">RAG <span>
+                            System</span></a>
+                    <span class="badge ">
+                        <form class="d-flex my-2 my-lg-0" [formGroup]="filterForm">
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field appearance="outline" color="primary" id="dashboard">
+                                    <mat-label>Enter a date range</mat-label>
+                                    <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+                                        <input matStartDate formControlName="start" placeholder="Start date"
+                                            (dateChange)="startDateChange($event)">
+                                        <input matEndDate formControlName="end" placeholder="End date"
+                                            (dateChange)="endDateChange($event)">
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                                    <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                                        start date</mat-error>
+                                    <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end
+                                        date
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-primary btn-icon" (click)="search()">
+                                    <i class="feather icon-search btn-icon-prepend"></i>
+                                </button>
+                            </div>
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-danger btn-icon" (click)="reset()">
+                                    <i class="feather icon-rotate-cw btn-icon-prepend"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12 col-xl-12 stretch-card">
+            <div class="row flex-grow-1">
+
+                <div class="col-md-3 grid-margin stretch-card" *ngFor="let data of summaryCard">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <h5 class=" mb-2">{{data.category}}</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-12 col-xl-8 value">
+                                    <h5 class="mb-2">{{data.quantity}}</h5>
+                                    <div class="d-flex align-items-baseline">
+                                        <p class="{{data.attrition_bg}}">
+                                            <span>{{data.attrition}}</span>
+                                            <i class="feather {{data.attrition_icon}} icon-sm mb-1"></i>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-12 col-xl-4 icon">
+                                    <div class=" mt-xl-0">
+                                        <img src="../../../../assets/images/rag/{{data.icon}}" width="60">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">RAG Comparison</h6>
+                    </div>
+                    <apx-chart [series]="ragComparisonChart.series" [colors]="ragComparisonChart.colors"  [chart]="ragComparisonChart.chart"
+                        [dataLabels]="ragComparisonChart.dataLabels" [plotOptions]="ragComparisonChart.plotOptions"
+                        [legend]="ragComparisonChart.legend" [fill]="ragComparisonChart.fill"
+                        [stroke]="ragComparisonChart.stroke" [tooltip]="ragComparisonChart.tooltip"
+                        [xaxis]="ragComparisonChart.xaxis"></apx-chart>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Overall Tenure</h6>
+                    </div>
+                    <apx-chart [series]="overallTenureChart.series" [colors]="overallTenureChart.colors"  [chart]="overallTenureChart.chart"
+                        [dataLabels]="overallTenureChart.dataLabels" [plotOptions]="overallTenureChart.plotOptions"
+                        [legend]="overallTenureChart.legend" [fill]="overallTenureChart.fill"
+                        [stroke]="overallTenureChart.stroke" [tooltip]="overallTenureChart.tooltip"
+                        [xaxis]="overallTenureChart.xaxis"></apx-chart>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Category</h6>
+                    </div>
+                    <apx-chart [series]="categoryChart.series" [colors]="categoryChart.colors"  [chart]="categoryChart.chart"
+                        [dataLabels]="categoryChart.dataLabels" [plotOptions]="categoryChart.plotOptions"
+                        [legend]="categoryChart.legend" [fill]="categoryChart.fill"
+                        [stroke]="categoryChart.stroke" [tooltip]="categoryChart.tooltip"
+                        [xaxis]="categoryChart.xaxis" [yaxis]="categoryChart.yaxis"></apx-chart>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Gender</h6>
+                    </div>
+                    <apx-chart [series]="genderChart.series" [colors]="genderChart.colors"  [chart]="genderChart.chart"
+                        [dataLabels]="genderChart.dataLabels" [plotOptions]="genderChart.plotOptions"
+                        [legend]="genderChart.legend" [fill]="genderChart.fill"
+                        [stroke]="genderChart.stroke" [tooltip]="genderChart.tooltip"
+                        [xaxis]="genderChart.xaxis"></apx-chart>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Employee Status</h6>
+                    </div>
+                    <apx-chart [series]="employeeStatusChart.series" [colors]="employeeStatusChart.colors"  [chart]="employeeStatusChart.chart"
+                        [dataLabels]="employeeStatusChart.dataLabels" [plotOptions]="employeeStatusChart.plotOptions"
+                        [legend]="employeeStatusChart.legend" [fill]="employeeStatusChart.fill"
+                        [stroke]="employeeStatusChart.stroke" [tooltip]="employeeStatusChart.tooltip"
+                        [xaxis]="employeeStatusChart.xaxis" ></apx-chart>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Location</h6>
+                    </div>
+                    <form class="d-flex my-2 my-lg-0" [formGroup]="filterForm">
+                    <div class="row ">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Country</mat-label>
+                                <mat-select formControlName="country" (selectionChange)="getStates($event)">
+                                    <mat-option *ngFor="let country of countries"
+                                        value="{{country.attributes.country_name}}">
+                                        {{country.attributes.country_name}}</mat-option>
+                                        
+    
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>State</mat-label>
+                                <mat-select formControlName="state" >
+                                    <mat-option *ngFor="let state of filterStates"
+                                        value="{{state}}">
+                                        {{state}}</mat-option>
+                                        
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <!-- <div class="col-md-4">
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Origin</mat-label>
+                                <input type="text" matInput formControlName="origin">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+
+                        </div> -->
+                        <div class="col-md-4 d-flex mt-1">
+                            <button type="button" class="btn btn-primary btn-icon me-2" (click)="searchLocation()">
+                              <i class="feather icon-search btn-icon-prepend"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-icon" (click)="resetLocation()">
+                              <i class="feather icon-rotate-cw btn-icon-prepend"></i>
+                            </button>
+                          </div>
+                        </div>         
+                       </form>
+
+                    <apx-chart [series]="stateChart.series" [colors]="stateChart.colors"  [chart]="stateChart.chart"
+                        [dataLabels]="stateChart.dataLabels" [plotOptions]="stateChart.plotOptions"
+                        [legend]="stateChart.legend" [fill]="stateChart.fill"
+                        [stroke]="stateChart.stroke" [tooltip]="stateChart.tooltip"
+                        [xaxis]="stateChart.xaxis"></apx-chart>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Age Group</h6>
+                    </div>
+                    <apx-chart [series]="ageGroupChart.series" [colors]="ageGroupChart.colors"  [chart]="ageGroupChart.chart"
+                        [dataLabels]="ageGroupChart.dataLabels" [plotOptions]="ageGroupChart.plotOptions"
+                        [legend]="ageGroupChart.legend" [fill]="ageGroupChart.fill"
+                        [stroke]="ageGroupChart.stroke" [tooltip]="ageGroupChart.tooltip"
+                        [xaxis]="ageGroupChart.xaxis" ></apx-chart>
+                </div>
+
+            </div>
+        </div>
+
+       
+    </div>
+
+ 
+
+
+</div>

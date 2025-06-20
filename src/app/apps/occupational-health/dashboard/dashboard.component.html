@@ -1,0 +1,494 @@
+<div class="container-fluid" id="dashboard">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a routerLink="." class="nobleui-logo d-block ">Occupational <span>
+                            Health</span></a>
+                    <span class="badge ">
+                        <form class="d-flex my-2 my-lg-0" [formGroup]="filterForm">
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field appearance="outline" color="primary">
+                                    <mat-label>Enter a date range</mat-label>
+                                    <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+                                        <input matStartDate formControlName="start" placeholder="Start date"
+                                            (dateChange)="startDateChange($event)">
+                                        <input matEndDate formControlName="end" placeholder="End date"
+                                            (dateChange)="endDateChange($event)">
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                                    <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                                        start date</mat-error>
+                                    <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end
+                                        date
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="(corporateUser === true) || (divisions.length > 1)"
+                                class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline" color="primary">
+                                    <mat-label>Division</mat-label>
+                                    <mat-select [formControl]="Division" multiple (selectionChange)="occDiv($event)">
+                                        <mat-select-trigger>
+                                            {{Division.value[0]?.division_name? Division.value[0]?.division_name : ''}}
+                                            <span *ngIf="Division?.value?.length > 1"
+                                                class="example-additional-selection">
+                                                (+{{Division.value.length - 1}}
+                                                {{Division.value?.length === 2 ?
+                                                'other' :
+                                                'others'}})
+                                            </span>
+                                        </mat-select-trigger>
+                                        <mat-option *ngFor="let division of divisions"
+                                            [value]="division">{{division.division_name}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-primary btn-icon" (click)="search()">
+                                    <i class="feather icon-search btn-icon-prepend"></i>
+                                </button>
+                            </div>
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-danger btn-icon" (click)="reset()">
+                                    <i class="feather icon-rotate-cw btn-icon-prepend"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12 col-xl-12 stretch-card">
+            <div class="row flex-grow-1">
+
+                <div class="col-md-4 grid-margin stretch-card" *ngFor="let data of summaryCard">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <h5 class=" mb-2">{{data.category}}</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-12 col-xl-8 value">
+                                    <h5 class="mb-2">{{data.quantity}}</h5>
+                                    <div class="d-flex align-items-baseline">
+                                        <p class="{{data.attrition_bg}}">
+                                            <span>{{data.attrition}}</span>
+                                            <i class="feather {{data.attrition_icon}} icon-sm mb-1"></i>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-12 col-xl-4 icon">
+                                    <div class=" mt-xl-0">
+                                        <img src="../../../../assets/images/occupational/{{data.icon}}" width="60">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-xl-12 stretch-card">
+            <div class="row flex-grow-1">
+                <div class="col-lg-12 col-xl-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline mb-2">
+                                <h6 class="card-title mb-0">Patient Flow</h6>
+                            </div>
+                            <apx-chart dir="ltr" class="apex-charts" [series]="patientflowChart.series"
+                                [chart]="patientflowChart.chart" [dataLabels]="patientflowChart.dataLabels"
+                                [plotOptions]="patientflowChart.plotOptions" [xaxis]="patientflowChart.xaxis"
+                                [legend]="patientflowChart.legend"></apx-chart>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0">Doctor Consultation</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="consultationChart.series"
+                        [chart]="consultationChart.chart" [colors]="consultationChart.colors"
+                        [plotOptions]="consultationChart.plotOptions" [legend]="consultationChart.legend"
+                        [labels]="consultationChart.labels">
+                    </apx-chart>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0">Department</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="departmentChart.series"
+                        [chart]="departmentChart.chart" [plotOptions]="departmentChart.plotOptions"
+                        [legend]="departmentChart.legend" [labels]="departmentChart.labels">
+                    </apx-chart>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0">Severity Level</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="severityLevelChart.series"
+                        [chart]="severityLevelChart.chart" [colors]="severityLevelChart.colors"
+                        [plotOptions]="severityLevelChart.plotOptions" [labels]="severityLevelChart.labels"
+                        [legend]="severityLevelChart.legend">
+                    </apx-chart>
+
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12 d-flex justify-content-center">
+                        <div class="markPer">
+                            <label class="d-flex align-items-center  tx-10 text-uppercase fw-bold "><span
+                                    class="p-1 ms-1 rounded-circle bg-primary"></span>Severe </label>
+                            <h5 class="fw-bolder mb-0 text-end">{{highCount}}</h5>
+                        </div>
+                        <div class="markPer">
+                            <label class="d-flex align-items-center tx-10 text-uppercase fw-bold "><span
+                                    class="p-1 me-1 rounded-circle bg-success"></span> Moderate</label>
+                            <h5 class="fw-bolder mb-0">{{mediumCount}}</h5>
+                        </div>
+                        <div class="markPer">
+                            <label class="d-flex align-items-center tx-10 text-uppercase fw-bold"><span
+                                    class="p-1 me-1 rounded-circle bg-danger"></span> Mild</label>
+                            <h5 class="fw-bolder mb-0">{{lowCount}}</h5>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4  col-xl-4">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Frequently Visited</h6>
+                    </div>
+                    <div class="table-responsive mt-4 route-cause">
+                        <table class="table table-centered mb-0">
+                            <tbody>
+                                <tr *ngFor="let data of topVisitedCard">
+                                    <td class="topVisit">
+                                        <p class="mb-1"> {{data.empId}}</p>
+                                    </td>
+                                    <td class="topVisit">
+                                        <p class="mb-1">{{data.name}}</p>
+                                    </td>
+                                    <td class="topVisit">
+                                        <p class="mb-1"> {{data.visits}} Visits</p>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0">Average Waiting</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="waitingChart.series" [chart]="waitingChart.chart"
+                        [plotOptions]="waitingChart.plotOptions" [legend]="waitingChart.legend"
+                        [xaxis]="waitingChart.xaxis" [yaxis]="waitingChart.yaxis">
+                    </apx-chart>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row margin">
+
+        <div class="col-xl-4">
+            <div class="card custom-height">
+                <div class="card-body custom-height">
+                    <h4 class="card-title mb-4">Gender</h4>
+                    <div>
+                        <apx-chart class="apex-charts" dir="ltr" [series]="genderChart.series"
+                            [chart]="genderChart.chart" [colors]="genderChart.colors"
+                            [plotOptions]="genderChart.plotOptions" [legend]="genderChart.legend"
+                            [labels]="genderChart.labels">
+                        </apx-chart>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6 d-flex justify-content-end">
+                            <div>
+                                <label
+                                    class="d-flex align-items-center justify-content-end tx-10 text-uppercase fw-bold">Total
+                                    Female <span class="p-1 ms-1 rounded-circle bg-secondary"></span></label>
+                                <h5 class="fw-bolder mb-0 text-end">{{femaleCount}}</h5>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div>
+                                <label class="d-flex align-items-center tx-10 text-uppercase fw-bold"><span
+                                        class="p-1 me-1 rounded-circle bg-primary"></span> Total Male</label>
+                                <h5 class="fw-bolder mb-0">{{maleCount}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 col-xl-8 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h6 class="card-title mb-0">Medicine </h6>
+                    </div>
+                    <ul ngbNav #medSource="ngbNav" [activeId]="1" class="nav-pills bg-light rounded">
+                        <li [ngbNavItem]="1">
+                            <a ngbNavLink>Threshold Limit</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause" id="waterCon">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of medicineCard | callback: filterMedicineThreshold">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0"># {{data.reference}} | Limit:
+                                                        {{data.limit}} {{data.unit}}</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Balance</p>
+                                                    <h5 class="mb-0">{{data.balance}} {{data.unit}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="2">
+                            <a ngbNavLink>Highest Quantity</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of medicineCard | callback: filterMedicineHighest">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Issued</p>
+                                                    <h5 class="mb-0">{{data.issued}} {{data.unit}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="3">
+                            <a ngbNavLink>Expiry</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of medicineCard | callback: filterMedicineExpiry">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0"># {{data.reference}} | Medicine
+                                                        Expiry: {{data.expiry | date:'dd-MMM-yyyy'}}</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Balance</p>
+                                                    <h5 class="mb-0">{{data.balance}} {{data.unit}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="4">
+                            <a ngbNavLink>Top Supplier</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of medicineCard | callback: filterTopSupplier">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0">In Top Suppliers</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Delivered</p>
+                                                    <h5 class="mb-0">{{data.deliveredQuantity}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                    <div [ngbNavOutlet]="medSource" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="row ">
+        <div class="col-xl-4">
+            <div class="card custom-height">
+                <div class="card-body custom-height">
+                    <h4 class="card-title mb-4">Age</h4>
+                    <div>
+                        <apx-chart class="apex-charts" dir="ltr" [series]="ageChart.series" [chart]="ageChart.chart"
+                            [colors]="ageChart.colors" [stroke]="ageChart.stroke" [dataLabels]="ageChart.dataLabels"
+                            [xaxis]="ageChart.xaxis">
+                        </apx-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-xl-4 grid-margin stretch-card">
+            <div class="card custom-height">
+                <div class="card-body custom-height">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-4"> Division </h6>
+                    </div>
+                    <apx-chart dir="ltr" [series]="divisionChart.series" [chart]="divisionChart.chart"
+                        [dataLabels]="divisionChart.dataLabels" [plotOptions]="divisionChart.plotOptions"
+                        [xaxis]="divisionChart.xaxis" [legend]="divisionChart.legend"
+                        [colors]="divisionChart.colors"></apx-chart>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-xl-4 grid-margin stretch-card">
+            <div class="card custom-height">
+                <div class="card-body custom-height">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-4">Disease </h6>
+                    </div>
+                    <apx-chart dir="ltr" [series]="diseaseChart.series" [chart]="diseaseChart.chart"
+                        [dataLabels]="diseaseChart.dataLabels" [plotOptions]="diseaseChart.plotOptions"
+                        [xaxis]="diseaseChart.xaxis" [colors]="diseaseChart.colors"
+                        [yaxis]="diseaseChart.yaxis"></apx-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-lg-12 col-xl-12 grid-margin stretch-card">
+            <div class="card ">
+                <div class="card-body ">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-4">Cross Division </h6>
+                    </div>
+
+                    <apx-chart [series]="crossDivisionChart.series" [chart]="crossDivisionChart.chart"
+                        [xaxis]="crossDivisionChart.xaxis" [stroke]="crossDivisionChart.stroke"
+                        [dataLabels]="crossDivisionChart.dataLabels"></apx-chart>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-8 col-xl-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="card-title mb-0">Recent Patients</h6>
+                    </div>
+
+                    <table class="table table-centered table-nowrap">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="align-middle">Patient ID</th>
+                                <th class="align-middle">Name</th>
+                                <th class="align-middle">Age</th>
+                                <th class="align-middle">Disease</th>
+                                <th class="align-middle">Doctor</th>
+                                <th class="align-middle">Check In Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of RecentPatientList">
+                                <td>{{data.attributes.patient_id}}</td>
+                                <td>{{data.attributes.employee_name }}</td>
+                                <td>{{data.attributes.age}}</td>
+                                <td>{{data.attributes.disease}}</td>
+                                <td>{{data.attributes.consulting_doctor.data?.attributes.first_name}}{{"
+                                    "}}{{data.attributes.consulting_doctor.data?.attributes.last_name}}</td>
+                                <td>{{data.attributes.check_in | date:'dd-MMM-yyyy'}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-xl-4 grid-margin stretch-card">
+            <div class="card custom-height">
+                <div class="card-body custom-height">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-4"> Maternity Applications </h6>
+                    </div>
+                    <apx-chart dir="ltr" [series]="maternityRecordChart.series" [chart]="maternityRecordChart.chart"
+                        [dataLabels]="maternityRecordChart.dataLabels" [plotOptions]="maternityRecordChart.plotOptions"
+                        [xaxis]="maternityRecordChart.xaxis" [legend]="maternityRecordChart.legend"
+                        [colors]="maternityRecordChart.colors" [yaxis]="maternityRecordChart.yaxis"></apx-chart>
+                </div>
+            </div>
+        </div>
+    </div>

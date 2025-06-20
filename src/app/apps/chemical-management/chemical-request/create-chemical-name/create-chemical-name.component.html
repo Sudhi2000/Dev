@@ -1,0 +1,186 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Commercial Name</mat-label>
+                        <input type="text" matInput formControlName="name">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Substance Name</mat-label>
+                        <input type="text" matInput formControlName="substance_name">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Molecular Formula</mat-label>
+                        <input type="text" matInput formControlName="formula">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Chemical Form Type</mat-label>
+                        <mat-select formControlName="chemical_form">
+                            <mat-option *ngFor="let value of chemical_dropdown" value="{{ value }}">
+                                {{value}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Reach Registration Number</mat-label>
+                        <input type="text" matInput formControlName="reach_regi_number">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Category</mat-label>
+                        <mat-select formControlName="category" (selectionChange)="onCategorySelection($event)">
+                            <mat-option *ngFor="let category of Categories"
+                            [value]="category.attributes.Value">
+                            {{ category.attributes.Value }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>ZDHC use category</mat-label>
+                        <mat-select formControlName="zdhc_use_category">
+                            <mat-option *ngFor="let category of filteredZdhcCategory" 
+                            [value]="category.attributes.Value">
+                                {{ category.attributes.Value }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Where and Why It is Used?</mat-label>
+                        <input type="text" matInput formControlName="where_why">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>ZDHC Level</mat-label>
+                        <mat-select formControlName="zdhc_level">
+                            <mat-option *ngFor="let level of zdhcLevel" [value]="level.attributes.Value ">
+                                {{level.attributes.Value}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>CAS Number</mat-label>
+                        <input type="text" matInput formControlName="cas_no">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Colour Index</mat-label>
+                        <input type="text" matInput formControlName="colour_index">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Use of PPE</mat-label>
+                        <mat-select [formControl]="use_of_ppe" multiple (selectionChange)="PPE($event)">
+                            <mat-select-trigger>
+                                {{use_of_ppe.value ? use_of_ppe.value[0] : ''}}
+                                <span *ngIf="use_of_ppe.value?.length > 1" class="example-additional-selection">
+                                    (+{{use_of_ppe.value.length - 1}}
+                                    {{use_of_ppe.value?.length === 2 ? 'other' : 'others'}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let type of toppingList"
+                                [value]="type.attributes.ppe_name">{{type.attributes.ppe_name}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Hazard Type</mat-label>
+                        <mat-select [formControl]="hazardType" multiple (selectionChange)="HazardType($event)">
+                            <mat-select-trigger>
+                                {{hazardType.value ? hazardType.value[0] : ''}}
+                                <span *ngIf="hazardType.value?.length > 1" class="example-additional-selection">
+                                    (+{{hazardType.value.length - 1}}
+                                    {{hazardType.value?.length === 2 ?
+                                    'other' :
+                                    'others'}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let type of TypeList"
+                                [value]="type.attributes.Value">{{type.attributes.Value}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>GHS Classification</mat-label>
+                        <mat-select [formControl]="ghsClassification" multiple
+                            (selectionChange)="GhsClassification($event)">
+                            <mat-select-trigger>
+                                {{ghsClassification.value ? ghsClassification.value[0] :
+                                ''}}
+                                <span *ngIf="ghsClassification.value?.length > 1"
+                                    class="example-additional-selection">
+                                    (+{{ghsClassification.value.length - 1}}
+                                    {{ghsClassification.value?.length === 2 ? 'other' :
+                                    'others'}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let type of Issues"
+                                [value]="type.attributes.Value"> 
+                                <span>{{type.attributes.Value}}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4 " *ngIf="mode!='update'" (click)="submit()"
+                    [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4 " *ngIf="mode==='update'" (click)="submit()"
+                    [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Update
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

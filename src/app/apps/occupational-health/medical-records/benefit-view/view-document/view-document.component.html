@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>Medical Document</h2>
+<mat-dialog-content class="mat-typography" [formGroup]="Form" style="width: 600px;">
+    <div class="row ">
+        <div class="col-md-6">
+            <mat-form-field fxFlex appearance="outline">
+                <mat-label>Document Type</mat-label>
+                <input type="text" matInput formControlName="document_type">
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="col-md-6">
+            <mat-form-field appearance="outline" color="primary">
+                <mat-label>Upload Date</mat-label>
+                <input matInput [matDatepicker]="ntcdp" placeholder="Choose a date" [formControl]="uploadDate">
+                <mat-datepicker-toggle matSuffix [for]="ntcdp"></mat-datepicker-toggle>
+                <mat-datepicker #ntcdp></mat-datepicker>
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="custom-dropzone-container">
+            <div *ngFor="let f of DocumentFiles; let i = index;" class="custom-dropzone">
+                <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [file]="f" (click)="openDocument(); $event.stopPropagation();">
+                    <ngx-dropzone-label class="preview-text">
+                        <div class="preview-text">{{ f.name }}</div>
+                    </ngx-dropzone-label>
+                </ngx-dropzone-preview>
+            </div>
+        </div>
+        <!-- <div class="custom-dropzone" ngx-dropzone [accept]="
+            'application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, image/jpeg, image/png'
+          " > -->
+            <!-- <ngx-dropzone-label>Drop your document here. Please ensure that the document
+                size is less than 5 MB</ngx-dropzone-label> -->
+            <!-- <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
+                [file]="f" >
+                <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+            </ngx-dropzone-preview> -->
+        <!-- </div> -->
+    </div>
+    <!-- <div class="row">
+        <div class="col-md-6">
+            <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f">
+            </ngx-dropzone-image-preview>
+        </div>
+    </div> -->
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    &nbsp;<button type="button" class="btn btn-secondary" mat-dialog-close>
+        Cancel
+    </button>
+</mat-dialog-actions>

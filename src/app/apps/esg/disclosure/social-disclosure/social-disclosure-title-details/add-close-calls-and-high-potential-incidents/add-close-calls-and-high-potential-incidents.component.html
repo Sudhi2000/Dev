@@ -1,0 +1,69 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Incident Id</mat-label>
+                        <input type="number" matInput formControlName="incident_id">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field fxFlex appearance="outline" color="warning"
+                    >
+                    <mat-label> Date</mat-label>
+                    <input matInput [matDatepicker]="date"
+                       formControlName="date" value="date">
+                    <mat-datepicker-toggle matSuffix
+                        [for]="date"></mat-datepicker-toggle>
+                    <mat-datepicker #date></mat-datepicker>
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Type</mat-label>
+                        <mat-select formControlName="type">
+                            <mat-option *ngFor="let data of lov[17]?.value" [value]="data.Value">
+                                <span >{{ data.Value }}
+                                </span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+              
+                
+            </div>
+            <div class="row">
+                <div id="esgDisclosure" class="row mb-4 mt-4">
+                    <quill-editor
+                        placeholder="Description" [modules]="quillConfig" formControlName="description">
+                    </quill-editor>
+                </div>
+            </div>
+            <div class="row">
+                <div id="esgDisclosure" class="row mb-4 mt-4">
+                    <quill-editor
+                        placeholder="Corrective Actions Taken" [modules]="quillConfig" formControlName="corrective_actions_taken">
+                    </quill-editor>
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <button *ngIf="data.mode!=='view'" type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                    [disabled]="!Form.valid" (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                <button *ngIf="data.mode==='view'" type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                    (click)="close()">
+                    <i class="feather icon-x-circle btn-icon-prepend"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

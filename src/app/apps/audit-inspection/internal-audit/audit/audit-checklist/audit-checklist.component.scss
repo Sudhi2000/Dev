@@ -1,0 +1,33 @@
+.table-responsive {
+    overflow-x: unset;
+}
+
+.table td{
+    white-space:unset !important
+}
+
+table
+{
+    counter-reset: rowNumber;
+}
+
+table tr > td:first-child
+{
+    counter-increment: rowNumber;
+}
+
+table tr td:first-child::before
+{
+    content: counter(rowNumber);
+    min-width: 1em;
+    margin-right: 0.5em;
+}
+ngb-rating{
+    font-size: 20px !important;
+    
+    
+}
+
+.btn-icon-text{
+    margin-right: 3px;
+}

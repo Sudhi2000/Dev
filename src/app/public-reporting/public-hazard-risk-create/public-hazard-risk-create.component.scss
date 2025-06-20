@@ -1,0 +1,50 @@
+.table-responsive {
+    overflow: hidden;
+}
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.selected-observation {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.draft-button {
+    margin-right: 5px;
+}
+
+.warning-font-size {
+    font-size: 12px;
+    color: red;
+    text-align: right;
+
+}
+
+.warning-font-safe {
+    font-size: 12px;
+    color: red;
+    padding-left: 11em;
+
+}
+mat-button-toggle-group.d-flex.flex-wrap mat-button-toggle {
+    flex: 1 1 0;
+    text-align: center;
+    white-space: nowrap;
+  }
+  

@@ -1,0 +1,175 @@
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { EsgService } from 'src/app/services/esg.service';
+import Swal from 'sweetalert2';
+import { AddNewTypeOfWasteComponent } from './add-new-type-of-waste/add-new-type-of-waste.component';
+
+
+@Component({
+  selector: 'app-add-waste-generated',
+  templateUrl: './add-waste-generated.component.html',
+  styleUrls: ['./add-waste-generated.component.scss']
+})
+export class AddWasteGeneratedComponent implements OnInit {
+
+  Form: FormGroup
+  lov: any[] = []
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+
+  constructor(private router: Router,
+    private formBuilder: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private esgService: EsgService,
+    private _snackBar: MatSnackBar,
+     public dialog: MatDialog,
+    public dialogRef: MatDialogRef<AddWasteGeneratedComponent>) { }
+
+
+  ngOnInit() {
+    this.lov = this.data.lov
+    this.Form = this.formBuilder.group({
+      id: [''],
+      title: [this.data.data.title || ''],
+      title_ref_id: [this.data.data.reference_id || ''],
+      esg_disclosure: [this.data.refID || ''],
+
+      type_of_waste: [this.data.data.type_of_waste || '', Validators.required],
+      category: [this.data.data.category || '', Validators.required],
+
+      waste_generated: [this.data.data.waste_generated || null, Validators.required],
+      wasteGeneratedUnit: [this.lov[42]?.value[0].Value||this.data.data.wasteGeneratedUnit || '', Validators.required],
+      process: [this.data.data.process || '', Validators.required],
+
+      type_of_disposal: [this.data.data.type_of_disposal || ''],
+      site_of_waste_disposal: [this.data.data.site_of_waste_disposal || ''],
+      waste_disposed: [this.data.data.waste_disposed || null],
+      wasteDisposedUnit: [this.lov[42]?.value[0].Value||this.data.data.wasteDisposedUnit || ''],
+
+      type_of_recovery: [this.data.data.type_of_recovery || ''],
+      site_of_waste_recovery: [this.data.data.site_of_waste_recovery || ''],
+      waste_recovered: [this.data.data.waste_recovered || null],
+      wasteRecoveredUnit: [this.lov[42]?.value[0].Value||this.data.data.wasteRecoveredUnit || ''],
+
+    })
+    
+    if (this.data.mode === 'view') {
+      this.Form.disable();
+    }
+  }
+
+
+  showProgressPopup() {
+    Swal.fire({
+      title: 'Please wait...',
+      html: 'Updating...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+  }
+  
+   new_type_of_waste() {
+      this.dialog.open(AddNewTypeOfWasteComponent, { width: "500px", data: { userID: this.data.userID, mode: 'create' } }).afterClosed().subscribe((data: any) => {
+        this.lov[22].value.push(data)
+        this.Form.controls['type_of_waste'].setValue(data.value)
+  
+        const statusText = "Type of Waste created.";
+        this._snackBar.open(statusText, 'OK', {
+          duration: 3000,
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
+  
+      })
+    }
+  
+  
+    modify_type_of_waste(data: any) {
+      this.dialog.open(AddNewTypeOfWasteComponent, {
+        width: "500px", data: { userID: this.data.userID, mode: 'modify', data: data }
+      }).afterClosed().subscribe((updatedData: any) => {
+  
+        if (updatedData?.id) {
+          const index = this.lov[22].value.findIndex((item: any) => {
+            return item.id === updatedData.id;
+          });
+  
+          if (index !== -1) {
+            this.lov[22].value[index] = updatedData;
+          } else {
+            console.warn("Type of Waste ID not found in the list.");
+          }
+          this.Form.controls['type_of_waste'].setValue(updatedData.value);
+  
+          const statusText = "Type of Waste updated.";
+          this._snackBar.open(statusText, 'OK', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+  
+        } else {
+          console.error('Invalid data: Missing ID.');
+        }
+      });
+    }
+  
+    delete_type_of_waste(data: any) {
+      this.showProgressPopup();
+      const currentValue = this.Form.controls['type_of_waste'].value;
+      this.esgService.deleteEnvTypeofWaste(data.id).subscribe({
+        next: (result: any) => {
+          this.lov[22].value = this.lov[22].value.filter((item: { id: any; }) => item.id !== data.id);
+        },
+        error: () => {
+          console.error('Error deleting');
+        },
+        complete: () => {
+          Swal.close();
+          if (currentValue === data.value) {
+          } else {
+            this.Form.controls['type_of_waste'].setValue(currentValue);
+          }
+          const statusText = "Type of Waste deleted.";
+          this._snackBar.open(statusText, 'OK', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+        }
+      });
+    }
+
+  submit() {
+    if (this.data.mode === 'modify' && this.data.data.id) {
+      const formData = new FormData();
+      this.Form.controls['id'].setValue(this.data.data.id)
+      formData.append('data', JSON.stringify(this.Form.value))
+      this.esgService.updateEnvWasteGenerated(formData).subscribe({
+        next: (result: any) => {
+          this.dialogRef.close(this.Form.value);
+        },
+        error: (err: any) => {
+
+        },
+        complete: () => {
+          const statusText = "Waste Generated details modified.";
+          this._snackBar.open(statusText, 'OK', {
+            duration: 3000,
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+        }
+      })
+    } else {
+      this.dialogRef.close(this.Form.value);
+    }
+    // this.dialogRef.close(this.Form.value);
+  }
+
+}

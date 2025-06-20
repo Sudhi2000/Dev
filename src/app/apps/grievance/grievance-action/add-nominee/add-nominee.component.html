@@ -1,0 +1,65 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Employee ID</mat-label>
+                        <input type="text" matInput formControlName="employee_id" (change)="fetchEmployeeDetails()">
+                        <mat-hint  (click)="editEmployeeDetails()" *ngIf="editEmployee===true"><i class="feather icon-edit btn-icon-prepend"></i> Edit Employee</mat-hint>
+                        
+                        <mat-error>Required Field</mat-error>      
+                    </mat-form-field>
+                    <!-- <button type="button" class="btn btn-primary btn-icon-text btn-xs below" *ngIf="editEmployee===true" (click)="editEmployeeDetails()">
+                        <i class="feather icon-edit btn-icon-prepend"></i>
+                        Edit Employee
+                    </button> -->
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input type="text" matInput formControlName="name">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Designation</mat-label>
+                        <mat-select formControlName="designation">
+                            <mat-option *ngFor="let designation of designations"
+                                value="{{designation.attributes.designation}}">
+                                {{designation.attributes.designation}}</mat-option>
+                            <mat-option (click)="new_designation()" class="option-btn"> <i
+                                    class=" mdi mdi-plus-circle"></i> Create designation
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Department</mat-label>
+                        <mat-select formControlName="department">
+                            <mat-option *ngFor="let name of departments" value="{{name.attributes.department_name}}">
+                                {{name.attributes.department_name}}</mat-option>
+
+                            <mat-option (click)="new_department()" class="option-btn"> <i
+                                    class=" mdi mdi-plus-circle"></i> Create department
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                    (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

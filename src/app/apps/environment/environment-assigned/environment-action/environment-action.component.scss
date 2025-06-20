@@ -1,0 +1,16 @@
+.table-responsive {
+    overflow: scroll;
+    overflow-y: hidden;
+}
+.action-btn {
+    margin-right: 5px;
+}
+
+#consumption {
+    table {counter-reset: no -1;}
+    table th.ghg{
+        text-transform: none ;
+    }
+    table tr{counter-increment: no;}
+    table tr td:first-child:before{ content: counter(no);}
+}

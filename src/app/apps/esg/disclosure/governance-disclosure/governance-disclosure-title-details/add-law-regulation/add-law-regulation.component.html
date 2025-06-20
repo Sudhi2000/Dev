@@ -1,0 +1,134 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Event ID</mat-label>
+                        <input type="number" matInput formControlName="event_id">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>NGRBC Principle</mat-label>
+                        <mat-select formControlName="NGRBC_principle">
+                            <mat-option *ngFor="let data of orderedNGRBC" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Name of institution</mat-label>
+                        <input type="text" matInput formControlName="agency_or_institution">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Judicial Sanctions</mat-label>
+                        <input type="text" matInput formControlName="judicial_sanctions">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Monetary Sanctions</mat-label>
+                        <input type="text" matInput formControlName="monetary_sanctions">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Amount</mat-label>
+                        <input type="number" matInput formControlName="amount">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Currency</mat-label>
+                        <input type="text" matInput formControlName="currency">
+
+                        <!-- <mat-select formControlName="currency">
+                            <mat-option *ngFor="let data of currencyLawRegulation" [value]="data">
+                                <span>{{ data }}</span>
+                            </mat-option>
+
+                        </mat-select> -->
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Type Non Monetary Case</mat-label>
+                        <input type="text" matInput formControlName="non_monetary_case">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Brief of the Case</mat-label>
+                        <input type="text" matInput formControlName="brief_of_case">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Appeal Preffered</mat-label>
+                        <input type="text" matInput formControlName="appeal_preffered">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Appeal/Revision Details</mat-label>
+                        <input type="text" matInput formControlName="appeal_revision_details">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Institution where appeal has been made</mat-label>
+                        <input type="text" matInput formControlName="agency_or_institution_of_appeal">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <button *ngIf="data.mode !== 'view'" type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                    [disabled]="!Form.valid" (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                <button *ngIf="data.mode === 'view'" type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                    (click)="close()">
+                    <i class="feather icon-x btn-icon-prepend"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

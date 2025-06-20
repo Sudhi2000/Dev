@@ -1,0 +1,11 @@
+<mat-dialog-content>
+    <div class="list-group">
+        <label class="list-group-item" *ngFor="let acts of unsafe_acts | callback: filterActs">
+            <input class="form-check-input me-1" type="checkbox" value="{{acts.id}}" (change)="addEvent($event)">
+            {{acts.attributes.title}}
+        </label>
+    </div>
+    <div class="d-grid gap-2 mt-3">
+        <button type="button" class="btn btn-secondary" (click)="complete()">Add Selected Acts</button>
+    </div>
+</mat-dialog-content>

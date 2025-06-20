@@ -1,0 +1,168 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-7">
+        <nav aria-label="breadcrumb ">
+          <a routerLink="." class="nobleui-logo d-block mt-3">External <span>Audit</span></a>
+          <ol class="breadcrumb breadcrumb-dot">
+            <li class="breadcrumb-item"><a routerLink="/apps/insight">Home</a></li>
+            <li class="breadcrumb-item"><a routerLink="/apps/audit-inspection/dashboard">Audit & Inspection</a></li>
+            <li class="breadcrumb-item"><a routerLink="/apps/audit-inspection/external-audit/register">External
+                Audit</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Register</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-md-2 search">
+        <div>
+          <div class="input-group">
+            <div class="input-group-text">
+              <i class="feather icon-search"></i>
+            </div>
+            <input type="text" class="form-control" [(ngModel)]="serachReference" id="navbarForm"
+              placeholder="Please provide the reference number">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 search">
+        <button type="button" class="btn btn-primary btn-icon-text" (click)="generate()" id="env_report">
+          <i class="btn-icon-prepend" data-feather="search"></i>
+          Search
+        </button>
+        <button type="button" class="btn btn-secondary btn-icon-text btn-reset" id="env_report_loader"
+          (click)="reset()">
+          <i class="btn-icon-prepend" data-feather="rotate-cw"></i>
+
+          Reset
+        </button>
+
+        <button type="button" class="btn btn-secondary btn-icon-text print-button" id="ext_report"
+          (click)="generateReport()">
+          <i class="feather icon-printer"></i>
+        </button>
+        <button type="button" class="btn btn-secondary btn-icon-text hide print-button" id="ext_report_loader">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 stretch-card">
+    <div class="card">
+      <div class="card-body table-card">
+        <div class="table-responsive">
+          <ng-container *ngIf="isLoading">
+            <app-loading-screen [rows]="9"></app-loading-screen>
+          </ng-container>
+          <ng-container *ngIf="!isLoading">
+            <table mat-table [dataSource]="dataSource" matSort>
+              <ng-container matColumnDef="reference_number">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Reference </th>
+                <td mat-cell *matCellDef="let element"> {{element.reference_number}} </td>
+              </ng-container>
+              <ng-container matColumnDef="start_date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Audit Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.audit_start_date | date:'dd-MMM-yyyy'}} -
+                  {{element.audit_end_date
+
+                  | date:'dd-MMM-yyyy'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="expiry_date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Expiry Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.audit_expiry_date
+                  | date:'dd-MMM-yyyy'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="audit_type">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Audit Type </th>
+                <td mat-cell *matCellDef="let element"> {{element.audit_type }} </td>
+              </ng-container>
+              <ng-container matColumnDef="audit_category">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Audit Category</th>
+                <td mat-cell *matCellDef="let element"> {{element.audit_category}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="audit_standard">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Audit Standard</th>
+                <td mat-cell *matCellDef="let element"> {{element.audit_standard}} </td>
+              </ng-container>
+              <ng-container matColumnDef="customer">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer</th>
+                <td mat-cell *matCellDef="let element"> {{element.customer}} </td>
+              </ng-container>
+              <ng-container matColumnDef="audit_firm">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Audit Firm</th>
+                <td mat-cell *matCellDef="let element"> {{element.audit_firm}} </td>
+              </ng-container>
+              <ng-container matColumnDef="division">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Division</th>
+                <td mat-cell *matCellDef="let element"> {{element.division}} </td>
+              </ng-container>
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Audit Status</th>
+                <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+              </ng-container>
+              <ng-container matColumnDef="lapsed_status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Due Date"> Elapse Days
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <button type="button"
+                    class="btn {{lapsedStatusButton(element.lapse_color_code)}} status-btn btn-icon-text btn-xs">
+                    {{element.lasped_days}}
+                  </button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="audit_status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Due Date"> Status
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <button type="button"
+                    class="btn {{statusButton(element.audit_status)}} status-btn btn-icon-text btn-xs">
+                    {{element.audit_status}}
+                  </button>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th *matHeaderCellDef class="actions-cell" mat-header-cell mat-sort-header>Actions</th>
+                <td *matCellDef="let row" class="actions-cell" mat-cell>
+
+                  <button type="button" class="btn btn-primary btn-icon btn-xs hide action-btn "
+                    id="{{row.reference_number}}_1">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="visually-hidden">Loading...</span>
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-icon btn-xs action-btn " (click)="view(row)"
+                    placement="top" ngbTooltip="View">
+                    <i class="feather icon-eye"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger btn-icon btn-xs" (click)="modify(row)" placement="top"
+                    ngbTooltip="Modify" *ngIf="row.audit_status==='Pending' || row.audit_status==='Scheduled'">
+                    <i class="feather icon-edit"></i>
+                  </button>
+                  <button type="button" class="btn btn-success btn-icon btn-xs" (click)="completed(row)" placement="top"
+                    ngbTooltip="Action" *ngIf=" row.audit_status==='Completed'">
+                    <i class="feather icon-zap"></i>
+                  </button>
+                  <button type="button" *ngIf="row.status==='Completed'" class="btn btn-success btn-icon btn-xs"
+                    (click)="action(row)" placement="top" ngbTooltip="Action Plan">
+                    <i class="feather icon-zap"></i>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="visibleColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: visibleColumns;"></tr>
+            </table>
+          </ng-container>
+          <mat-paginator [pageSize]="pageSize" showFirstLastButtons [showFirstLastButtons]="true" [length]="totalItems"
+            (page)=" unitSpecific && !corporateUser  ? get_external_audit_unit_specific_register($event): get_external_audit_register($event)"
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

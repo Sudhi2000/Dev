@@ -1,0 +1,50 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Upstream Category</mat-label>
+                        <mat-select formControlName="upstream_category_name">
+                            <mat-option *ngFor="let data of lov[11]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Quantity</mat-label>
+                        <input type="number" matInput formControlName="quantity">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Unit</mat-label>
+                        <mat-select formControlName="unit">
+                            <mat-option *ngFor="let data of lov[43]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="mb-3">
+                    <button *ngIf="data.mode!=='view'" type="button"
+                        class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                        (click)="submit()">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Submit
+                    </button>
+                    <button *ngIf="data.mode=='view'" type="button" class="btn btn-secondary float-end mt-4"
+                        mat-dialog-close>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

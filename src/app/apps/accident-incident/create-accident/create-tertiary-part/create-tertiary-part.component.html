@@ -1,0 +1,49 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid custom-dialog-content  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-12">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Body Primary Region</mat-label>
+                        <mat-select  (selectionChange)="fetchSecondaryOptions()" formControlName="primary">
+                            <mat-option
+                                *ngFor="let primary of primaryparts"
+                                value="{{primary}}">
+                                {{primary}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-12">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Body Secondary Region</mat-label>
+                        <mat-select formControlName="secondary">
+                            <mat-option
+                                *ngFor="let secondary of secondaryparts"
+                                value="{{secondary}}">
+                                {{secondary}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-12">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Body Tertiary Region</mat-label>
+                        <input type="text" matInput formControlName="tertiary">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                   
+                </div>
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4 "
+                    (click)="submit()" [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                
+            </div>
+        </div>
+
+    </div>
+    </div>

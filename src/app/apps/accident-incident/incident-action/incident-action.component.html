@@ -1,0 +1,255 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Incident<span>
+                                    Management</span></a>
+                            <h6 class=" mb-3 pb-2"># {{Form.value.reference_number}}</h6>
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Reporting Date</h6>
+                            <h6 class="text-end mb-3 pb-2 ">{{Form.value.reported_date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+                                <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex">
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">article</mat-icon>
+                                            General Details
+                                        </ng-template>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Division</mat-label>
+                                                    <input type="text" matInput formControlName="division">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Location</mat-label>
+                                                    <input type="text" matInput formControlName="location">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Circumstances</mat-label>
+                                                    <input type="text" matInput formControlName="circumstances">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Employee ID</th>
+                                                        <th>Name</th>
+                                                        <th>Division</th>
+                                                        <th>Department</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let data of witnessList">
+                                                        <td>{{data.attributes.employee_id}}</td>
+                                                        <td>{{data.attributes.name}}</td>
+                                                        <td>{{data.attributes.division}}</td>
+                                                        <td>{{data.attributes.department}}</td>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <h6 class="mb-3">Evidences</h6>
+                                        </div>
+                                        <div class="row evidence">
+                                            <a href="" (click)="false" class="col-md-2 ps-1 pe-1"
+                                                *ngFor="let image of evidences; let i=index">
+                                                <figure class="mb-2">
+                                                    <img class="img-fluid rounded" [src]="image.src" (click)="open(i)"
+                                                        width="150" alt="">
+                                                </figure>
+                                            </a>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">article</mat-icon>
+                                            Incident Details
+                                        </ng-template>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Type of Near Miss</mat-label>
+                                                    <input type="text" matInput formControlName="type_of_near_miss">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Type of Concern</mat-label>
+                                                    <input type="text" matInput formControlName="type_of_concern">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Factors</mat-label>
+                                                    <input type="text" matInput formControlName="factors">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Causes</mat-label>
+                                                    <input type="text" matInput formControlName="causes">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-4 mt-4">
+                                            <quill-editor placeholder="Incident Details" [modules]="quillConfig"
+                                                formControlName="description">
+                                            </quill-editor>
+                                        </div>
+                                        <div class="row">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Person Type</th>
+                                                        <th>Person Name</th>
+                                                        <th>Gender</th>
+                                                        <th>Designation</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let data of affectedPeopleList">
+                                                        <td>{{data.attributes.person_type}}</td>
+                                                        <td>{{data.attributes.person_name}}</td>
+                                                        <td>{{data.attributes.gender}}</td>
+                                                        <td>{{data.attributes.designation}}</td>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">add_task</mat-icon>
+                                            Action
+                                        </ng-template>
+                                        <div class="row mb-4 mt-4">
+                                            <quill-editor placeholder="Treatment Post Incident *"
+                                                [modules]="quillConfig" formControlName="TreatmentPostIncident">
+                                            </quill-editor>
+                                            <p *ngIf="!Form.controls['TreatmentPostIncident'].valid &&Form.controls['TreatmentPostIncident'].touched"
+                                                class="quill-editor-error"> Required Field *</p>
+                                        </div>
+                                        <div class="row mb-4 mt-4">
+                                            <quill-editor placeholder="Post Analysis Incident *" [modules]="quillConfig"
+                                                formControlName="PostAnalysisIncident">
+                                            </quill-editor>
+
+                                            <p *ngIf="!Form.controls['PostAnalysisIncident'].valid &&Form.controls['PostAnalysisIncident'].touched"
+                                                class="quill-editor-error"> Required Field *</p>
+
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'"
+                                                (change)="onSelect($event)">
+                                                <ngx-dropzone-label>Drop your evidences here. Please ensure the image
+                                                    size is less than 20 MB</ngx-dropzone-label>
+                                                <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview"
+                                                    [removable]="true" *ngFor="let f of files" [file]="f"
+                                                    (removed)="onRemove(f)">
+                                                </ngx-dropzone-image-preview>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                                                (click)="submit()" [disabled]="!Form.valid">
+                                                <i class="feather icon-send btn-icon-prepend"></i>
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </mat-tab>
+                                </mat-tab-group>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-3">
+                        <button class="btn btn-primary" mat-icon-button aria-label="Example icon-button with a menu">
+                            {{Form.value.status}}
+                        </button>
+                        <button class="btn btn-success status-btn ms-2" mat-icon-button
+                            aria-label="Example icon-button with a menu" (click)="navigate()">
+                            <i class="feather icon-chevron-left"></i> Back to History
+
+                        </button>
+                    </div>
+                    <div class="mt-3">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Reported By:</label>
+                        <p class="text-muted">{{Form.value.reporterName}}, {{Form.value.reporterDesignation}}</p>
+                    </div>
+                    <div class="mt-3">
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Incident Date</mat-label>
+                            <input matInput [matDatepicker]="incdp" placeholder="Choose a date"
+                                [formControl]="incidentdate">
+                            <mat-datepicker-toggle matSuffix [for]="incdp"></mat-datepicker-toggle>
+                            <mat-datepicker #incdp></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                        <mat-form-field fxFlex appearance="outline" color="warning">
+                            <mat-label>Incident Time</mat-label>
+                            <input matTimepicker #t="matTimepicker" [strict]="false" id="timepicker-example" mode="12h"
+                                placeholder="Please select time..." name="time" [formControl]="incidenttime">
+                            <mat-icon matSuffix (click)="t.showDialog()">access_time</mat-icon>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mt-3">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Severity *:</label><br>
+                        <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="severity"
+                            #group="matButtonToggleGroup" class="injuryType">
+                            <mat-button-toggle value="Low" class="injuryTypeOption">Low</mat-button-toggle>
+                            <mat-button-toggle value="Medium" class="injuryTypeOption">Medium</mat-button-toggle>
+                            <mat-button-toggle value="High" class="injuryTypeOption">High</mat-button-toggle>
+                            <mat-button-toggle value="Very High" class="injuryTypeOption">Very High</mat-button-toggle>
+                            <mat-button-toggle value="Extreme" class="injuryTypeOption">Extreme</mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+                    <div class="mt-3">
+                        <label class="tx-11 fw-bolder mb-0 text-uppercase">Severity Impact *:</label><br>
+                        <mat-button-toggle-group name="fontStyle" aria-label="Font Style"
+                            formControlName="severityImpact" #group="matButtonToggleGroup" class="injuryType">
+                            <mat-button-toggle value="Low" class="injuryTypeOption">Low</mat-button-toggle>
+                            <mat-button-toggle value="Medium" class="injuryTypeOption">Medium</mat-button-toggle>
+                            <mat-button-toggle value="High" class="injuryTypeOption">High</mat-button-toggle>
+                            <mat-button-toggle value="Very High" class="injuryTypeOption">Very High</mat-button-toggle>
+                            <mat-button-toggle value="Extreme" class="injuryTypeOption">Extreme</mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

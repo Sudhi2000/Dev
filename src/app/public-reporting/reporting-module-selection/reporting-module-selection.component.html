@@ -1,0 +1,47 @@
+<div class="min-h-screen flex flex-col">
+  <!-- Main Content Area -->
+  <div class="p-6 flex flex-col items-center flex-grow">
+    <!-- Logo Row -->
+    <div class="logo-row flex justify-center items-center gap-2 mb-5">
+      <img src="assets/images/sattva-logo-dark.png" alt="Sattva Logo" class="logo-img" />
+      <img src="{{client_logo}}" alt="Company Logo" class="logo-img" />
+    </div>
+
+    <!-- Card Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center w-full">
+      <mat-card class="w-full max-w-xs cursor-pointer hover:shadow-lg transition-shadow duration-300 mb-3 mt-3" (click)="hazardRisk()">
+        <mat-card-content class="flex flex-col items-center">
+          <img src="../../../assets/images/radiation-alt.png"
+               alt="Hazard & Risk"
+               style="width: 30%; display: block; margin: 0 auto; margin-bottom: 1rem;" />
+          <h3 class="text-sm font-medium text-center">Report A Hazard</h3>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="w-full max-w-xs cursor-pointer hover:shadow-lg transition-shadow duration-300 mb-3" (click)="accident()">
+        <mat-card-content class="flex flex-col items-center">
+          <img src="../../../assets/images/face-head-bandage.png"
+               alt="Accident"
+               style="width: 30%; display: block; margin: 0 auto; margin-bottom: 1rem;" />
+          <h3 class="text-sm font-medium text-center">Report An Accident</h3>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="w-full max-w-xs cursor-pointer hover:shadow-lg transition-shadow duration-300" (click)="grievance()">
+        <mat-card-content class="flex flex-col items-center">
+          <img src="../../../assets/images/clipboard-user.png"
+               alt="Grievance"
+               style="width: 30%; display: block; margin: 0 auto; margin-bottom: 1rem;" />
+          <h3 class="text-sm font-medium text-center">Report A Grievance</h3>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="row">
+    <span class="copyright w-full text-center block py-4">
+      {{copyRight}}
+    </span>
+  </div>
+</div>

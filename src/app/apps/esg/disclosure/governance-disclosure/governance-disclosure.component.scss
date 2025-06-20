@@ -1,0 +1,66 @@
+.custom-header::after {
+    content: none;
+}
+
+.table-responsive {
+    overflow-x: unset;
+}
+.table-bordered {
+    margin-top: 10px;
+}
+
+// .table-bordered th,
+// .table-bordered td {
+//     white-space: nowrap;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//     width: 100%; /* Adjust the value as needed */
+//     text-align: center;
+// }
+.table-bordered th:not(:last-child), 
+.table-bordered td:not(:last-child)  {
+    white-space: normal; /* Allow text to wrap */
+    word-wrap: break-word; /* Ensure long words break onto the next line */
+    overflow: hidden; /* Prevent content overflow */
+    text-overflow: ellipsis; /* Add ellipsis for long text */
+    max-width: 120px; /* Adjust width as needed */
+    padding: 8px; /* Add some spacing */
+    text-align: center; /* Center-align the text */
+    // font-weight: bold; /* Ensure headers are prominent */
+}
+.table-bordered th:last-child, 
+.table-bordered td:last-child {
+    white-space: nowrap; /* Prevent text wrapping */
+    max-width: unset; /* Allow full content to display */
+    text-align: center; /* Center-align the actions */
+}
+
+// #govDisNumberRows {
+//     table {
+//         counter-reset: rowNumber;
+//     }
+
+//     table tr > td:nth-child(2) {
+//         counter-increment: rowNumber;
+//     }
+
+//     table tr td:nth-child(2)::before {
+//         content: counter(rowNumber);
+//         min-width: 1em;
+//         margin-right: 0.5em;
+//     }
+
+//     tr {
+//         vertical-align: middle;
+//     }
+// }
+
+
+// .mat-form-field-appearance-outline .mat-form-field-outline {
+//     top: 5px; /* Adjust this if needed */
+//   }
+  
+//   .mat-form-field-appearance-outline .mat-form-field-label {
+//     transform: translateY(-50%);
+//   }
+  

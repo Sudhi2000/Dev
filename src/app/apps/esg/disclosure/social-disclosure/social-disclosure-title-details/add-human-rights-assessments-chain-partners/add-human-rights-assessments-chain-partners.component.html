@@ -1,0 +1,69 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Types of Human rights violations</mat-label>
+                        <mat-select formControlName="types_of_human_rights_violation">
+                            <mat-option *ngFor="let data of lov[21]?.value" [value]="data.value">
+                                <span class="option-container">{{ data.value }}
+                                    <span>
+                                        <i class="feather icon-edit modifyicon" (click)="modifyTypeofHumanRightsViolation(data)"></i>
+                                        <i class="feather icon-trash-2 deleteicon" (click)="deleteTypeofHumanRightsViolation(data)"></i>
+                                    </span>
+                                </span>
+                            </mat-option>
+                            <mat-option (click)="newTypeOfHumanRightsViolation()" class="option-btn">
+                                <i class="mdi mdi-plus-circle"></i> Create New Type of Human Rights Violation
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Total number of value chain partners</mat-label>
+                        <input type="number" matInput formControlName="total_number_of_value_chain_partners">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                </div>
+                <div class="row">
+
+                <div class="col-md-12">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Number of value chain partners assessed for Human Rights Violations</mat-label>
+                        <input type="number" matInput formControlName="no_of_chain_val_assessed_for_hr_violation">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+          
+              
+                
+            </div>
+  
+            <div class="row">
+                <div id="esgDisclosure" class="row mb-4 mt-4">
+                    <quill-editor
+                        placeholder="Corrective Actions Taken" [modules]="quillConfig" formControlName="corrective_actions_taken">
+                    </quill-editor>
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <button *ngIf="data.mode!=='view'" type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                    [disabled]="!Form.valid" (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                <button *ngIf="data.mode==='view'" type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                    (click)="close()">
+                    <i class="feather icon-x-circle btn-icon-prepend"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

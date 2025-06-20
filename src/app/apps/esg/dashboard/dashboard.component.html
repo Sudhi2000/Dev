@@ -1,0 +1,1082 @@
+<div class="container-fluid" id="dashboard">
+
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a routerLink="." class="nobleui-logo d-block">ESG <span>Management</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge">
+                        <form class="d-flex my-2 my-lg-0" [formGroup]="filterForm">
+                            <!-- Mode Toggle: Fiscal or Calendar
+                            <div class="input-group me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Year Mode</mat-label>
+                                    <mat-select formControlName="mode" (selectionChange)="onModeChange($event)">
+                                        <mat-option value="fiscal">Financial Year</mat-option>
+                                        <mat-option value="calendar">Calendar Year</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            Date Range Pickers
+                            <div class="input-group me-2 mb-2 mb-md-0" [formGroup]="dateRange">
+
+                                Fiscal Year Date Picker
+                                <mat-form-field *ngIf="selectedMode === 'fiscal'" appearance="outline">
+                                    <mat-label>Financial Year</mat-label>
+                                    <input matInput [matDatepicker]="fiscalPicker" [value]="fiscalMonthDisplay"
+                                        (focus)="fiscalPicker.open()" readonly />
+                                    <mat-datepicker-toggle matSuffix [for]="fiscalPicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #fiscalPicker startView="multi-year"
+                                        (yearSelected)="yearSelected($event)"
+                                        (monthSelected)="monthSelected($event, fiscalPicker)" panelClass="month-picker">
+                                    </mat-datepicker>
+                                </mat-form-field>
+
+                                Calendar Year Date Range Picker
+                                <mat-form-field *ngIf="selectedMode === 'calendar'" appearance="outline">
+                                    <mat-label>Calendar Year</mat-label>
+                                    <mat-date-range-input [rangePicker]="picker2">
+                                        <input matStartDate formControlName="calendarStart" placeholder="Start date">
+                                        <input matEndDate formControlName="calendarEnd" placeholder="End date">
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker2></mat-date-range-picker>
+                                </mat-form-field>
+
+                            </div> -->
+                            <!-- Date Range Picker -->
+                            <div class="input-group me-2 mb-2 mb-md-0" [formGroup]="dateRange">
+                                <mat-form-field appearance="outline" color="primary" id="dashboard">
+                                    <mat-label>Date range</mat-label>
+                                    <mat-date-range-input [rangePicker]="picker">
+                                        <input matStartDate formControlName="start" placeholder="Start date"
+                                            (dateChange)="startDateChange($event)">
+                                        <input matEndDate formControlName="end" placeholder="End date"
+                                            (dateChange)="endDateChange($event)">
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                                    <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                                        start date</mat-error>
+                                    <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end
+                                        date</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Year Dropdown -->
+                            <div class="input-group me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Year</mat-label>
+                                    <mat-select formControlName="year" multiple (selectionChange)="yearVal($event)">
+                                        <mat-option [value]="data.year" *ngFor="let data of years">{{ data.year
+                                            }}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Month Dropdown -->
+                            <div class="input-group me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Month</mat-label>
+                                    <mat-select formControlName="month" (selectionChange)="monthVal($event)">
+                                        <mat-option *ngFor="let m of months" [value]="m">{{ m }}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Division Dropdown (conditionally visible) -->
+                            <div class="input-group me-2 mb-2 mb-md-0" *ngIf="divisions.length > 1">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Division</mat-label>
+                                    <mat-select formControlName="division">
+                                        <mat-option [value]="data.division_uuid" *ngFor="let data of divisions">
+                                            {{ data.division_name }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Search Button -->
+                            <div class="input-group me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-primary btn-icon" (click)="search()">
+                                    <i class="feather icon-search btn-icon-prepend"></i>
+                                </button>
+                            </div>
+
+                            <!-- Reset Button -->
+                            <div class="input-group me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-danger btn-icon" (click)="reset()">
+                                    <i class="feather icon-rotate-cw btn-icon-prepend"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- SDG Section Content -->
+
+    <div id="sdgSection" class="section">
+        <!-- Summary Card -->
+        <div class="row mt-3">
+            <div class="col-12 col-xl-12 stretch-card">
+
+                <div class="row flex-grow-1">
+                    <div class="col-md-2 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-baseline">
+                                    <h5 class="mb-2">Total SDG Initiatives</h5>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 col-md-12 col-xl-6 value">
+                                        <h5 class="mb-2">{{ totalInitiatives }}</h5>
+                                    </div>
+                                    <div class="col-6 col-md-12 col-xl-6 icon">
+                                        <div class="mt-xl-0">
+                                            <img src="../../../../assets/images/ESG_Dashboard/SDGWheel.png" width="60">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+
+            <!-- SDG Initiatives Chart -->
+
+            <div class="col-lg-4 grid-margin stretch-card">
+                <div class="card custom-height" [perfectScrollbar]>
+                    <div class="card-body custom-height" [perfectScrollbar]>
+                        <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                            <h6 class="card-title mb-0">SDG Initiatives </h6>
+                        </div>
+                        <apx-chart class="apex-charts" dir="ltr" [series]="SDGChart.series" [chart]="SDGChart.chart"
+                            [plotOptions]="SDGChart.plotOptions" [legend]="SDGChart.legend" [labels]="SDGChart.labels">
+                        </apx-chart>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4 d-flex justify-content-center">
+                            <div>
+                                <label class="d-flex align-items-center tx-10 text-uppercase fw-bold">Total
+                                    <span class="p-1 ms-1 rounded-circle bg-secondary"></span></label>
+                                <h6 class="fw-bolder mb-0 text-end">{{totalInitiatives}} </h6>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex justify-content-center">
+                            <div>
+                                <label class="d-flex align-items-center tx-10 text-uppercase fw-bold"><span
+                                        class="p-1 me-1 rounded-circle bg-primary"></span>Happening</label>
+                                <h6 class="fw-bolder mb-0">{{happeningCount}} </h6>
+                            </div>
+                        </div>
+                        <div class="col-4 d-flex justify-content-center">
+                            <div>
+                                <label class="d-flex align-items-center tx-10 text-uppercase fw-bold"><span
+                                        class="p-1 me-1 rounded-circle bg-success"></span>Completed</label>
+                                <h6 class="fw-bolder mb-0">{{completedCount}} </h6>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- SDG Distribution Chart -->
+            <div class="col-lg-8 grid-margin stretch-card"> <!-- Adjust width to align with existing UI -->
+                <div class="card custom-height" [perfectScrollbar]>
+                    <div class="card-body custom-height" [perfectScrollbar]>
+                        <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                            <h6 class="card-title mb-0">SDG Distributions</h6>
+                        </div>
+                        <div class="sdg-grid">
+                            <div *ngFor="let goal of sdgGoals" class="sdg-card" (mouseenter)="hoveredGoal = goal.id"
+                                (mouseleave)="hoveredGoal = null">
+                                <div class="sdg-inner" [ngClass]="{'flipped': hoveredGoal === goal.id}">
+                                    <!-- Front Side: SDG Image -->
+                                    <div class="sdg-front">
+                                        <img [src]="goal.imageUrl" [alt]="goal.name">
+                                    </div>
+                                    <!-- Back Side: SDG Count -->
+                                    <div class="sdg-back">
+                                        <h5>{{ goal.count }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card custom-height">
+                    <div class="card-body custom-height">
+                        <div class="d-flex justify-content-between align-items-baseline mb-2">
+                            <h6 class="card-title mb-4">Top Performing SDGs</h6>
+                        </div>
+                        <apx-chart dir="ltr" [series]="SDGTopFiveChart.series" [chart]="SDGTopFiveChart.chart"
+                            [dataLabels]="SDGTopFiveChart.dataLabels" [plotOptions]="SDGTopFiveChart.plotOptions"
+                            [xaxis]="SDGTopFiveChart.xaxis" [colors]="SDGTopFiveChart.colors"
+                            [yaxis]="SDGTopFiveChart.yaxis"></apx-chart>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SDG Progress Tracker(stacked chart) -->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card custom-height">
+                    <div class="card-body custom-height">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="card-title mb-0">SDG Progress Tracker</h6>
+                        </div>
+                        <apx-chart class="apex-charts" [series]="SDGprogressChart.series"
+                            [chart]="SDGprogressChart.chart" [xaxis]="SDGprogressChart.xaxis"
+                            [yaxis]="SDGprogressChart.yaxis" [legend]="SDGprogressChart.legend"
+                            [plotOptions]="SDGprogressChart.plotOptions" [dataLabels]="SDGprogressChart.dataLabels"
+                            [colors]="SDGprogressChart.colors" [tooltip]="SDGprogressChart.tooltip">
+                        </apx-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card custom-height" [perfectScrollbar]>
+                    <div class="card-body custom-height" [perfectScrollbar]>
+                        <div class="d-flex justify-content-between align-items-center mb-1 mt-2">
+                            <h6 class="card-title mb-0">SDG Pillars</h6>
+                        </div>
+
+                        <div *ngIf="pillarChart" class="mb-1">
+                            <apx-chart [series]="pillarChart.series" [chart]="pillarChart.chart"
+                                [plotOptions]="pillarChart.plotOptions" [labels]="pillarChart.labels"
+                                [stroke]="pillarChart.stroke" [colors]="pillarChart.colors"
+                                [dataLabels]="pillarChart.dataLabels" [responsive]="pillarChart.responsive">
+                            </apx-chart>
+                        </div>
+
+                        <div class="row row-cols-5 g-2 text-center">
+                            <div *ngFor="let card of pillarCard; let i = index" class="col">
+                                <div class="border rounded p-1" [ngStyle]="{ 
+                              'border-color': pillarChart.colors[i], 
+                              'background-color': '#f9f9f9',
+                              'min-height': '60px' 
+                            }">
+
+                                    <div class="fw-bold text-truncate" [ngStyle]="{ 
+                                'color': pillarChart.colors[i], 
+                                'font-size': '0.75rem', 
+                                'white-space': 'nowrap', 
+                                'overflow': 'hidden', 
+                                'text-overflow': 'ellipsis' 
+                              }">
+                                        {{ card.title }}
+                                    </div>
+
+                                    <div class="text-muted" style="font-size: 0.7rem;">
+                                        {{ card.count }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cumulative Impacts Chart-->
+
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card custom-height" [perfectScrollbar]>
+                    <div class="card-body custom-height" [perfectScrollbar]>
+                        <div class="d-flex justify-content-between align-items-baseline mb-2">
+                            <h6 class="card-title mb-0">Top 10 Impacts</h6>
+                        </div>
+                        <div class="table-responsive mt-4 route-cause">
+                            <table class="table table-centered mb-0">
+                                <tbody>
+                                    <tr *ngFor="let impact of topCumulativeImpacts">
+                                        <td>
+                                            <p class="mb-1">{{ impact.name }}</p>
+                                        </td>
+                                        <td>
+                                            <h5 class="mb-0">{{ impact.sum }}</h5>
+                                            <p class="mb-1">{{ impact.unit }}</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- ESG Section Content -->
+    <div id="esgSection" class="section">
+
+        <div class="row mt-3">
+            <!-- GHG Emissions -->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-baseline mb-2">
+                            <h6 class="card-title mb-0">GHG Emissions</h6>
+                        </div>
+                        <apx-chart dir="ltr" class="apex-charts" [chart]="GHGEmissionChart.chart"
+                            [series]="GHGEmissionChart.series" [colors]="GHGEmissionChart.colors"
+                            [stroke]="GHGEmissionChart.stroke" [dataLabels]="GHGEmissionChart.dataLabels"
+                            [xaxis]="GHGEmissionChart.xaxis" [yaxis]="GHGEmissionChart.yaxis"
+                            [tooltip]="GHGEmissionChart.tooltip" [legend]="GHGEmissionChart.legend">
+                        </apx-chart>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Energy Consumption Trend -->
+            <div class="col-lg-6 col-xl-6  grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-baseline mb-2">
+                            <h6 class="card-title mb-0">Total Energy Consumption Trend</h6>
+                        </div>
+                        <apx-chart [series]="TotalEnergyConsumptionChart.series"
+                            [chart]="TotalEnergyConsumptionChart.chart" [xaxis]="TotalEnergyConsumptionChart.xaxis"
+                            [stroke]="TotalEnergyConsumptionChart.stroke"
+                            [dataLabels]="TotalEnergyConsumptionChart.dataLabels"
+                            [colors]="TotalEnergyConsumptionChart.colors"
+                            [markers]="TotalEnergyConsumptionChart.markers"
+                            [tooltip]="TotalEnergyConsumptionChart.tooltip" [yaxis]="TotalEnergyConsumptionChart.yaxis">
+                        </apx-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Water Withdrawal</h6>
+                        <div *ngIf="waterWithdrawalChart">
+                            <apx-chart [series]="waterWithdrawalChart.series" [chart]="waterWithdrawalChart.chart"
+                                [xaxis]="waterWithdrawalChart.xaxis" [yaxis]="waterWithdrawalChart.yaxis"
+                                [plotOptions]="waterWithdrawalChart.plotOptions"
+                                [dataLabels]="waterWithdrawalChart.dataLabels" [tooltip]="waterWithdrawalChart.tooltip">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Waste Disposed Chart -->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Waste Disposed</h6>
+                        <div *ngIf="wasteStackedChart">
+                            <apx-chart [series]="wasteStackedChart.series" [chart]="wasteStackedChart.chart"
+                                [xaxis]="wasteStackedChart.xaxis" [yaxis]="wasteStackedChart.yaxis"
+                                [plotOptions]="wasteStackedChart.plotOptions"
+                                [dataLabels]="wasteStackedChart.dataLabels" [tooltip]="wasteStackedChart.tooltip"
+                                [legend]="wasteStackedChart.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Overall Employee Count Trend</h6>
+                        <div *ngIf="EmployeeCountChart">
+                            <apx-chart [series]="EmployeeCountChart.series" [chart]="EmployeeCountChart.chart"
+                                [xaxis]="EmployeeCountChart.xaxis" [stroke]="EmployeeCountChart.stroke"
+                                [dataLabels]="EmployeeCountChart.dataLabels" [markers]="EmployeeCountChart.markers"
+                                [tooltip]="EmployeeCountChart.tooltip" [colors]="EmployeeCountChart.colors"
+                                [yaxis]="EmployeeCountChart.yaxis">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Age Distribution Chart -->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Age-wise Distribution of Employees</h6>
+                        <div *ngIf="ageDistributionChart">
+                            <apx-chart [series]="ageDistributionChart.series" [chart]="ageDistributionChart.chart"
+                                [xaxis]="ageDistributionChart.xaxis" [yaxis]="ageDistributionChart.yaxis"
+                                [plotOptions]="ageDistributionChart.plotOptions"
+                                [dataLabels]="ageDistributionChart.dataLabels" [tooltip]="ageDistributionChart.tooltip"
+                                [colors]="ageDistributionChart.colors" [legend]="ageDistributionChart.legend">
+                            </apx-chart>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row mt-3">
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-5">Gender Distribution Trend</h6>
+                        <div *ngIf="genderDistributionChart">
+                            <apx-chart [series]="genderDistributionChart.series" [chart]="genderDistributionChart.chart"
+                                [xaxis]="genderDistributionChart.xaxis"
+                                [dataLabels]="genderDistributionChart.dataLabels"
+                                [tooltip]="genderDistributionChart.tooltip" [yaxis]="genderDistributionChart.yaxis"
+                                [colors]="genderDistributionChart.colors"
+                                [plotOptions]="genderDistributionChart.plotOptions"
+                                [legend]="genderDistributionChart.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--  Employees Type Count Trend -->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Employees by Contract Type and Gender</h6>
+
+                        <!-- Dropdown to choose type -->
+                        <div class="form-group mb-3">
+                            <label for="empTypeSelect" class="form-label">Select Employee Contract Type:</label>
+                            <select id="empTypeSelect" class="form-control" [(ngModel)]="selectedEmpType"
+                                (change)="onEmpTypeChange($event)">
+                                <option value="Temporary">Temporary</option>
+                                <option value="Permanent">Permanent</option>
+                            </select>
+                        </div>
+
+                        <!-- Chart section -->
+                        <div *ngIf="empTypeChart">
+                            <apx-chart [series]="empTypeChart.series" [chart]="empTypeChart.chart"
+                                [xaxis]="empTypeChart.xaxis" [dataLabels]="empTypeChart.dataLabels"
+                                [tooltip]="empTypeChart.tooltip" [colors]="empTypeChart.colors"
+                                [yaxis]="empTypeChart.yaxis"></apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <!-- New Hires Trend -->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Overall New Hires</h6>
+                        <div *ngIf="newHiresChart">
+                            <apx-chart [series]="newHiresChart.series" [chart]="newHiresChart.chart"
+                                [xaxis]="newHiresChart.xaxis" [stroke]="newHiresChart.stroke"
+                                [markers]="newHiresChart.markers" [dataLabels]="newHiresChart.dataLabels"
+                                [tooltip]="newHiresChart.tooltip" [yaxis]="newHiresChart.yaxis"
+                                [colors]="newHiresChart.colors" [plotOptions]="newHiresChart.plotOptions"
+                                [legend]="newHiresChart.legend">
+                            </apx-chart>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">New Hires by Age Group</h6>
+                        <div *ngIf="newHiresAgeChart">
+                            <apx-chart [series]="newHiresAgeChart.series" [chart]="newHiresAgeChart.chart"
+                                [xaxis]="newHiresAgeChart.xaxis" [dataLabels]="newHiresAgeChart.dataLabels"
+                                [tooltip]="newHiresAgeChart.tooltip" [yaxis]="newHiresAgeChart.yaxis"
+                                [markers]="newHiresAgeChart.markers" [colors]="newHiresAgeChart.colors"
+                                [legend]="newHiresAgeChart.legend" [stroke]="newHiresAgeChart.stroke">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">New Hires by Gender Group</h6>
+                        <div *ngIf="newHiresGenderChart">
+                            <apx-chart [series]="newHiresGenderChart.series" [chart]="newHiresGenderChart.chart"
+                                [xaxis]="newHiresGenderChart.xaxis" [dataLabels]="newHiresGenderChart.dataLabels"
+                                [tooltip]="newHiresGenderChart.tooltip" [yaxis]="newHiresGenderChart.yaxis"
+                                [colors]="newHiresGenderChart.colors" [plotOptions]="newHiresGenderChart.plotOptions"
+                                [legend]="newHiresGenderChart.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Overall Turnover Rate</h6>
+                        <div *ngIf="attritionRateChart">
+                            <apx-chart *ngIf="attritionRateChart" [series]="attritionRateChart.series"
+                                [chart]="attritionRateChart.chart" [xaxis]="attritionRateChart.xaxis"
+                                [markers]="attritionRateChart.markers" [yaxis]="attritionRateChart.yaxis"
+                                [dataLabels]="attritionRateChart.dataLabels" [stroke]="attritionRateChart.stroke"
+                                [tooltip]="attritionRateChart.tooltip" [colors]="attritionRateChart.colors"
+                                [legend]="attritionRateChart.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Region-wise Turnover Rate</h6>
+
+                        <div *ngIf="attritionRateRegionChart">
+                            <apx-chart [series]="attritionRateRegionChart.series"
+                                [chart]="attritionRateRegionChart.chart" [xaxis]="attritionRateRegionChart.xaxis"
+                                [yaxis]="attritionRateRegionChart.yaxis"
+                                [dataLabels]="attritionRateRegionChart.dataLabels"
+                                [stroke]="attritionRateRegionChart.stroke" [tooltip]="attritionRateRegionChart.tooltip"
+                                [colors]="attritionRateRegionChart.colors" [legend]="attritionRateRegionChart.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voluntary Attrition Rate by Age Group (Stacked Bar Chart) -->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Turnover Rate by Age Group</h6>
+
+                        <div *ngIf="attritionRateAgeGroupChart">
+                            <apx-chart [series]="attritionRateAgeGroupChart.series"
+                                [chart]="attritionRateAgeGroupChart.chart" [xaxis]="attritionRateAgeGroupChart.xaxis"
+                                [yaxis]="attritionRateAgeGroupChart.yaxis"
+                                [dataLabels]="attritionRateAgeGroupChart.dataLabels"
+                                [stroke]="attritionRateAgeGroupChart.stroke"
+                                [tooltip]="attritionRateAgeGroupChart.tooltip"
+                                [colors]="attritionRateAgeGroupChart.colors"
+                                [legend]="attritionRateAgeGroupChart.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <!-- Voluntary Attrition Rate by Gender-->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Turnover Rate by Gender</h6>
+
+                        <div *ngIf="attritionRateGenderChart">
+                            <apx-chart [series]="attritionRateGenderChart.series"
+                                [chart]="attritionRateGenderChart.chart" [xaxis]="attritionRateGenderChart.xaxis"
+                                [yaxis]="attritionRateGenderChart.yaxis"
+                                [dataLabels]="attritionRateGenderChart.dataLabels"
+                                [stroke]="attritionRateGenderChart.stroke" [tooltip]="attritionRateGenderChart.tooltip"
+                                [colors]="attritionRateGenderChart.colors" [legend]="attritionRateGenderChart.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Voluntary Attrition Rate Year over Year-->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Year-over-Year Turnover Comparison</h6>
+
+                        <div *ngIf="attritionRateYOYChart">
+                            <apx-chart [series]="attritionRateYOYChart.series" [chart]="attritionRateYOYChart.chart"
+                                [xaxis]="attritionRateYOYChart.xaxis" [yaxis]="attritionRateYOYChart.yaxis"
+                                [dataLabels]="attritionRateYOYChart.dataLabels" [stroke]="attritionRateYOYChart.stroke"
+                                [tooltip]="attritionRateYOYChart.tooltip" [colors]="attritionRateYOYChart.colors"
+                                [legend]="attritionRateYOYChart.legend" [markers]="attritionRateYOYChart.markers">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row mt-3">
+            <!-- Gender Representation-->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Gender Representation by Level</h6>
+
+                        <div class="form-group mb-3">
+                            <label for="empTypeSelect" class="form-label">Select Employee Level:</label>
+                            <select id="empTypeSelect" class="form-control" [(ngModel)]="selectedEmpLevelType"
+                                (change)="onEmpLevelChange($event)">
+                                <option *ngFor="let level of availableLevels" [value]="level">{{ level }}</option>
+                            </select>
+                        </div>
+                        <div *ngIf="GenderRepChart">
+                            <apx-chart [series]="GenderRepChart.series" [chart]="GenderRepChart.chart"
+                                [xaxis]="GenderRepChart.xaxis" [yaxis]="GenderRepChart.yaxis"
+                                [dataLabels]="GenderRepChart.dataLabels" [stroke]="GenderRepChart.stroke"
+                                [tooltip]="GenderRepChart.tooltip" [colors]="GenderRepChart.colors"
+                                [markers]="GenderRepChart.markers" [legend]="GenderRepChart.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Employees with Disability-->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Employees with Disability</h6>
+
+                        <div *ngIf="DisabilityRepChart">
+                            <apx-chart [series]="DisabilityRepChart.series" [chart]="DisabilityRepChart.chart"
+                                [xaxis]="DisabilityRepChart.xaxis" [yaxis]="DisabilityRepChart.yaxis"
+                                [dataLabels]="DisabilityRepChart.dataLabels" [stroke]="DisabilityRepChart.stroke"
+                                [tooltip]="DisabilityRepChart.tooltip" [colors]="DisabilityRepChart.colors"
+                                [legend]="DisabilityRepChart.legend">
+                            </apx-chart>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row mt-3">
+
+            <!-- Gender Pay Parity-->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Gender Pay Parity Ratio</h6>
+
+                        <!-- Dropdown to select pay gap type -->
+                        <div class="form-group mb-3">
+                            <label for="gapTypeSelect" class="form-label">Select Pay Gap Type:</label>
+                            <select id="gapTypeSelect" class="form-control" [(ngModel)]="selectedGapType"
+                                (change)="updateGenderParityChart()">
+                                <option value="average">Average Pay Gap</option>
+                                <option value="median">Median Pay Gap</option>
+                            </select>
+                        </div>
+
+                        <div *ngIf="genderParityChart">
+                            <apx-chart [series]="genderParityChart.series" [chart]="genderParityChart.chart"
+                                [xaxis]="genderParityChart.xaxis" [dataLabels]="genderParityChart.dataLabels"
+                                [tooltip]="genderParityChart.tooltip" [colors]="genderParityChart.colors"
+                                [yaxis]="genderParityChart.yaxis">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Skill Upgradation-->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Skill Upgradation</h6>
+
+                        <div *ngIf="SkillUpgradeChart">
+                            <apx-chart [series]="SkillUpgradeChart.series" [chart]="SkillUpgradeChart.chart"
+                                [xaxis]="SkillUpgradeChart.xaxis" [yaxis]="SkillUpgradeChart.yaxis"
+                                [dataLabels]="SkillUpgradeChart.dataLabels" [stroke]="SkillUpgradeChart.stroke"
+                                [tooltip]="SkillUpgradeChart.tooltip" [colors]="SkillUpgradeChart.colors"
+                                [legend]="SkillUpgradeChart.legend">
+                            </apx-chart>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row mt-3">
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Parental Leave Return & Retention</h6>
+
+                        <!-- Check if there is data (available years length > 0) -->
+                        <div *ngIf="returnToWorkavailableYears.length > 0; else noDataTemplate">
+
+                            <!-- Year Dropdown -->
+                            <div class="form-group mb-3">
+                                <label for="yearSelect" class="form-label">Select Year:</label>
+                                <select id="yearSelect" class="form-control" [(ngModel)]="returnToWorkselectedYear"
+                                    (change)="onYearChange()">
+                                    <option *ngFor="let year of returnToWorkavailableYears" [value]="year">
+                                        {{ year }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Chart -->
+                            <apx-chart *ngIf="parentalLeaveChart && parentalLeaveChart.series.length > 0"
+                                [series]="parentalLeaveChart.series" [chart]="parentalLeaveChart.chart"
+                                [labels]="parentalLeaveChart.labels" [legend]="parentalLeaveChart.legend"
+                                [dataLabels]="parentalLeaveChart.dataLabels" [tooltip]="parentalLeaveChart.tooltip"
+                                [plotOptions]="parentalLeaveChart.plotOptions">
+                            </apx-chart>
+                        </div>
+
+                        <!-- No Data Template -->
+                        <ng-template #noDataTemplate>
+                            <div class="text-center text-muted my-4">
+                                No data available for Parental Leave Return & Retention.
+                            </div>
+                        </ng-template>
+
+                    </div>
+                </div>
+            </div>
+            <!-- HR Trained Employees -->
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Human Rights Issues and Policies Training</h6>
+
+                        <div *ngIf="HRTrainedEMPChart?.series?.length; else noHRDataTemplate">
+                            <apx-chart [series]="HRTrainedEMPChart.series" [chart]="HRTrainedEMPChart.chart"
+                                [xaxis]="HRTrainedEMPChart.xaxis" [yaxis]="HRTrainedEMPChart.yaxis"
+                                [dataLabels]="HRTrainedEMPChart.dataLabels" [stroke]="HRTrainedEMPChart.stroke"
+                                [tooltip]="HRTrainedEMPChart.tooltip" [colors]="HRTrainedEMPChart.colors"
+                                [legend]="HRTrainedEMPChart.legend">
+                            </apx-chart>
+                        </div>
+
+                        <!-- No Data Template -->
+                        <ng-template #noHRDataTemplate>
+                            <div class="text-center text-muted my-4">
+                                No data available for Human Rights Issues and Policies Training
+                            </div>
+                        </ng-template>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Employee Union Membership</h6>
+
+                        <!-- Check if there are available years -->
+                        <div *ngIf="unionAvailableYears.length > 0; else noUnionDataTemplate">
+
+                            <!-- Year Dropdown -->
+                            <div class="form-group mb-3">
+                                <label for="unionYearSelect" class="form-label">Select Year:</label>
+                                <select id="unionYearSelect" class="form-control" [(ngModel)]="unionSelectedYear"
+                                    (change)="onUnionYearChange()">
+                                    <option *ngFor="let year of unionAvailableYears" [value]="year">
+                                        {{ year }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Check if data exists for the selected year -->
+                            <div
+                                *ngIf="unionMembershipChart && unionMembershipChart.series.length > 0; else noDataForSelectedYearTemplate">
+                                <!-- Chart -->
+                                <apx-chart [series]="unionMembershipChart.series" [chart]="unionMembershipChart.chart"
+                                    [labels]="unionMembershipChart.labels" [legend]="unionMembershipChart.legend"
+                                    [dataLabels]="unionMembershipChart.dataLabels"
+                                    [tooltip]="unionMembershipChart.tooltip"
+                                    [plotOptions]="unionMembershipChart.plotOptions">
+                                </apx-chart>
+                            </div>
+
+                            <!-- No data for the selected year template -->
+                            <ng-template #noDataForSelectedYearTemplate>
+                                <div class="text-center text-muted my-4">
+                                    No data available for {{ unionSelectedYear }}.
+                                </div>
+                            </ng-template>
+
+                        </div>
+
+                        <!-- No available years template -->
+                        <ng-template #noUnionDataTemplate>
+                            <div class="text-center text-muted my-4">
+                                No data available for Employee Union Membership.
+                            </div>
+                        </ng-template>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Retirement Benefits Coverage by Percentage</h6>
+
+                        <div
+                            *ngIf="retirementBenefitsChart?.series?.length && retirementBenefitsChart?.xaxis?.categories?.length">
+                            <apx-chart [series]="retirementBenefitsChart.series" [chart]="retirementBenefitsChart.chart"
+                                [xaxis]="retirementBenefitsChart.xaxis" [yaxis]="retirementBenefitsChart.yaxis"
+                                [dataLabels]="retirementBenefitsChart.dataLabels"
+                                [tooltip]="retirementBenefitsChart.tooltip"></apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-lg-7 col-xl-7 grid-margin stretch-card">
+                <div class="card custom-height" [perfectScrollbar]>
+                    <div class="card-body custom-height" [perfectScrollbar]>
+                        <div class="d-flex justify-content-between align-items-center mb-1 mt-2">
+                            <h6 class="card-title mb-0">Employee Injury Types</h6>
+
+                            <!-- Year Dropdown -->
+                            <div class="dropdown">
+                                <select class="form-select" [(ngModel)]="selectedInjuryYear"
+                                    (change)="onEMPInjuryYearChange()">
+                                    <option *ngFor="let year of availableInjuryYears" [value]="year">{{ year }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div *ngIf="empInjuryChart.series.length > 0" class="mb-1">
+                            <apx-chart [series]="empInjuryChart.series" [chart]="empInjuryChart.chart"
+                                [plotOptions]="empInjuryChart.plotOptions" [labels]="empInjuryChart.labels"
+                                [colors]="empInjuryChart.colors" [dataLabels]="empInjuryChart.dataLabels"
+                                [responsive]="empInjuryChart.responsive" [tooltip]="empInjuryChart.tooltip"
+                                [legend]="empInjuryChart.legend" [yaxis]="empInjuryChart.yaxis">
+                            </apx-chart>
+                        </div>
+
+                        <!-- Show message if no data -->
+                        <div *ngIf="empInjuryChart.series.length === 0" class="text-center text-muted"
+                            style="font-size: 0.9rem;">
+                            No employee injury data available.
+                        </div>
+
+                        <!-- Cards for Injury Types -->
+                        <!-- Cards for Injury Types (only show when there's valid data) -->
+                        <div *ngIf="empInjuryChart.series.length > 0" class="row row-cols-5 g-2 text-center">
+                            <div *ngFor="let card of injuryCard; let i = index" class="col">
+                                <div class="border rounded p-1" [ngStyle]="{
+                          'border-color': empInjuryChart.colors[i],
+                          'background-color': '#f9f9f9',
+                          'min-height': '60px'}">
+                                    <div class="fw-bold text-truncate" [ngStyle]="{
+                            'color': empInjuryChart.colors[i],
+                            'font-size': '0.75rem',
+                            'white-space': 'nowrap',
+                            'overflow': 'hidden',
+                            'text-overflow': 'ellipsis'
+                          }">
+                                        {{ card.title }}
+                                    </div>
+                                    <div class="text-muted" style="font-size: 0.7rem;">
+                                        {{ card.count }} cases
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 col-xl-5 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">BOD vs KMP</h6>
+
+                        <!-- Check if there is data (available years length > 0) -->
+                        <div *ngIf="bodKmpavailableYears.length > 0; else noBODKMPDataTemplate">
+
+                            <!-- Year Dropdown -->
+                            <div class="form-group mb-3">
+                                <label for="yearSelect" class="form-label">Select Year:</label>
+                                <select id="yearSelect" class="form-control" [(ngModel)]="bodKmpselectedYear"
+                                    (change)="onBodKmpYearChange()">
+                                    <option *ngFor="let year of bodKmpavailableYears" [value]="year">
+                                        {{ year }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Chart -->
+                            <apx-chart *ngIf="bodKmpDonutChart && bodKmpDonutChart.series.length > 0"
+                                [series]="bodKmpDonutChart.series" [chart]="bodKmpDonutChart.chart"
+                                [labels]="bodKmpDonutChart.labels" [legend]="bodKmpDonutChart.legend"
+                                [dataLabels]="bodKmpDonutChart.dataLabels" [tooltip]="bodKmpDonutChart.tooltip"
+                                [plotOptions]="bodKmpDonutChart.plotOptions">
+                            </apx-chart>
+                        </div>
+
+                        <!-- No Data Template -->
+                        <ng-template #noBODKMPDataTemplate>
+                            <div class="text-center text-muted my-4">
+                                No data available for BOD vs KMP.
+                            </div>
+                        </ng-template>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row mt-3">
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Grievance Closure Rate</h6>
+                        <small>Total Complaints: {{ govGrievanceTotalComplaints }}</small>
+                        <div *ngIf="govGrievanceAvailableYears.length > 0; else noGovGrievanceDataTemplate">
+                            <!-- Year Dropdown -->
+                            <div class="form-group mb-3">
+                                <label for="grievanceYearSelect" class="form-label">Select Year:</label>
+                                <select id="grievanceYearSelect" class="form-control"
+                                    [(ngModel)]="govGrievanceSelectedYear" (change)="onGovGrievanceYearChange()">
+                                    <option *ngFor="let year of govGrievanceAvailableYears" [value]="year">{{ year }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Group Dropdown -->
+                            <div class="form-group mb-3">
+                                <label for="grievanceGroupSelect" class="form-label">Select Group:</label>
+                                <select id="grievanceGroupSelect" class="form-control"
+                                    [(ngModel)]="govGrievanceSelectedGroup" (change)="onGovGrievanceGroupChange()">
+                                    <option *ngFor="let group of govGrievanceAvailableGroups" [value]="group">{{ group
+                                        }}</option>
+                                </select>
+                            </div>
+
+                            <!-- Chart -->
+                            <apx-chart *ngIf="govGrievanceRadialChart && govGrievanceRadialChart.series.length > 0"
+                                [series]="govGrievanceRadialChart.series" [chart]="govGrievanceRadialChart.chart"
+                                [labels]="govGrievanceRadialChart.labels" [legend]="govGrievanceRadialChart.legend"
+                                [dataLabels]="govGrievanceRadialChart.dataLabels"
+                                [tooltip]="govGrievanceRadialChart.tooltip"
+                                [plotOptions]="govGrievanceRadialChart.plotOptions">
+                            </apx-chart>
+                        </div>
+
+                        <!-- No Data Template -->
+                        <ng-template #noGovGrievanceDataTemplate>
+                            <div class="text-center text-muted my-4">
+                                No data available for Grievance Redressal.
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Number of Suppliers by Year</h6>
+                        <div *ngIf="supplierChart?.series?.length">
+                            <apx-chart [series]="supplierChart.series" [chart]="supplierChart.chart"
+                                [xaxis]="supplierChart.xaxis" [dataLabels]="supplierChart.dataLabels"
+                                [tooltip]="supplierChart.tooltip" [yaxis]="supplierChart.yaxis"
+                                [markers]="supplierChart.markers" [colors]="supplierChart.colors"
+                                [legend]="supplierChart.legend" [stroke]="supplierChart.stroke">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Total Training Hours Over the Years</h6>
+                        <div *ngIf="trainingLineChart?.series?.length">
+                            <apx-chart [series]="trainingLineChart.series" [chart]="trainingLineChart.chart"
+                                [xaxis]="trainingLineChart.xaxis" [dataLabels]="trainingLineChart.dataLabels"
+                                [tooltip]="trainingLineChart.tooltip" [yaxis]="trainingLineChart.yaxis"
+                                [markers]="trainingLineChart.markers" [colors]="trainingLineChart.colors"
+                                [legend]="trainingLineChart.legend" [stroke]="trainingLineChart.stroke">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Training Hours by Employee Level</h6>
+
+                        <div *ngIf="TrainingByLevelChart">
+                            <apx-chart [series]="TrainingByLevelChart.series" [chart]="TrainingByLevelChart.chart"
+                                [xaxis]="TrainingByLevelChart.xaxis" [yaxis]="TrainingByLevelChart.yaxis"
+                                [dataLabels]="TrainingByLevelChart.dataLabels" [stroke]="TrainingByLevelChart.stroke"
+                                [tooltip]="TrainingByLevelChart.tooltip" [colors]="TrainingByLevelChart.colors"
+                                [legend]="TrainingByLevelChart.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+
+            <div class="col-lg-6 col-xl-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3">Training Hours by Function</h6>
+
+                        <div *ngIf="TrainingByFunctionChart">
+                            <apx-chart [series]="TrainingByFunctionChart.series" [chart]="TrainingByFunctionChart.chart"
+                                [xaxis]="TrainingByFunctionChart.xaxis" [yaxis]="TrainingByFunctionChart.yaxis"
+                                [dataLabels]="TrainingByFunctionChart.dataLabels"
+                                [stroke]="TrainingByFunctionChart.stroke" [tooltip]="TrainingByFunctionChart.tooltip"
+                                [colors]="TrainingByFunctionChart.colors" [legend]="TrainingByFunctionChart.legend">
+                            </apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

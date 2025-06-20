@@ -1,0 +1,57 @@
+<div mat-dialog-content [formGroup]="Form">
+  <div class="container-fluid d-flex justify-content-center w-100">
+    <div class="table-responsive w-100">
+      <div class="row">
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field fxFlex appearance="outline" color="primary">
+              <mat-label>Pollutants Emitted</mat-label>
+              <mat-select [formControl]="pollutantEmitted" (selectionChange)="PollutantsEmitted($event)">
+                <mat-select-trigger>
+                  {{pollutantEmitted.value?.attributes?.Value}}
+                </mat-select-trigger>
+                <mat-option *ngFor="let data of pollutantsEmitted" [value]="data">
+                  {{data.attributes.Value}}
+                </mat-option>
+                <mat-option disabled (click)="new_pollutant()" class="option-btn">
+                  <i class="mdi mdi-plus-circle"></i> Create New Pollutant
+                </mat-option>
+              </mat-select>
+              <mat-error>Required Field</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Concentration</mat-label>
+              <input type="number" matInput formControlName="quantity" (change)="pollutantsQuantity($event)">
+              <mat-error>Required Field</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Unit</mat-label>
+              <input matInput formControlName="unit" readonly>
+              <mat-error>Required Field</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="outline">
+              <mat-label>Legal Emission Limit</mat-label>
+              <input type="number" matInput formControlName="legal_emission_limit">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 text-end">
+          <button type="button" class="btn btn-success btn-icon-text mt-4" [disabled]="!Form.valid" (click)="submit()">
+            <i class="feather icon-send btn-icon-prepend"></i>
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

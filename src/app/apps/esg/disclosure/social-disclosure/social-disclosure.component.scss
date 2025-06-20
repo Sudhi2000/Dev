@@ -1,0 +1,57 @@
+.custom-header::after {
+    content: none;
+}
+.table-responsive {
+    overflow-x: unset;
+}
+
+.table-bordered {
+    margin-top: 10px;
+
+}
+
+.table-bordered th:not(:last-child), 
+.table-bordered td:not(:last-child)  {
+    white-space: normal;
+    word-wrap: break-word; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+    padding: 8px;
+    text-align: center;
+    // font-weight: bold;
+}
+.table-bordered th:last-child, 
+.table-bordered td:last-child {
+    white-space: nowrap; 
+    max-width: unset; 
+    text-align: center; 
+}
+.long-hint {
+    display: block;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    color: rgba(0, 0, 0, 0.60); 
+    font-size: 0.750rem; 
+    margin-top: 4px;
+}
+.deleteicon {
+    color: red;
+    margin-left: 15px;
+}
+
+.modifyicon {
+    color: green;
+}
+
+
+.option-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+::ng-deep .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+    background: white; 
+    width: auto; 
+}

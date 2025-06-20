@@ -1,0 +1,22 @@
+  <form [formGroup]="otpForm">
+    <div class="otp-container">
+        <div class="logo">
+            <img src="assets/images/sattva-logo-dark.png">
+        </div> 
+      <p>Enter the 6-digit OTP received in your registered email</p>
+      <div class="input-group">
+          <input type="text" formControlName="otp1" class="otp-box" #otpBox1 maxlength="1" >
+          <input type="text" formControlName="otp2" class="otp-box" #otpBox2 maxlength="1" >
+          <input type="text" formControlName="otp3" class="otp-box" #otpBox3 maxlength="1">
+          <input type="text" formControlName="otp4" class="otp-box" #otpBox4 maxlength="1" >
+          <input type="text" formControlName="otp5" class="otp-box" #otpBox5 maxlength="1" >
+          <input type="text" formControlName="otp6" class="otp-box" #otpBox6 maxlength="1" >        
+      </div>
+      <div class="button-group">
+        <button type="button" class="btn btn-primary" (click)="backToLogin()">Back To Login</button>
+        <button type="button" class="btn btn-success" (click)="confirm()">Confirm</button>
+      </div>
+    </div>
+  </form>
+  
+  

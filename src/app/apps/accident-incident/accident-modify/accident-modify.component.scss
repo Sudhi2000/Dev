@@ -1,0 +1,79 @@
+.table-responsive {
+    overflow: hidden;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.create-option {
+    background-color: #6571ff !important;
+    color: white !important;
+}
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+table {
+    thead {
+        tr {
+            th {
+                padding-left: 20px;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                padding-left: 20px;
+            }
+        }
+    }
+}
+
+.btn-previous {
+    margin-right: 2px;
+}
+
+.action-btn {
+    margin-right: 5px;
+}
+
+mat-chip {
+    background-color: #05A34A !important;
+    color: white !important;
+}
+
+.injuryType {
+    display: grid;
+
+    .injuryTypeOption {
+        border-bottom: solid 1px #e7e7e7;
+        border-left: none
+    }
+}
+
+.hide {
+    display: none;
+}
+
+.quill-editor-error {
+    font-size: 12px;
+    color: red;
+    text-align: right;
+
+}
+
+.warning-font-size {
+    font-size: 12px;
+}

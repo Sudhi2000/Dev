@@ -1,0 +1,109 @@
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fluid">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-5 ps-0 text-md-start text-center">
+            <a routerLink="." class="nobleui-logo d-block mt-3">
+              Materiality<span> Survey</span>
+            </a>
+            <p class="mt-1 mb-1"><b>Materiality Assessment</b></p>
+          </div>
+          <div class="col-12 col-md-5 ps-0 text-center mt-3 mt-md-0">
+            <img src="assets/images/sattva-logo-dark.png" class="img-fluid" style="max-height: 60px;">
+          </div>
+          <div class="col-12 col-md-2 pe-0 text-md-end text-center mt-3 mt-md-0">
+            <h6 class="fw-bold mt-4 mb-2">Created Date</h6>
+            <h6 class="mb-3 pb-2">{{ createdDate | date: 'MMM d, y' }}</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Single page layout -->
+  <div *ngFor="let data of topicArray; let i = index" class="card mt-3">
+    <div class="card-body d-flex flex-column align-items-center">
+
+      <div class="text-center mb-4">
+        <div style="margin-bottom: 4px;">Topic: <strong>{{ data?.topic }}</strong></div>
+        <div>Sub Topic: <strong>{{ data?.sub_topic }}</strong></div>
+      </div>
+
+      <!-- Impact Materiality Slider -->
+      <div class="form-group mb-4 text-center" style="width: 300px;">
+        <label for="impact-{{ i }}" class="d-block">
+          Impact Materiality (1-10):
+          <strong>{{ data.impactMateriality }}</strong>
+        </label>
+        <mat-slider min="0" max="10" step="1" tickInterval="1"
+          [(ngModel)]="data.impactMateriality"
+          thumbLabel
+          class="dynamic-slider custom-slider w-100"
+          [ngClass]="getSliderColor(data.impactMateriality)">
+        </mat-slider>
+
+        <div class="d-flex justify-content-between mt-1 px-1">
+          <span *ngFor="let n of numbersArray" [ngClass]="
+  data?.impactMateriality !== undefined && n === data.impactMateriality
+    ? getSliderColor(data.impactMateriality)
+    : 'text-muted'
+"
+>
+  {{ n }}
+</span>
+
+        </div>
+      </div>
+
+      <!-- Financial Materiality Slider -->
+      <div class="form-group mb-4 text-center" style="width: 300px;">
+  <label for="financial-{{ i }}" class="d-block">
+    Financial Materiality (1-10):
+    <strong>{{ data.financialMateriality }}</strong>
+  </label>
+
+  <mat-slider min="0" max="10" step="1" tickInterval="1"
+    [(ngModel)]="data.financialMateriality"
+    thumbLabel
+    class="dynamic-slider custom-slider w-100"
+    [ngClass]="getSliderColor(data.financialMateriality)">
+  </mat-slider>
+
+  <div class="d-flex justify-content-between mt-1 px-1">
+    <span *ngFor="let n of numbersArray"
+          [ngClass]="
+            data?.financialMateriality !== undefined && n === data.financialMateriality
+              ? getSliderColor(data.financialMateriality)
+              : 'text-muted'
+          ">
+      {{ n }}
+    </span>
+  </div>
+</div>
+
+
+      <!-- Average Display -->
+      <ng-container *ngIf="getAverage(data) as avg">
+        <div class="mt-2 text-center">
+          Average Materiality:
+          <strong [ngClass]="{
+            'text-success': avg >= 1 && avg <= 10,
+            'text-danger': avg < 1 || avg > 10
+          }">{{ avg | number: '1.1-2' }}</strong>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+
+  <!-- Submit button at the bottom -->
+  <div class="text-center mt-4">
+    <button class="btn btn-primary" (click)="onSubmit()" [disabled]="!isFormValid()">
+      Submit
+    </button>
+  </div>
+</div>
+
+
+

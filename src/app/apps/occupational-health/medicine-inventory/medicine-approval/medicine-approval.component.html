@@ -1,0 +1,98 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-12">
+
+            <div class="container-fluid d-flex justify-content-between header">
+                <div class="col-lg-8 ps-0">
+                    <a routerLink="." class="nobleui-logo d-block mt-3">Medicine<span>
+                        Inventory</span></a>
+                    <p class="mt-1 mb-1">Approve Request - {{Form.value.reference_number}}</p>
+                </div>
+                <div class="col-lg-4 pe-0">
+                    <h6 class="fw-bold text-end mt-4 mb-2">Request Date</h6>
+                    <h6 class="text-end mb-5 ">{{Form.value.request_date| date:'MMM d, y'}}</h6>
+                </div>
+            </div>
+            <div class="container-fluid  d-flex justify-content-center w-100">
+                <div class="table-responsive w-100">
+                    <div class="row ">
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Medicine Name</mat-label>
+                                <input type="text" matInput formControlName="medicine_name">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        
+                    </div>
+
+                    <div class="row ">
+                       
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Generic Name</mat-label>
+                                <input type="text" matInput formControlName="generic_name">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-6">
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Division</mat-label>
+                                <input type="text" matInput formControlName="division">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Requested Quantity</mat-label>
+                                <input type="number" matInput formControlName="requested_quantity">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row ">
+                        <div class="col-md-12">
+                            <mat-form-field fxFlex appearance="outline" color="primary">
+                                <mat-label>Purchase Executive</mat-label>
+                                <mat-select formControlName="purchase_executive">
+                                    <mat-option *ngFor="let approver of peopleList" [value]="approver.id">
+                                        <img style="vertical-align:middle; margin-right: 4px;"
+                                            src={{approver?.attributes?.image?.data?.attributes?.image}} height="30" />
+                                        <span>{{ approver.attributes.first_name }}
+                                            {{approver.attributes.last_name}}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                     
+                    <div class="row mt-3">
+                        <quill-editor placeholder="Remarks" [modules]="quillConfig" formControlName="remarks">
+                        </quill-editor>
+                    </div>
+                     
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-danger btn-icon-text float-end mt-4" (click)="action('Rejected')"
+                           >
+                            
+                            Reject
+                        </button>
+                        <button type="button" class="btn btn-success btn-icon-text float-end mt-4 btn-previous" (click)="action('Approved')"
+                            >
+                            <i class="feather icon-send btn-icon-prepend"></i>
+                            Approve
+                        </button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

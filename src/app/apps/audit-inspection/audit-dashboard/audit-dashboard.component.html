@@ -1,0 +1,1064 @@
+<div class="container-fluid" id="dashboard">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a routerLink="." class="nobleui-logo d-block ">Audit & Inspection <span>
+                            Management</span></a>
+                    <span class="badge ">
+
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                    <span class="badge ">
+                        <form class="d-flex my-2 my-lg-0" [formGroup]="filterForm">
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field appearance="outline" color="primary" id="dashboard">
+                                    <mat-label>Enter a date range</mat-label>
+                                    <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+                                        <input matStartDate formControlName="start" placeholder="Start date"
+                                            (dateChange)="startDateChange($event)">
+                                        <input matEndDate formControlName="end" placeholder="End date"
+                                            (dateChange)="endDateChange($event)">
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                                    <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                                        start date</mat-error>
+                                    <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end
+                                        date
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0" *ngIf="(divisions.length > 1)">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Division</mat-label>
+                                    <mat-select formControlName="division">
+                                        <mat-option [value]="data.division_uuid"
+                                            *ngFor="let data of divisions">{{data.division_name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="input-group me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Period</mat-label>
+                                    <mat-select formControlName="period" (selectionChange)="onPeriodChange($event)">
+                                        <mat-option [value]="data.attributes.Value"
+                                            *ngFor="let data of periodValues">{{data.attributes.Value}}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Year</mat-label>
+                                    <mat-select formControlName="year" (selectionChange)="yearVal($event)">
+                                        <mat-option [value]="data.year"
+                                            *ngFor="let data of years">{{data.year}}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Audit Type</mat-label>
+                                    <mat-select formControlName="audit_type">
+                                        <mat-option [value]="data.attributes.Value"
+                                            *ngFor="let data of auditTypes">{{data.attributes.Value}}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-primary btn-icon" (click)="search()">
+                                    <i class="feather icon-search btn-icon-prepend"></i>
+                                </button>
+
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+
+                                <button type="button" class="btn btn-danger btn-icon" (click)="reset()">
+                                    <i class="feather icon-rotate-cw btn-icon-prepend"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12 col-xl-12 stretch-card">
+            <div class="row flex-grow-1">
+                <div class="col-md-2-5 grid-margin stretch-card" *ngFor="let data of summaryCardData">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline mb-3">
+                                <h6 class="card-title mb-0"><i class="feather {{data.icon}}"></i> {{data.title}}</h6>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-12 col-xl-12">
+                                    <h3 class="mb-2">{{data.value}}</h3>
+                                    <div class="d-flex align-items-baseline">
+                                        <p class="{{data.attri_bg}}">
+                                            <span>{{data.attrition}}</span>
+                                            <i class="feather {{data.attri_icon}} icon-sm mb-1"></i>
+                                            From previous period
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row"  *ngIf="!filterForm.value.audit_type ">
+        <div class="col-xl-6">
+            <div class="card gender-card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Internal Audit Score</h4>
+                    <div>
+                        <apx-chart dir="ltr" class="apex-charts" [chart]="divisionChart.chart"
+                            [xaxis]="divisionChart.xaxis" [series]="divisionChart.series"
+                            [legend]="divisionChart.legend" [colors]="divisionChart.colors" [fill]="divisionChart.fill"
+                            [dataLabels]="divisionChart.dataLabels" [plotOptions]="divisionChart.plotOptions">
+                        </apx-chart>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6" >
+            <div class="card custom-height ">
+                <div class="card-body custom-height">
+                    <h4 class="card-title mb-4">External Audit Status</h4>
+                    <div>
+                        <apx-chart [series]="externalMonthlyChart.series" [chart]="externalMonthlyChart.chart"
+                            [dataLabels]="externalMonthlyChart.dataLabels"
+                            [plotOptions]="externalMonthlyChart.plotOptions" [yaxis]="externalMonthlyChart.yaxis"
+                            [legend]="externalMonthlyChart.legend" [fill]="externalMonthlyChart.fill"
+                            [stroke]="externalMonthlyChart.stroke" [tooltip]="externalMonthlyChart.tooltip"
+                            [xaxis]="externalMonthlyChart.xaxis"></apx-chart>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="filterForm.value.audit_type === 'External'">
+        <div class="col-xl-12" >
+            <div class="card custom-height ">
+                <div class="card-body custom-height">
+                    <h4 class="card-title mb-4">External Audit Status</h4>
+                    <div>
+                        <apx-chart [series]="externalMonthlyChart.series" [chart]="externalMonthlyChart.chart"
+                            [dataLabels]="externalMonthlyChart.dataLabels"
+                            [plotOptions]="externalMonthlyChart.plotOptions" [yaxis]="externalMonthlyChart.yaxis"
+                            [legend]="externalMonthlyChart.legend" [fill]="externalMonthlyChart.fill"
+                            [stroke]="externalMonthlyChart.stroke" [tooltip]="externalMonthlyChart.tooltip"
+                            [xaxis]="externalMonthlyChart.xaxis"></apx-chart>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="filterForm.value.audit_type === 'Internal'">
+        <div class="col-xl-12">
+            <div class="card gender-card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Internal Audit Score</h4>
+                    <div>
+                        <apx-chart dir="ltr" class="apex-charts" [chart]="divisionChart.chart"
+                            [xaxis]="divisionChart.xaxis" [series]="divisionChart.series"
+                            [legend]="divisionChart.legend" [colors]="divisionChart.colors" [fill]="divisionChart.fill"
+                            [dataLabels]="divisionChart.dataLabels" [plotOptions]="divisionChart.plotOptions">
+                        </apx-chart>
+                    </div>
+
+                </div>
+            </div>
+        </div> 
+    </div>
+    <!-- <div class="row mt-3" *ngIf="filterForm.value.audit_type !== 'External'">
+        <div class="col-xl-12">
+            <div class="card gender-card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Average Internal audit score</h4>
+                    <div>
+                        <apx-chart class="apex-charts" dir="ltr" [series]="avgInternalScoreChart.series"
+                            [chart]="avgInternalScoreChart.chart" [colors]="avgInternalScoreChart.colors"
+                            [stroke]="avgInternalScoreChart.stroke" [dataLabels]="avgInternalScoreChart.dataLabels"
+                            [xaxis]="avgInternalScoreChart.xaxis">
+                        </apx-chart>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div> -->
+ 
+    <div class="row mt-3" *ngIf="filterForm.value.audit_type !== 'External'">
+        <div class="col-lg-7 col-xl-7 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Audit Completion and Timeliness Metrics</h6>
+                    </div>
+
+                    <p *ngIf="audTimelinessCard.length === 0">
+                        There is no enough data to populate this chart. {{ audTimelinessCard.length }}
+                    </p>
+
+                    <apx-chart [series]="timelinessChart.series" [chart]="timelinessChart.chart"
+                        [plotOptions]="timelinessChart.plotOptions" [labels]="timelinessChart.labels"
+                        [legend]="timelinessChart.legend" [colors]="timelinessChart.colors"
+                        [responsive]="timelinessChart.responsive"></apx-chart>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5  col-xl-5">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Audit Team Productivity</h6>
+                    </div>
+                    <div class="table-responsive mt-4 route-cause">
+                        <table class="table table-centered mb-0">
+                            <tbody>
+                                <tr *ngFor="let data of teamProductivityCard">
+                                    <td>
+                                        <p class="mb-1">{{data.name}}</p>
+                                    </td>
+                                    <td>
+                                        <apx-chart [series]="[data.completionPercentage]" [chart]="radialChart.chart"
+                                            [plotOptions]="radialChart.plotOptions" [labels]="radialChart.labels">
+                                        </apx-chart>
+                                    </td>
+                                    <td>
+                                        <h5 class="mb-0">{{data.visits}}</h5>
+                                        <p class="mb-1"> count</p>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12 col-xl-12 stretch-card">
+            <div class="row flex-grow-1">
+                <div class="col-md-4 grid-margin stretch-card" *ngFor="let data of riskLevelCardData">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline mb-2">
+                                <h6 class="card-title mb-0">{{data.title}}</h6>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-12 col-xl-5">
+                                    <h3 class="mb-2">{{data.total}}</h3>
+                                    <div class="d-flex align-items-baseline">
+                                        <p class="text-success">
+                                            <span>{{data.attrition}}</span>
+                                            <i class="feather {{data.attritionIcon}} icon-sm mb-1"></i>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-12 col-xl-7 align-right">
+                                    <div class="mt-md-3 mt-xl-0 level">
+                                        <apx-chart [series]="[data.currTotal]" [chart]="priorityLevelChart.chart"
+                                            [plotOptions]="priorityLevelChart.plotOptions" [colors]="[data.colors]"
+                                            [labels]="priorityLevelChart.labels"></apx-chart>
+
+                                        <apx-chart [series]="[data.currComp]" [chart]="comLevelChart.chart"
+                                            [plotOptions]="comLevelChart.plotOptions" [colors]="comLevelChart.colors"
+                                            [labels]="comLevelChart.labels"></apx-chart>
+                                    </div>
+                                    
+                                     
+                                </div>
+                                <div class="row mb-3 tat-status justify-content-center">
+                                    <div class="col-12 mt-4" *ngIf="data.currTotal">
+                                      <div class="ml-5 d-flex justify-content-center"> <!-- Added justify-content-center class -->
+                                        <label class="d-flex align-items-center tx-10 text-uppercase fw-bold tat-label">{{data.label}}
+                                          <span class="p-1 ms-1 rounded-circle" [ngStyle]="{'background-color': data.colors}"></span>
+                                        </label>
+                                        <span class="mx-2"></span>
+                                        <label class="d-flex align-items-center tx-10 text-uppercase fw-bold tat-label">{{data.label2}}
+                                          <span class="p-1 ms-1 rounded-circle" [ngStyle]="{'background-color': comLevelChart.colors}"></span>
+                                        </label>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3"  *ngIf="filterForm.value.audit_type !== 'External'">
+        <div class="col-lg-7  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Findings</h6>
+                    </div>
+                    <ul ngbNav #categoryNav="ngbNav" [activeId]="1" class="nav-pills bg-light rounded mt-3">
+                        <li [ngbNavItem]="1">
+                            <a ngbNavLink>Overview</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of findingsCardData | callback: filterCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.title}}</h5>
+                                                    <p class="text-muted mb-0">In Audit & Inspection</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="2">
+                            <a ngbNavLink>Social</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of findingsCardData | callback: filterSocialCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.title}}</h5>
+                                                    <p class="text-muted mb-0">In Audit & Inspection</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="3">
+                            <a ngbNavLink>Health & Safety</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of findingsCardData | callback: filterHealthCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.title}}</h5>
+                                                    <p class="text-muted mb-0">In Audit & Inspection</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="4">
+                            <a ngbNavLink>Environmental</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of findingsCardData | callback: filterEnvCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.title}}</h5>
+                                                    <p class="text-muted mb-0">In Audit & Inspection</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="5">
+                            <a ngbNavLink>Security</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of findingsCardData | callback: filterSecCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.title}}</h5>
+                                                    <p class="text-muted mb-0">In Audit & Inspection</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="6">
+                            <a ngbNavLink>Management System</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of findingsCardData | callback: filterMngCategory">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.title}}</h5>
+                                                    <p class="text-muted mb-0">In Audit & Inspection</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                    <div [ngbNavOutlet]="categoryNav" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Audit Score</h6>
+                    </div>
+                    <ul ngbNav #audScoreNav="ngbNav" [activeId]="1" class="nav-pills bg-light rounded mt-3">
+                        <li [ngbNavItem]="1">
+                            <a ngbNavLink>Overview</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of audScoreCardData | callback: filteraudScore">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.title}}</h5>
+                                                    <p class="text-muted mb-0">In Audit & Inspection</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="2">
+                            <a ngbNavLink>Social</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of audScoreCardData | callback: filterSocialaudScore">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.title}}</h5>
+                                                    <p class="text-muted mb-0">In Audit & Inspection</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="3">
+                            <a ngbNavLink>Health & Safety</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of audScoreCardData | callback: filterHealthaudScore">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.title}}</h5>
+                                                    <p class="text-muted mb-0">In Audit & Inspection</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="4">
+                            <a ngbNavLink>Environmental</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of audScoreCardData | callback: filterEnvaudScore">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.title}}</h5>
+                                                    <p class="text-muted mb-0">In Audit & Inspection</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="5">
+                            <a ngbNavLink>Security</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of audScoreCardData | callback: filterSecaudScore">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.title}}</h5>
+                                                    <p class="text-muted mb-0">In Audit & Inspection</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="6">
+                            <a ngbNavLink>Management System</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of audScoreCardData | callback: filterMngaudScore">
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.title}}</h5>
+                                                    <p class="text-muted mb-0">In Audit & Inspection</p>
+                                                </td>
+                                                <td>
+                                                    <apx-chart [series]="[data.percentage]" [chart]="radialChart.chart"
+                                                        [plotOptions]="radialChart.plotOptions"
+                                                        [labels]="radialChart.labels">
+                                                    </apx-chart>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Count</p>
+                                                    <h5 class="mb-0">{{data.count}}</h5>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                    <div [ngbNavOutlet]="audScoreNav" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3" *ngIf="filterForm.value.audit_type !== 'External'">
+        <div class="col-lg-4  col-xl-4">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Repeat Sub category Rate</h6>
+                    </div>
+                    <div class="table-responsive mt-4 route-cause">
+                        <table class="table table-centered mb-0">
+                            <tbody>
+                                <tr *ngFor="let data of repeatedSubCategoryCard">
+                                    <td>
+                                        <h6 class="mb-0">{{data.subcategory}}</h6>
+                                        <p class="mb-1">{{data.category}}</p>
+                                    </td>
+                                    <td>
+                                        <h5 class="mb-0">{{data.visits}}</h5>
+                                        <p class="mb-1"> count</p>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card custom-height">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Audit Grading Distribution</h4>
+                    <div>
+                        <apx-chart dir="ltr" class="apex-charts" [chart]="gradeChart.chart" [labels]="gradeChart.labels"
+                            [series]="gradeChart.series" [legend]="gradeChart.legend"
+                            [plotOptions]="gradeChart.plotOptions">
+                        </apx-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-4">Hierarchy of control</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="heirarchyChart.series"
+                        [chart]="heirarchyChart.chart" [plotOptions]="heirarchyChart.plotOptions"
+                        [legend]="heirarchyChart.legend" [labels]="heirarchyChart.labels"
+                        [colors]="heirarchyChart.colors">
+                    </apx-chart>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row mt-3">
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-4">Audit Announcement</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="announcementChart.series"
+                        [chart]="announcementChart.chart" [plotOptions]="announcementChart.plotOptions"
+                        [legend]="announcementChart.legend" [labels]="announcementChart.labels"
+                        [colors]="announcementChart.colors">
+                    </apx-chart>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8  grid-margin stretch-card" *ngIf="filterForm.value.audit_type !== 'Internal'">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Others</h6>
+                    </div>
+                    <ul ngbNav #othersNav="ngbNav" [activeId]="1" class="nav-pills bg-light rounded" >
+
+                        <li [ngbNavItem]="1"  *ngIf="filterForm.value.audit_type !== 'Internal'">
+                            <a ngbNavLink>External Audit Expiry</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of external_expiry_list_card">
+                                                <td class="priorityIcon"> <i class="material-icons expired">bookmark</i>
+                                                </td>
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0"># {{data.reference}} | Expiry Date:
+                                                        {{data.expiry | date:'dd-MMM-yyyy'}}</p>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Category</p>
+                                                    <h5 class="mb-0"> {{data.Category}}</h5>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="2"  *ngIf="filterForm.value.audit_type !== 'Internal'">
+                            <a ngbNavLink>External Audit Action Expiry</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of external_action_expiry_list">
+                                                <td class="priorityIcon"> <i class="material-icons expired">bookmark</i>
+                                                </td>
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0"> Created Date:
+                                                        {{data.created | date:'dd-MMM-yyyy'}}</p>
+                                                    <p class="text-muted mb-0">Expiry Date: {{data.expiry |
+                                                        date:'dd-MMM-yyyy'}}</p>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">External Audit</p>
+                                                    <h5 class="mb-0"># {{data.external_audit}}</h5>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                        <li [ngbNavItem]="3" *ngIf="!filterForm.value.audit_type">
+                            <a ngbNavLink>Internal Audit Action Expiry</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of internal_action_expiry_list">
+                                                <td class="priorityIcon"> <i class="material-icons expired">bookmark</i>
+                                                </td>
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0"> Created Date:
+                                                        {{data.created | date:'dd-MMM-yyyy'}}</p>
+                                                    <p class="text-muted mb-0">Expiry Date: {{data.expiry |
+                                                        date:'dd-MMM-yyyy'}}</p>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Internal Audit</p>
+                                                    <h5 class="mb-0"># {{data.internal_audit}}</h5>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                    
+                    <div [ngbNavOutlet]="othersNav" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8  grid-margin stretch-card" *ngIf="filterForm.value.audit_type === 'Internal'">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Others</h6>
+                    </div>
+                    <ul ngbNav #othersNav="ngbNav" [activeId]="1" class="nav-pills bg-light rounded" >
+                        <li [ngbNavItem]="1">
+                            <a ngbNavLink>Internal Audit Action Expiry</a>
+                            <ng-template ngbNavContent>
+                                <div class="table-responsive mt-4 route-cause">
+                                    <table class="table table-centered mb-0">
+                                        <tbody>
+                                            <tr *ngFor="let data of internal_action_expiry_list">
+                                                <td class="priorityIcon"> <i class="material-icons expired">bookmark</i>
+                                                </td>
+                                                <td>
+                                                    <h5 class="font-size-14 mb-1">{{data.name}}</h5>
+                                                    <p class="text-muted mb-0"> Created Date:
+                                                        {{data.created | date:'dd-MMM-yyyy'}}</p>
+                                                    <p class="text-muted mb-0">Expiry Date: {{data.expiry |
+                                                        date:'dd-MMM-yyyy'}}</p>
+                                                </td>
+                                                <td>
+                                                    <p class="text-muted mb-1">Internal Audit</p>
+                                                    <h5 class="mb-0"># {{data.internal_audit}}</h5>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                    
+                    <div [ngbNavOutlet]="othersNav" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3" *ngIf="filterForm.value.audit_type !== 'Internal'">
+        <div class="col-lg-8  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Upcoming Audit Expiry Details</h6>
+                    </div>
+
+                    <table class="table table-centered table-nowrap">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="align-middle">Reference</th>
+                                <th class="align-middle">Expiry Date</th>
+                                <th class="align-middle">Division</th>
+                                <th class="align-middle">Category</th>
+                                <th class="align-middle">Standard</th>
+                                <th class="align-middle">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of upcomingExpiry">
+                                <td>{{data.attributes.reference_number}}</td>
+                                <td>{{data.attributes.audit_expiry_date | date:'dd-MMM-yyyy'}}</td>
+                                <td>{{data.attributes.business_unit.data.attributes.division_name}}</td>
+                                <td>{{data.attributes.audit_category}}</td>
+                                <td>{{data.attributes.audit_standard}}</td>
+                                <td>{{data.attributes.audit_status}}</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-4">Audit Type Distribution</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="auditTypeChart.series"
+                        [chart]="auditTypeChart.chart" [plotOptions]="auditTypeChart.plotOptions"
+                        [legend]="auditTypeChart.legend" [labels]="auditTypeChart.labels"
+                        [colors]="auditTypeChart.colors">
+                    </apx-chart>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row mt-3" *ngIf="filterForm.value.audit_type !== 'Internal'">
+        <div class="col-xl-4">
+            <div class="card gender-card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Audit Category Breakdown</h4>
+                    <div>
+                        <apx-chart dir="ltr" class="apex-charts" [chart]="categoryBreakdownChart.chart"
+                            [xaxis]="categoryBreakdownChart.xaxis" [series]="categoryBreakdownChart.series"
+                            [legend]="categoryBreakdownChart.legend" [colors]="categoryBreakdownChart.colors"
+                            [fill]="categoryBreakdownChart.fill" [dataLabels]="categoryBreakdownChart.dataLabels"
+                            [plotOptions]="categoryBreakdownChart.plotOptions">
+                        </apx-chart>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <div class="card custom-height ">
+                <div class="card-body custom-height">
+                    <h4 class="card-title mb-4">Division-Wise Audits</h4>
+
+                    <div id="chart-year">
+                        <apx-chart [series]="divisionWiseChart.series" [chart]="divisionWiseChart.chart"
+                            [dataLabels]="divisionWiseChart.dataLabels" [plotOptions]="divisionWiseChart.plotOptions"
+                            [yaxis]="divisionWiseChart.yaxis" [xaxis]="divisionWiseChart.xaxis"
+                            [colors]="divisionWiseChart.colors" [tooltip]="divisionWiseChart.tooltip"></apx-chart>
+                    </div>
+                    <div id="chart-quarter">
+                        <apx-chart [series]="divisionWiseOptionsChart.series" [chart]="divisionWiseOptionsChart.chart"
+                            [legend]="divisionWiseOptionsChart.legend"
+                            [plotOptions]="divisionWiseOptionsChart.plotOptions"
+                            [yaxis]="divisionWiseOptionsChart.yaxis"
+                            [xaxis]="divisionWiseOptionsChart.xaxis"></apx-chart>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3" *ngIf="filterForm.value.audit_type !== 'Internal'">
+        <div class="col-lg-7 col-xl-7 grid-margin stretch-card">
+            <div class="card custom-height">
+                <div class="card-body custom-height">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-4">Audit Standards</h6>
+                    </div>
+                    <apx-chart dir="ltr" [series]="standardChart.series" [chart]="standardChart.chart"
+                        [dataLabels]="standardChart.dataLabels" [plotOptions]="standardChart.plotOptions"
+                        [xaxis]="standardChart.xaxis" [colors]="standardChart.colors" [legend]="standardChart.legend"
+                        [yaxis]="standardChart.yaxis"></apx-chart>
+                </div>
+            </div>
+        </div>
+          <!-- <div class="col-lg-5  col-xl-5" *ngIf="filterForm.value.audit_type === 'External'">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Audit Team Productivity</h6>
+                    </div>
+                    <div class="table-responsive mt-4 route-cause">
+                        <table class="table table-centered mb-0">
+                            <tbody>
+                                <tr *ngFor="let data of teamProductivityCard">
+                                    <td>
+                                        <p class="mb-1">{{data.name}}</p>
+                                    </td>
+                                    <td>
+                                        <apx-chart [series]="[data.completionPercentage]" [chart]="radialChart.chart"
+                                            [plotOptions]="radialChart.plotOptions" [labels]="radialChart.labels">
+                                        </apx-chart>
+                                    </td>
+                                    <td>
+                                        <h5 class="mb-0">{{data.visits}}</h5>
+                                        <p class="mb-1"> count</p>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-lg-5 grid-margin stretch-card" *ngIf="filterForm.value.audit_type === 'External'">
+            <div class="card custom-height" [perfectScrollbar]>
+              <div class="card-body custom-height" [perfectScrollbar]>
+                <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                  <h6 class="card-title mb-4"> External Auditors (Audit Firms) Performed Audits</h6>
+                </div>
+          
+                <apx-chart class="apex-charts" dir="ltr"
+                  [series]="auditFirmChart.series"
+                  [chart]="auditFirmChart.chart"
+                  [plotOptions]="auditFirmChart.plotOptions"
+                  [legend]="auditFirmChart.legend"
+                  [labels]="auditFirmChart.labels"
+                  [colors]="auditFirmChart.colors">
+                </apx-chart>
+          
+                <div class="row mt-4">
+                  <div
+                    class="col-3 d-flex justify-content-center"
+                    *ngFor="let item of auditFirmDetails; let i = index">
+                    <div>
+                      <label class="d-flex align-items-center tx-10 text-uppercase fw-bold">
+                        <span
+                          class="p-1 me-1 rounded-circle"
+                          [ngStyle]="{'background-color': auditFirmChart.colors[i]}"
+                        ></span>
+                        {{ item.firm }}
+                      </label>
+                      <h6 class="fw-bolder mb-0">{{ item.count }}</h6>
+                    </div>
+                  </div>
+                </div>
+          
+              </div>
+            </div>
+          </div>
+    </div>

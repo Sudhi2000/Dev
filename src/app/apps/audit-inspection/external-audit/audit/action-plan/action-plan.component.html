@@ -1,0 +1,108 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row padd">
+                <p class="mt-1 mb-1"><b>Create Action Plan</b></p>
+
+            </div>
+            <div class="row mt-3">
+                <p class="mt-1 mb-1">Finding?</p>
+
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <quill-editor placeholder="Please provide your findings" [modules]="quillConfig"
+                        formControlName="finding">
+                    </quill-editor>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Severity</mat-label>
+                        <mat-select formControlName="priority">
+                            <mat-option *ngFor="let value of priority_dropdown"
+                            value="{{value}}">
+                            {{value}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Reported Date</mat-label>
+                        <input matInput [matDatepicker]="RpApproval" placeholder="Choose a date" formControlName="reported_date"
+                        (dateChange)="report_Date($event)">
+                        <mat-datepicker-toggle matSuffix [for]="RpApproval"></mat-datepicker-toggle>
+                        <mat-datepicker #RpApproval></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Due Date</mat-label>
+                        <input matInput [matDatepicker]="dpApproval" placeholder="Choose a date" [formControl]="dueDate"
+                        (dateChange)="due_date($event)">
+                    <mat-datepicker-toggle matSuffix [for]="dpApproval"></mat-datepicker-toggle>
+                    <mat-datepicker #dpApproval></mat-datepicker>
+                    <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Assignee</mat-label>
+                        <mat-select formControlName="assignee">
+                            <mat-option *ngFor="let assignee of peopleList" [value]="assignee.id">
+                                <span>{{ assignee?.attributes?.first_name }}
+                                    {{assignee?.attributes?.last_name}}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="custom-dropzone" ngx-dropzone
+                    [accept]="'image/*'" 
+                    (change)="onSelect($event)">
+                    <ngx-dropzone-label>Drop your Action Plan evidence. Please ensure that the document size is less
+                        than 10 MB</ngx-dropzone-label>
+                    <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files"
+                        [file]="f" (removed)="onRemove(f)">
+                        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                    </ngx-dropzone-preview>
+                </div>
+            </div>
+
+            <div class="form-check form-switch mb-3 mt-3" *ngIf="addMoreEvidence">
+                <input type="checkbox" class="form-check-input" id="formSwitch1"
+                    formControlName="add_more_evidence">
+                <label class="form-check-label" for="formSwitch1">Add more evidence</label>
+            </div>
+
+            <div class="row mt-3" *ngIf="Form.value.add_more_evidence">
+                <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'"
+                    (change)="onSelectMoreEvidence($event)">
+                    <ngx-dropzone-label>Drop more evidences here. Please ensure the image
+                        size is less than 10 MB</ngx-dropzone-label>
+                    <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true"
+                        *ngFor="let f of moreFiles" [file]="f" (removed)="onRemoveMoreEvidence(f)">
+                        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                    </ngx-dropzone-preview>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4" (click)="submit()"
+                    [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Create
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

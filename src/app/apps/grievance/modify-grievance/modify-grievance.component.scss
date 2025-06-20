@@ -1,0 +1,71 @@
+.table-responsive {
+    overflow: hidden;
+}
+
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+table {
+    thead {
+        tr {
+            th {
+                padding-left: 20px;
+            }
+        }
+
+    }
+
+    tbody {
+        tr {
+            td {
+                padding-left: 20px;
+
+            }
+        }
+    }
+}
+
+.btn-previous {
+    margin-right: 2px;
+}
+
+.action-btn {
+    margin-right: 5px;
+}
+
+
+mat-chip {
+    background-color: #05A34A !important;
+    color: white !important;
+}
+
+.error {
+    color: red;
+}
+
+.hide {
+    display: none;
+}
+
+.quill-editor-error {
+    font-size: 12px;
+    color: red;
+    text-align: right;
+
+}

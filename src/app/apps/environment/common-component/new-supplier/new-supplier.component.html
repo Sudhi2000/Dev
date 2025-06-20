@@ -1,0 +1,27 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Name</mat-label>
+                        <input type="text" matInput formControlName="name">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input type="email" matInput formControlName="email">
+                    </mat-form-field>
+                </div>
+                <div class="mb-3">
+                    <button type="button" class="btn btn-success btn-icon-text float-end mt-4 " (click)="submit()"
+                        [disabled]="!Form.valid">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

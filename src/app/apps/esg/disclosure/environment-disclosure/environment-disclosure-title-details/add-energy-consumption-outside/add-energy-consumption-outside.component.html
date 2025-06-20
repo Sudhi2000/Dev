@@ -1,0 +1,142 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Energy Type</mat-label>
+                        <mat-select formControlName="energy_type">
+                            <mat-option *ngFor="let data of lov[41]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Energy Category</mat-label>
+                        <mat-select   [disabled]="isEnergyCategoryReadonly()" formControlName="energy_category">
+                            <mat-option *ngFor="let data of lov[9]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4"
+                    *ngIf="Form.value.energy_category !== 'Downstream categories' && Form.value.energy_category !== 'Upstream categories'">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Quantity</mat-label>
+                        <input type="number" matInput formControlName="quantity">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <button type="button" *ngIf="Form.value.energy_category=='Upstream categories'&& mode!='view'"
+                class="btn btn-primary btn-icon-text mb-4" (click)="addUpstreamCat()">
+                <i class="feather icon-plus btn-icon-prepend"></i>
+                Add Upstream Category
+            </button>
+            <button type="button" *ngIf="Form.value.energy_category=='Downstream categories'&& mode!='view'"
+                class="btn btn-primary btn-icon-text mb-4" (click)="addDownstreamCat()">
+                <i class="feather icon-plus btn-icon-prepend"></i>
+                Add Downstream Category
+            </button>
+            <div class="row mb-2" *ngIf="upStreamCategory.concat(filteredupStreamCategory).length !== 0">
+                <div class="pollutants-table-responsive pt-3" id="consumption">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <!-- <th>#</th> -->
+                                <th>Fuel Name</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th *ngIf="mode!='view'">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of upStreamCategory.concat(filteredupStreamCategory); let i = index">
+                                <!-- <td></td> -->
+                                <td>{{ data.upstream_category_name }}</td>
+                                <td>{{ data.quantity }}</td>
+                                <td>{{ data.unit }}</td>
+                                <td *ngIf="mode!='view'">
+                                    <button type="button" class="btn btn-success btn-icon btn-xs action-btn me-1"
+                                        (click)="editUpstreamCat(data, i)">
+                                        <i class="feather icon-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                        (click)="deleteUpstreamCat(data, i)">
+                                        <i class="feather icon-trash-2"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mb-2" *ngIf="downStreamCategory.concat(filteredDownStreamCategory).length !== 0">
+                <div class="pollutants-table-responsive pt-3" id="consumption">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <!-- <th>#</th> -->
+                                <th>Fuel Name</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th *ngIf="mode!='view'">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of downStreamCategory.concat(filteredDownStreamCategory); let i = index">
+                                <!-- <td></td> -->
+                                <td>{{ data.downstream_category_name }}</td>
+                                <td>{{ data.quantity }}</td>
+                                <td>{{ data.unit }}</td>
+                                <td *ngIf="mode!='view'">
+                                    <button type="button" class="btn btn-success btn-icon btn-xs action-btn me-1"
+                                        (click)="editUpstreamCat(data, i)">
+                                        <i class="feather icon-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                        (click)="deleteUpstreamCat(data, i)">
+                                        <i class="feather icon-trash-2"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-4"
+                    *ngIf="Form.value.energy_category !== 'Downstream categories' && Form.value.energy_category !== 'Upstream categories'">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Unit</mat-label>
+                        <mat-select formControlName="unit">
+                            <mat-option *ngFor="let data of lov[43]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="mb-3">
+                    <button *ngIf="mode!='view'" type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                        [disabled]="!Form.valid" (click)="submit()">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Submit
+                    </button>
+                    <button *ngIf="mode=='view'" type="button" class="btn btn-secondary float-end mt-4"
+                        mat-dialog-close>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

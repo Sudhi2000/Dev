@@ -1,0 +1,72 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            
+                <div class="row ">
+                    <div class="col-md-6">
+                       
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Manufacturer</mat-label>
+                            <input type="text" matInput formControlName="manufacturer">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Price</mat-label>
+                            <input type="text" matInput formControlName="price" (change)="cost($event)"
+                            OnlyNumber="true">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Purchased Date</mat-label>
+                            <input matInput [matDatepicker]="dp" placeholder="Choose a date"
+                                [formControl]="purchasedate" (dateChange)="purchaseDate($event)">
+                            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                            <mat-datepicker #dp></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+                    </div>
+                    <div class="col-md-6">
+                        
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Manufacturing Date</mat-label>
+                            <input matInput [matDatepicker]="ip" placeholder="Choose a date"
+                                [formControl]="manufacturedate" (dateChange)="manufactureDate($event)">
+                            <mat-datepicker-toggle matSuffix [for]="ip"></mat-datepicker-toggle>
+                            <mat-datepicker #ip></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row ">
+                     
+                    <div class="col-md-6">
+
+                       
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Equipment</mat-label>
+                            <input type="text" matInput formControlName="equipment">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <button type="button" class="btn btn-secondary btn-icon-text float-end mt-4 " (click)="close()"
+                       >
+                        
+                        Close
+                    </button>
+                </div>
+            
+        </div>
+    </div>

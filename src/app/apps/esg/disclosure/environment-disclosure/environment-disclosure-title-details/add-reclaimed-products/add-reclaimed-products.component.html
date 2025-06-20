@@ -1,0 +1,79 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-8">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Reclaimed products and their packaging material</mat-label>
+                        <mat-select formControlName="reclaimed_product">
+                            <mat-option *ngFor="let data of lov[5]?.value" [value]="data.value">
+                                <span class="option-container">{{ data.value }}
+                                    <span>
+                                        <i class="feather icon-edit modifyicon" (click)="modify_reclaimed_product(data)"></i>
+                                        <i class="feather icon-trash-2 deleteicon" (click)="delete_reclaimed_product(data)"></i>
+                                    </span>
+                                </span>
+                            </mat-option>
+                            <mat-option (click)="new_reclaimed_product()" class="option-btn"> <i class=" mdi mdi-plus-circle"></i>
+                                Create New Product/Material
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Product Category</mat-label>
+                        <mat-select formControlName="product_category">
+                            <mat-option *ngFor="let data of lov[6]?.value" [value]="data.value">
+                                <span class="option-container">{{ data.value }}
+                                    <span>
+                                        <i class="feather icon-edit modifyicon" (click)="modify_product_category(data)"></i>
+                                        <i class="feather icon-trash-2 deleteicon" (click)="delete_product_category(data)"></i>
+                                    </span>
+                                </span>
+                            </mat-option>
+                            <mat-option (click)="new_product_category()" class="option-btn"> <i class=" mdi mdi-plus-circle"></i>
+                                Create New Product Category
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                </div>
+                <div class="row">
+                <div class="col-md-8">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Quantity of products and their packaging materials reclaimed</mat-label>
+                        <input type="number" matInput formControlName="quantity">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Unit</mat-label>
+                        <mat-select formControlName="unit">
+                            <mat-option *ngFor="let data of lov[42]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+                   
+            <div class="mb-3">
+                <button *ngIf="data.mode!=='view'" type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                    (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                <button *ngIf="data.mode=='view'" type="button" class="btn btn-secondary float-end mt-4" mat-dialog-close>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

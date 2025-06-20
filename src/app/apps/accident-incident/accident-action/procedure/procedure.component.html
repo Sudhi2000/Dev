@@ -1,0 +1,9 @@
+<div class="list-group">
+    <label class="list-group-item" *ngFor="let overview of accident_overview | callback: filterEvents">
+        <input class="form-check-input me-1" type="checkbox" value="{{overview.id}}" (change)="addEvent($event)">
+        {{overview.attributes.title}}
+    </label>
+</div>
+<div class="d-grid gap-2 mt-3">
+    <button type="button" class="btn btn-secondary" (click)="complete()">Add Selected Procedures</button>
+</div>

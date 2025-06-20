@@ -1,0 +1,121 @@
+.table-responsive {
+    overflow-x: unset;
+}
+
+
+table {
+    thead {
+        tr {
+            th {
+                padding-left: 20px;
+            }
+        }
+
+    }
+
+    tbody {
+        tr {
+            td {
+                padding-left: 20px;
+
+            }
+        }
+    }
+}
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+.edit-btn {
+    margin-right: 5px;
+}
+
+
+mat-chip {
+    background-color: #05A34A !important;
+    color: white !important;
+}
+
+.mat-chip.mat-standard-chip.mat-chip-disabled {
+    background-color: #05A34A !important;
+    color: white !important;
+}
+
+.list-group-item.active {
+    background-color: #ECEFF1;
+    border-color: #ECEFF1;
+    color: black;
+}
+
+
+
+.table td {
+    white-space: unset !important
+}
+
+.action {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.action-item {
+    vertical-align: middle;
+}
+
+#correctiveAction {
+    table {counter-reset: no -1;}
+    table tr{counter-increment: no;}
+    table tr td:first-child:before{ content: counter(no);}
+}
+
+#correctiveSetting{
+    table tr td:first-child:before{ 
+        display: none;
+    }
+
+
+}
+
+#expenseTable {
+    table {counter-reset: no -1;}
+    table tr{counter-increment: no;}
+    table tr td:first-child:before{ content: counter(no);}
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.btn-icon-attach{
+    height: 30px;
+    width: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 2px;
+}
+
+.image{
+    padding-left: 10px ;
+}
+.injuryType{
+    display: grid;
+    .injuryTypeOption{
+        border-bottom: solid 1px #e7e7e7;
+        border-left:none
+    }
+}
+.hide{
+    display: none;
+}

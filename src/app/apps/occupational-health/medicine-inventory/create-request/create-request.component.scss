@@ -1,0 +1,29 @@
+.table-responsive {
+    overflow: hidden;
+}
+
+.hide{
+    display: none;
+}
+
+.btn-previous {
+    margin-right: 2px;
+}
+
+.titleicon_delete
+{
+color: red;
+//margin-left: 80%;
+}
+.titleicon_edit{
+   color: green;
+}
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon-container {
+    margin-left: 8px; /* Adjust the margin as needed to control the spacing between the title and the icon */
+}

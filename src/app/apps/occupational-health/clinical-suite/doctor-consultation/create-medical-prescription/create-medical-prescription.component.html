@@ -1,0 +1,73 @@
+<div mat-dialog-content [formGroup]="Form">
+  <div class="container-fluid d-flex justify-content-center w-100">
+    <div class="table-responsive w-100">
+      <div class="row">
+        <div class="col-md-12" *ngIf="!this.Form.value.outside_medicine">
+          <mat-form-field appearance="outline">
+            <mat-label>Medicine From Inventory</mat-label>
+            <mat-select formControlName="medicine_name">
+              <mat-option *ngFor="let name of medicineName" [value]="name.attributes.name"
+                (click)="checkMedicine(name)">
+                {{ name.attributes.name }}</mat-option>
+              <!-- <mat-option class="option-btn" (click)="addOutsideMedicine()"><i class="mdi mdi-plus-circle"></i>
+                Prescribe Medicine From
+                Outside</mat-option> -->
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-12">
+          <div class="form-check form-switch mb-2">
+            <input type="checkbox" class="form-check-input" id="formSwitch1" formControlName="outside_medicine">
+            <label class="form-check-label" for="formSwitch1">Prescribe Medicine From
+              Outside</label>
+          </div>
+        </div>
+        
+      </div>
+      <div class="row" *ngIf="this.Form.value.outside_medicine">
+        <div class="col-md-12">
+          <mat-form-field fxFlex appearance="outline">
+            <mat-label>Medicine Name</mat-label>
+            <input type="text" matInput formControlName="medicine_name" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+          
+        </div>
+
+      </div>
+      <div class="row mb-2" *ngIf="medical_exist">
+        <button class="btn btn-warning" type="button">
+          Medicine alreay added in the list
+        </button>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field fxFlex appearance="outline">
+            <mat-label>Dosage</mat-label>
+            <input type="text" matInput formControlName="dosage" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Days</mat-label>
+            <input type="number" matInput formControlName="days" />
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <quill-editor placeholder="Usage" [modules]="quillConfig" formControlName="usage">
+        </quill-editor>
+      </div>
+      <div class="mb-3">
+        <button type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+          (click)="submit()">
+          <i class="feather icon-send btn-icon-prepend"></i>
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

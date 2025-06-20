@@ -1,0 +1,188 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+  
+            <!-- Header -->
+            <div class="row">
+              <div class="col-12 col-md-8">
+                <a routerLink="." class="nobleui-logo d-block mt-3">Hazard & Risk<span> Management</span></a>
+                <p class="mt-1 mb-1"><b>Report a new hazard or risk</b></p>
+              </div>
+              <div class="col-12 col-md-4 text-md-end">
+                <h6 class="fw-bold mt-4 mb-2">Date</h6>
+                <h6>{{Form.value.reported_date | date:'MMM d, y'}}</h6>
+              </div>
+            </div>
+  
+            <!-- Status & Toggle Group -->
+            <div class="mt-3">
+              <button [disabled]="Form.value.status === 'Completed'" class="btn btn-primary w-100">
+                <i class="feather icon-more-horizontal btn-icon-prepend"></i> {{Form.value.status}}
+              </button>
+            </div>
+  
+            <div class="mt-3">
+              <label class="tx-11 fw-bold text-uppercase">Risk Level *:</label>
+              <mat-button-toggle-group formControlName="level" (change)="riskLevel($event)" class="d-flex flex-wrap">
+                <mat-button-toggle value="High">High</mat-button-toggle>
+                <mat-button-toggle value="Medium">Medium</mat-button-toggle>
+                <mat-button-toggle value="Low">Low</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+  
+            <div class="mt-3">
+              <label class="tx-11 fw-bold text-uppercase">Type *</label>
+              <mat-button-toggle-group formControlName="unsafe" class="d-flex flex-wrap">
+                <mat-button-toggle value="Unsafe Act">Unsafe Act</mat-button-toggle>
+                <mat-button-toggle value="Unsafe Condition">Unsafe Condition</mat-button-toggle>
+              </mat-button-toggle-group>
+              <div *ngIf="Form.controls['unsafe'].invalid" class="warning-font-safe">Required Field *</div>
+            </div>
+  
+            <!-- Due Date & Assignee -->
+            <div class="row mt-3">
+              <div class="col-12 col-md-6 mb-3">
+                <mat-form-field appearance="outline" color="primary" class="w-100">
+                  <mat-label>Due Date</mat-label>
+                  <input matInput [matDatepicker]="dp" [min]="minDate" placeholder="Choose a date"
+                    [formControl]="duedate" (dateChange)="dueDate($event)">
+                  <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                  <mat-datepicker #dp></mat-datepicker>
+                  <mat-error>Required Field</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-md-6 mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Division</mat-label>
+                  <mat-select (selectionChange)="BusinessUnit($event)" [formControl]="Division">
+                    <mat-option *ngFor="let division of divisions" [value]="division">
+                      {{division.division_name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>Required Field</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-md-6 mb-3">
+                <mat-form-field appearance="outline" color="primary" class="w-100">
+                  <mat-label>Assignee</mat-label>
+                  <mat-select formControlName="assignee" (click)="assigneeClick()">
+                    <mat-option *ngFor="let people of filteredPeopleList" [value]="people.id"
+                      (onSelectionChange)="responsible(people)">
+                      <img style="vertical-align:middle; margin-right: 4px;"
+                        [src]="people?.attributes?.image?.data?.attributes?.image" height="30" />
+                      {{ people.attributes.first_name }} {{people.attributes.last_name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="Form.get('assignee')?.touched && Form.get('assignee')?.invalid">
+                    Required Field
+                  </mat-error>                </mat-form-field>
+              </div>
+            </div>
+  
+            <!-- Category Section -->
+            <div class="row">
+              <div class="col-12 col-md-6 mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Category</mat-label>
+                  <mat-select formControlName="category" (selectionChange)="subCategory($event)">
+                    <mat-option *ngFor="let category of categories" [value]="category.attributes.Value">
+                      {{category.attributes.Value}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>Required Field</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-md-6 mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Sub Category</mat-label>
+                  <mat-select formControlName="sub_category" (selectionChange)="observation($event)">
+                    <mat-option *ngFor="let subcategory of subcategories" [value]="subcategory.attributes.Value"
+                      (click)="sub_category(subcategory)">
+                      {{subcategory.attributes.Value}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>Required Field</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+  
+            <div class="mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Observation Type</mat-label>
+                <mat-select formControlName="observation">
+                  <mat-option *ngFor="let observation of observations" [value]="observation.attributes.observation">
+                    {{observation.attributes.observation}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Required Field</mat-error>
+              </mat-form-field>
+              <div *ngIf="Form.controls['observation'].value">
+                <strong>Observation:</strong> {{ Form.controls['observation'].value }}
+              </div>
+            </div>
+  
+            <!-- Division & Location -->
+            <div class="row">
+              <div class="col-12 col-md-6 mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Location / Department</mat-label>
+                  <input matInput formControlName="location_department">
+                  <mat-error>Required Field</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+  
+            <!-- Sub Location -->
+            <mat-form-field appearance="outline" class="w-100 mb-3">
+              <mat-label>Sub Location</mat-label>
+              <input matInput formControlName="sub_location">
+              <mat-error>Required Field</mat-error>
+            </mat-form-field>
+  
+            <!-- Description -->
+            <div class="mb-4">
+              <quill-editor placeholder="Description" [modules]="quillConfig" formControlName="description">
+              </quill-editor>
+            </div>
+  
+            <!-- Dropzone -->
+            <div class="mb-3">
+              <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
+                <ngx-dropzone-label>Drop your evidence here. Image size < 10 MB</ngx-dropzone-label>
+                <ngx-dropzone-image-preview *ngFor="let f of files" [file]="f" [removable]="true"
+                  (removed)="onRemove(f)">
+                </ngx-dropzone-image-preview>
+              </div>
+              <p *ngIf="!Form.controls['evidence'].valid" class="warning-font-size">Required Field *</p>
+            </div>
+  
+            <!-- Add more evidence -->
+            <div class="form-check form-switch mb-3">
+              <input type="checkbox" class="form-check-input" id="formSwitch1" formControlName="add_more_evidence">
+              <label class="form-check-label" for="formSwitch1">Add more evidence</label>
+            </div>
+  
+            <div *ngIf="Form.value.add_more_evidence" class="mb-3">
+              <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelectMoreEvidence($event)">
+                <ngx-dropzone-label>Drop more evidences here. Image size < 10 MB</ngx-dropzone-label>
+                <ngx-dropzone-image-preview *ngFor="let f of moreFiles" [file]="f" [removable]="true"
+                  (removed)="onRemoveMoreEvidence(f)">
+                </ngx-dropzone-image-preview>
+              </div>
+            </div>
+  
+            <!-- Submit -->
+            <div class="d-grid mt-4">
+              <button type="button" class="btn btn-primary btn-icon-text" (click)="submit('Submit')" [disabled]="!Form.valid">
+                <i class="feather icon-send btn-icon-prepend"></i> Submit
+              </button>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

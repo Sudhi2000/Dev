@@ -1,0 +1,130 @@
+.table-responsive {
+    overflow: hidden;
+}
+
+.reminder-checkboxes {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkbox-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.checkbox-container .form-check {
+    margin-right: 20px;
+    /* Adjust spacing between checkboxes */
+    margin-bottom: 10px;
+    /* Adjust spacing between lines */
+    padding-top: 10px;
+}
+
+.after {
+    margin-top: 10px;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+table {
+    thead {
+        tr {
+            th {
+                padding-left: 20px;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                padding-left: 20px;
+
+            }
+        }
+    }
+}
+
+.btn-previous {
+    margin-right: 2px;
+}
+
+.action-btn {
+    margin-right: 5px;
+}
+
+
+mat-chip {
+    background-color: #05A34A !important;
+    color: white !important;
+}
+
+.injuryType {
+    display: grid;
+
+    .injuryTypeOption {
+        border-bottom: solid 1px #e7e7e7;
+        border-left: none
+    }
+}
+
+.time-dropdown {
+    display: inline-flex;
+
+    mat-form-field {
+        margin-right: 5px;
+    }
+}
+
+
+.action-btn {
+    margin-right: 5px;
+}
+
+.quill-editor-error {
+    font-size: 12px;
+    color: red;
+    display: flex;
+    justify-content: end;
+
+}
+
+.option-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.titleicon_edit {
+    cursor: pointer;
+    color: green;
+    ;
+}
+
+.titleicon_delete {
+    color: red;
+}
+
+.hide {
+    display: none;
+}

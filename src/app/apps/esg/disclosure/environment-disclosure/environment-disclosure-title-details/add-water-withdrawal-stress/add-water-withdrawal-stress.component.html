@@ -1,0 +1,94 @@
+
+    <div mat-dialog-content [formGroup]="Form">
+        <div class="container-fluid d-flex justify-content-center w-100">
+            <div class="table-responsive w-100">
+                <!-- First Row -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Water Source</mat-label>
+                            <mat-select formControlName="water_source">
+                                <mat-option *ngFor="let data of lov[13]?.value" [value]="data.Value">
+                                    <span>{{ data.Value }}</span>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+    
+                    <!-- Third Party Water - Only visible when selected -->
+                    <div class="col-md-4" *ngIf="Form.value.water_source === 'Third party water'">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Third Party Water</mat-label>
+                            <mat-select formControlName="third_party_water">
+                                <mat-option *ngFor="let data of lov[15]?.value" [value]="data.Value">
+                                    <span>{{ data.Value }}</span>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+    
+                    <div class="col-md-4">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Water Type</mat-label>
+                            <mat-select formControlName="water_type">
+                                <mat-option *ngFor="let data of lov[14]?.value" [value]="data.Value">
+                                    <span>{{ data.Value }}</span>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+    
+                    <!-- Quantity in First Row (When Third Party Water is NOT selected) -->
+                    <div class="col-md-4" *ngIf="Form.value.water_source !== 'Third party water'">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Quantity</mat-label>
+                            <input type="number" matInput formControlName="quantity">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+    
+                <!-- Second Row -->
+                <div class="row">
+                    <!-- Quantity moves to Second Row when Third Party Water is selected -->
+                    <div class="col-md-4" *ngIf="Form.value.water_source === 'Third party water'">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Quantity</mat-label>
+                            <input type="number" matInput formControlName="quantity">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+    
+                    <div class="col-md-4">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Unit</mat-label>
+                            <mat-select formControlName="unit">
+                                <mat-option *ngFor="let data of lov[44]?.value" [value]="data.Value">
+                                    <span>{{ data.Value }}</span>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+    
+                    <div class="mb-3">
+                        <button *ngIf="data.mode !== 'view'" type="button"
+                            class="btn btn-success btn-icon-text float-end mt-4" 
+                            [disabled]="!Form.valid"
+                            (click)="submit()">
+                            <i class="feather icon-send btn-icon-prepend"></i> Submit
+                        </button>
+                        <button *ngIf="data.mode === 'view'" type="button" 
+                            class="btn btn-secondary float-end mt-4"
+                            mat-dialog-close>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    

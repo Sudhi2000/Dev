@@ -1,0 +1,66 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Business Partner Type</mat-label>
+                        <mat-select formControlName="business_partner_type">
+                            <mat-option *ngFor="let data of lov[5]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                            
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                
+                <div class="col-md-4">
+                <mat-form-field appearance="outline">
+                    <mat-label>Business Partners</mat-label>
+                    <input type="number" (keydown)="handleNumericInput($event)" matInput formControlName="business_partners">
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field appearance="outline">
+                    <mat-label>Communicated Business partners</mat-label>
+                    <input type="number" (keydown)="handleNumericInput($event)" matInput formControlName="business_partners_communicated">
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+            </div>
+            </div>
+
+            <div class="row">
+           
+                <div class="col-md-4">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Trained Business partners </mat-label>
+                            <input type="number" (keydown)="handleNumericInput($event)" matInput formControlName="trained_business_partners">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field appearance="outline">
+                                <mat-label>Man hours of training</mat-label>
+                                <input type="number" (keydown)="handleNumericInput($event)" matInput formControlName="man_hours">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+ 
+            <div class="mb-3">
+                <button *ngIf="data.mode !== 'view'" type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                    (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                <button *ngIf="data.mode === 'view'" type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                    (click)="close()">
+                    <i class="feather icon-x btn-icon-prepend"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

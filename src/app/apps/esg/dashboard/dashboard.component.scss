@@ -1,0 +1,179 @@
+nav{
+    padding-left: 2% !important;
+    padding-right: 4% !important;
+}
+.icon{
+    text-align: right;
+}
+.value{
+    align-self: center;
+}
+
+.tab-card{
+    padding: 0px !important;
+}
+
+.nav-link{
+    color: black !important;
+
+}
+
+.nav-link.active{
+    color: white !important;
+
+}
+
+.search-btn{
+    margin-left: 5px;
+}
+
+.custom-height{
+    height: 400px!important;
+    position: relative;
+
+}
+
+.age-card,.gender-card{
+    height: 100%;
+}
+
+
+nav{
+    padding-left: 2% !important;
+    padding-right: 4% !important;
+}
+.icon{
+    text-align: right;
+}
+.value{
+    align-self: center;
+}
+
+.tab-card{
+    padding: 0px !important;
+}
+
+.nav-link{
+    color: black !important;
+
+}
+
+.nav-link.active{
+    color: white !important;
+
+}
+
+
+
+.search-btn{
+    margin-left: 5px;
+}
+
+.custom-height{
+    height: 450px!important;
+    position: relative;
+
+}
+
+.custom-height-2{
+    height: 550px!important;
+    position: relative;
+}
+
+.age-card,.gender-card{
+    height: 100%;
+}
+
+.bg-others{
+    background-color: blueviolet;
+}
+.nobleui-logo{
+    font-size: 20px;
+}
+
+.status{
+    text-align: center;
+}
+
+.level{
+    display:inline-flex
+}
+
+
+ngb-progressbar{
+    width: 150px;
+}
+
+#waterCon{
+    .table td{
+        white-space: pre-wrap !important;
+    }
+}
+/* Reset */
+
+
+  
+  /* Utility Class */
+
+
+
+
+//SDG Distribution card
+
+.sdg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); // Adjusted for better responsiveness
+    gap: 10px;
+    justify-content: center;
+}
+
+.sdg-card {
+    width: 100px; // Reduced size
+    height: 95px;
+    perspective: 1000px;
+}
+
+.sdg-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+}
+
+.sdg-card:hover .sdg-inner {
+    transform: rotateY(180deg);
+}
+
+.sdg-front, .sdg-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sdg-front {
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sdg-front img {
+    max-width: 90%;  // Adjust image size
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.sdg-back {
+    background: #007bff;
+    color: white;
+    transform: rotateY(180deg);
+    font-size: 1.2rem;
+    font-weight: bold;
+}

@@ -1,0 +1,94 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Factory Name</mat-label>
+                                <input type="text" matInput formControlName="factory_name">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Email</mat-label>
+                                <input type="email" matInput formControlName="contact_email">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Factory Address</mat-label>
+                                <input type="text" matInput formControlName="factory_address">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Contact Number</mat-label>
+                                <input type="number" matInput formControlName="contact_number">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Designation</mat-label>
+                                <input type="text" matInput formControlName="designation">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field fxFlex appearance="outline" color="primary">
+                                <mat-label>Factory Contact Person</mat-label>
+                                <mat-select [formControl]="factoryContactPerson"
+                                    (selectionChange)="FactoryContactPerson($event)" #select>
+                                    <mat-select-trigger>
+                                        {{factoryContactPerson.value}}
+                                    </mat-select-trigger>
+                                    <mat-option *ngFor="let assignee of approversList"
+                                        [value]="assignee.attributes.first_name + ' ' + assignee.attributes.last_name">
+
+                                        <span>{{ assignee.attributes.first_name }}
+                                            {{assignee.attributes.last_name}}</span>
+                                    </mat-option>
+                                    <mat-option *ngFor="let data of contactPersons"
+                                        [value]="data.attributes.person_name">{{data.attributes.person_name}}</mat-option>
+                                    <mat-option disabled (click)="new_contact_person()" class="option-btn"> <i
+                                            class=" mdi mdi-plus-circle"></i> Create Contact Person
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-success btn-icon-text float-end"
+                                *ngIf="mode !== 'update'" (click)="submit()" [disabled]="!Form.valid">
+                                <i class="feather icon-send btn-icon-prepend"></i>
+                                Submit
+                            </button>
+                            <button type="button" class="btn btn-success btn-icon-text float-end"
+                                *ngIf="mode === 'update'" (click)="submit()" [disabled]="!Form.valid">
+                                <i class="feather icon-send btn-icon-prepend"></i>
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

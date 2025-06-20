@@ -1,0 +1,2058 @@
+<div *ngIf="disclosureMode==='modify'">
+    <div *ngFor="let theme of groupedData" class="theme-section">
+        <div class="row">
+            <h6 class="mt-2 mb-2">
+                <i class="feather icon-layers me-2"></i>
+                {{ theme.theme }}
+            </h6>
+        </div>
+
+        <ngb-accordion [formGroup]="govDisclosureForm" [closeOthers]="false">
+            <ngb-panel *ngFor="let title of theme.titles" [type]="'hidden'">
+                <ng-template ngbPanelTitle>
+                    <div class="accordion-button custom-header">
+                        <div class="col-md-8">
+                            <span>{{ title.title }}</span>
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            <!-- Check if the title has a corresponding key in titleKeyMapping and show the bookmark icon -->
+                            <ng-container *ngIf="hasDataForTitle(title.title)">
+                                <i class="material-icons text-success" style="font-size: 20px;">bookmark</i>
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <!-- #Title :Board of Directors -->
+
+                <ng-template *ngIf="title.title==='Board of Directors'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="d-grid gap-2">
+                            <button
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open') ||(esgHead===true)"
+                                (click)="addDirectorsDetails(title)" type="button"
+                                class="btn btn-secondary btn-icon-text"><i
+                                    class="feather icon-check-square btn-icon-prepend"></i>
+                                Add Directors Details</button>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Governance Body</th>
+                                    <th>Age Group</th>
+                                    <th>Male</th>
+                                    <th>Female</th>
+                                    <th>Other</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of directorDetails.concat(filteredDirectorDetails); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.governance_body }}</td>
+                                        <td class="col-sm-3">{{ item.age_group }}</td>
+                                        <td class="col-sm-1">{{ item.male }}</td>
+                                        <td class="col-sm-1">{{ item.female }}</td>
+                                        <td class="col-sm-1">{{ item.other }}</td>
+                                        <td class="col-sm-3">
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open' ) ||(esgHead===true)"
+                                                type="button" class="btn btn-success btn-icon btn-xs action-btn me-1"
+                                                (click)="ModifyDirectorDetails(item, i)" ngbTooltip="Modify">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewDirectorDetails(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+
+
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open') ||(esgHead===true)"
+                                                type="button" class="btn btn-danger me-2 btn-icon btn-xs action-btn"
+                                                (click)="deleteDirectorDetails(item,i)" ngbTooltip="Delete">
+                                                <i class="feather icon-trash-2"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="directorDetailsNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitDirectorDetails('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open') ||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Director Tenure -->
+
+                <ng-template *ngIf="title.title==='Director Tenure'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-4 mt-2">
+                            <mat-form-field fxFlex appearance="outline" color="primary">
+                                <mat-label>Tenure Type</mat-label>
+                                <mat-select formControlName="tenureType"
+                                    [disabled]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)">
+                                    <!-- (selectionChange)="setTenureType($event)"> -->
+                                    <mat-option *ngFor="let type of lov[2]?.value"
+                                        [value]="type.Value">{{type.Value}}</mat-option>
+                                </mat-select>
+                                <!-- <mat-error>Required Field</mat-error> -->
+                            </mat-form-field>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="directorTenureNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitDirectorTenure('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open') ||(esgHead===true) "
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Anti corruption training for governance body -->
+                <ng-template *ngIf="title.title==='Anti corruption training for governance body'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Governance Body Members Informed</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="governanceMembersInformed">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Governance Members Trained on Anti-Corruption</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="governanceMembersTrained">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Man Hours of Training Provided</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="manHoursTraining">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="govBodyTrainingNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitGovBodyAntiCorruptTraining('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Anti corruption training for employees -->
+
+                <ng-template *ngIf="title.title==='Anti corruption training for employees'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="d-grid gap-2">
+                            <button
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                (click)="addEmployeeDetails(title)" type="button"
+                                class="btn btn-secondary btn-icon-text"><i
+                                    class="feather icon-check-square btn-icon-prepend"></i>
+                                Add Employees Details</button>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th title="Employee by Level">Employee Level</th>
+                                    <th title="Employee by Function">Employee Function</th>
+                                    <th title="Employees communicated to">Contacted Employees</th>
+                                    <th title="Employees received training">Trained Employees</th>
+                                    <th title="Man hours of training">Man Hours</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of employeeDetails.concat(filteredEmployeeDetails); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.employee_by_level }}</td>
+                                        <td class="col-sm-3">{{ item.employee_by_function }}</td>
+                                        <td class="col-sm-1">{{ item.employees_communicated }}</td>
+                                        <td class="col-sm-1">{{ item.trained_employees }}</td>
+                                        <td class="col-sm-1">{{ item.man_hours }}</td>
+                                        <td class="col-sm-3">
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                                type="button" class="btn btn-success btn-icon btn-xs action-btn me-1"
+                                                (click)="ModifyEmployeeDetails(item,title.reference_id, i)"
+                                                ngbTooltip="Modify">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewEmployeeDetails(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+
+
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                                type="button" class="btn btn-danger me-2 btn-icon btn-xs action-btn"
+                                                (click)="deleteEmployeeDetails(item,i)" ngbTooltip="Delete">
+                                                <i class="feather icon-trash-2"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="empTrainingNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitEmployeeDetails('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Anti corruption training for business partners -->
+                <ng-template *ngIf="title.title==='Anti corruption training for business partners'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="d-grid gap-2">
+                            <button
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true) "
+                                (click)="addBusinessPartnerDetails(title)" type="button"
+                                class="btn btn-secondary btn-icon-text"><i
+                                    class="feather icon-check-square btn-icon-prepend"></i>
+                                Add Business Partner Details</button>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th title="Type of Business Partner">Business Partner Type</th>
+                                    <th title="Number of Business Partners">Business Partners</th>
+                                    <th title="Business Partners communicated to">Contacted Business Partners</th>
+                                    <th title="Business Partners received training">Trained Business Partners</th>
+                                    <th title="Man hours of training">Man Hours</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let item of businessPartnerDetails.concat(filteredBusinessPartnerDetails); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.business_partner_type }}</td>
+                                        <td class="col-sm-3">{{ item.business_partners }}</td>
+                                        <td class="col-sm-1">{{ item.business_partners_communicated }}</td>
+                                        <td class="col-sm-1">{{ item.trained_business_partners }}</td>
+                                        <td class="col-sm-1">{{ item.man_hours }}</td>
+                                        <td class="col-sm-3">
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                                type="button" class="btn btn-success btn-icon btn-xs action-btn me-1"
+                                                (click)="ModifyBusinessPartnerDetails(item,title.reference_id, i)"
+                                                ngbTooltip="Modify">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewBusinessPartnerDetails(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+
+
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                                type="button" class="btn btn-danger me-2 btn-icon btn-xs action-btn"
+                                                (click)="deleteBusinessPartnerDetails(item,i)" ngbTooltip="Delete">
+                                                <i class="feather icon-trash-2"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="businessPartnerNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitBusinessPartnerDetails('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Anti-competitive behaviour, anti-trust and monopoly practices. -->
+                <ng-template *ngIf="title.title==='Anti-competitive behaviour, anti-trust and monopoly practices'"
+                    ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100" matTooltip="Number of legal actions pending or completed 
+                                regarding anti-competitive behavior and violations of anti-trust and monopoly legislation in which the 
+                                organization has been identified as a participant.">
+                                    <mat-label>Legal Actions Count</mat-label>
+                                    <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                     type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="legal_actions_count">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100" matTooltip="Amount of fines and settlements incurred 
+                                related to anti-trust/anti-competitive practices">
+                                    <mat-label>Fines and Settlements Amount</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="fines_settlements_amt">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Currency</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="text" matInput formControlName="anti_competitive_currency">
+
+                                    <!-- <mat-select formControlName="currency">
+                                        <mat-option *ngFor="let data of currencyCompany" [value]="data">
+                                            <span>{{ data }}</span>
+                                        </mat-option>
+
+                                    </mat-select> -->
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100"
+                                    matTooltip="Main outcome of completed actions, including any decisions on judgements">
+                                    <mat-label>Outcome of Completed Actions</mat-label>
+                                    <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                     type="text" matInput formControlName="completed_actions_outcome">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="antiCompetitiveNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitAntiCompetitive('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+                        </div>
+
+                    </div>
+                </ng-template>
+                <!-- #Title: Anti corruption  -->
+                <ng-template *ngIf="title.title==='Anti corruption'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-5">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Total Number of operations</mat-label>
+                                    <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                     type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="operations_AC">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-7">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Number of operations assessed for corruption related risk</mat-label>
+                                    <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                     type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="corruption_risk_operations">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="antiCorruptNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitAntiCorrupt('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+                <!-- #Title: Incidents corruption  -->
+                <ng-template *ngIf="title.title==='Incidents of corruption'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Confirmed Incidents</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="confirmed_corruption_incidents">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Incidents of Board Action</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="corruption_incidents_board_action">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Incidents of KMP action</mat-label>
+                                    <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                     type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="corruption_incidents_kmp_action">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Incidents of Employee Action</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="corruption_incidents_employee_action">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Incidents of Worker Action</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="corruption_incidents_worker_action">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Incidents of Business Partners </mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="business_partner_contracts_corrup_violations">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Organisation Public Legal Cases</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="public_legal_cases_org_emp">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Outcome of Public Legal Cases </mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="text" matInput formControlName="public_legal_cases_outcome">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="incidentsCorruptNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitIncidentCorrupt('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+                        </div>
+
+                    </div>
+                </ng-template>
+                <!-- #Title: Conflicts of Interest -->
+                <ng-template *ngIf="title.title==='Conflicts of Interest'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="d-grid gap-2">
+                            <button
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                (click)="addConflictsInterests(title)" type="button"
+                                class="btn btn-secondary btn-icon-text"><i
+                                    class="feather icon-check-square btn-icon-prepend"></i>
+                                Add Conflicts Details</button>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Complaints</th>
+                                    <th>Description</th>
+                                    <th>Corrective Action</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let item of conflictsInterests.concat(filteredConflictsInterests); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.category }}</td>
+                                        <td class="col-sm-3">{{ item.complaints }}</td>
+                                        <td class="col-sm-1">{{ item.description }}</td>
+                                        <td class="col-sm-1">{{ item.corrective_action }}</td>
+                                        <td class="col-sm-3">
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                                type="button" class="btn btn-success btn-icon btn-xs action-btn me-1"
+                                                (click)="ModifyConflictsInterests(item, title.reference_id,i)"
+                                                ngbTooltip="Modify">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewConflictsInterests(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+
+
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                                type="button" class="btn btn-danger me-2 btn-icon btn-xs action-btn"
+                                                (click)="deleteConflictsInterests(item,i)" ngbTooltip="Delete">
+                                                <i class="feather icon-trash-2"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="conflictsNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitConflictsInterests('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Disciplinary action against corruption -->
+                <ng-template *ngIf="title.title==='Disciplinary action against corruption'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Board of directors</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="board_of_director">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Employees</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="employees">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Workers</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="workers">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="disciplinaryNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitDisciplinaryAction('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Awareness program on NGRBC principles -->
+                <ng-template *ngIf="title.title==='Awareness program on NGRBC principles'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Training and Awareness for BODs</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="bod_training_awareness_count">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>BODs Covered</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="bod_covered_training_awareness_count">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Training and Awareness for KMPs</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="kmp_training_awareness_count">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>KMPs Covered</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="kmp_covered_training_awareness_count">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Training and Awareness for Employees</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="employee_training_awareness_count">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Employees Covered</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="employee_covered_training_awareness_count">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Training and Awareness for Workers</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="worker_training_awareness_count">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Workers Covered</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="worker_covered_training_awareness_count">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="ngrbcNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitNGRBC('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+                <!-- #Title: Awareness program for value chain partners on NGRBC principles -->
+                <ng-template *ngIf="title.title==='Awareness program for value chain partners on NGRBC principles'"
+                    ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Value Chain Partners</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="value_chain_partners_count">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Awareness Programs</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="awareness_programs_count">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Value Chain Partners Covered Awareness</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="value_chain_partners_covered_awareness">
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="valueChainNgrbcNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitValueChainNGRBC('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Compliance with laws and regulations -->
+
+                <ng-template *ngIf="title.title==='Compliance with laws and regulations'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="d-grid gap-2">
+                            <button
+                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                (click)="addLawRegulations(title)" type="button"
+                                class="btn btn-secondary btn-icon-text"><i
+                                    class="feather icon-check-square btn-icon-prepend"></i>
+                                Add Compliance</button>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Event ID</th>
+                                    <th>NGRBC Principle</th>
+                                    <th>Name of institutions</th>
+                                    <th>Judicial Sanctions</th>
+                                    <th>Monetary Sanctions</th>
+                                    <!-- <th>Amount</th>
+                                    <th>Currency</th>
+                                    <th>Non Monetary Case</th>
+                                    <th>Brief of the Case</th>
+                                    <th>Appeal Preffered</th>
+                                    <th>Appeal/Revision Details</th>
+                                    <th>Institutions that made Appeal</th> -->
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of lawRegulations.concat(filteredLawRegulations); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.event_id }}</td>
+                                        <td class="col-sm-3">{{ item.NGRBC_principle }}</td>
+                                        <td class="col-sm-1">{{ item.agency_or_institution }}</td>
+                                        <td class="col-sm-1">{{ item.judicial_sanctions }}</td>
+                                        <td class="col-sm-1">{{ item.monetary_sanctions }}</td>
+                                        <!-- <td class="col-sm-1">{{ item.amount}}</td>
+                                        <td class="col-sm-1">{{ item.currency}}</td>
+                                        <td class="col-sm-1">{{ item.non_monetary_case}}</td>
+                                        <td class="col-sm-1">{{ item.brief_of_case}}</td>
+                                        <td class="col-sm-1">{{ item.appeal_preffered}}</td>
+                                        <td class="col-sm-1">{{ item.appeal_revision_details}}</td>
+                                        <td class="col-sm-1">{{ item.agency_or_institution_of_appeal}}</td> -->
+                                        <td class="col-sm-3">
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                                type="button" class="btn btn-success btn-icon btn-xs action-btn me-1"
+                                                (click)="ModifyLawRegulations(item,title.reference_id, i)"
+                                                ngbTooltip="Modify">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewLawRegulations(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+
+
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                                type="button" class="btn btn-danger me-2 btn-icon btn-xs action-btn"
+                                                (click)="deleteLawRegulations(item,i)" ngbTooltip="Delete">
+                                                <i class="feather icon-trash-2"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="lawRegulationNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitLawRegulations('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+                <!-- #Title: Grievances/ Complaints -->
+                <ng-template *ngIf="title.title==='Grievances/Complaints'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="d-grid gap-2">
+                            <button
+                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                (click)="addComplaints(title)" type="button" class="btn btn-secondary btn-icon-text"><i
+                                    class="feather icon-check-square btn-icon-prepend"></i>
+                                Add Conflicts Details</button>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Stakeholder Group</th>
+                                    <th>Complaints Received</th>
+                                    <th>Complaints Pending</th>
+                                    <th>Remarks</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of complaints.concat(filteredComplaints); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.stakeholder_group }}</td>
+                                        <td class="col-sm-3">{{ item.complaints_received }}</td>
+                                        <td class="col-sm-1">{{ item.complaints_pending }}</td>
+                                        <td class="col-sm-1">{{ item.remarks }}</td>
+                                        <td class="col-sm-3">
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true) "
+                                                type="button" class="btn btn-success btn-icon btn-xs action-btn me-1"
+                                                (click)="ModifyComplaints(item,title.reference_id, i)"
+                                                ngbTooltip="Modify">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewComplaints(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+
+
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                                type="button" class="btn btn-danger me-2 btn-icon btn-xs action-btn"
+                                                (click)="deleteComplaints(item,i)" ngbTooltip="Delete">
+                                                <i class="feather icon-trash-2"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="grievanceNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitComplaints('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor') && theme.status === 'Open')||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Corporate partnership overview -->
+
+                <ng-template *ngIf="title.title==='Corporate partnership overview'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="d-grid gap-2">
+                            <button
+                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                (click)="addCorporate(title)" type="button" class="btn btn-secondary btn-icon-text"><i
+                                    class="feather icon-check-square btn-icon-prepend"></i>
+                                Add Conflicts Details</button>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Name of Venture</th>
+                                    <th>Corporate Partnership Type</th>
+                                    <th>Percentage Share</th>
+                                    <th>Business Participation</th>
+                                    <th>Actions</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of corporate.concat(filteredCorporate); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.name_of_venture }}</td>
+                                        <td class="col-sm-3">{{ item.corp_partnership_type }}</td>
+                                        <td class="col-sm-1">{{ item.percentage_share }}</td>
+                                        <td class="col-sm-1">{{ item.business_participation }}</td>
+                                        <td class="col-sm-3">
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                                type="button" class="btn btn-success btn-icon btn-xs action-btn me-1"
+                                                (click)="ModifyCorporate(item, title.reference_id,i)"
+                                                ngbTooltip="Modify">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewCorporate(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+
+
+                                            <button
+                                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                                type="button" class="btn btn-danger me-2 btn-icon btn-xs action-btn"
+                                                (click)="deleteCorporate(item,i)" ngbTooltip="Delete">
+                                                <i class="feather icon-trash-2"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor
+                                [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                placeholder="Notes" [modules]="quillConfig" formControlName="corporateNotes">
+                            </quill-editor>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mb-4">
+                            <button (click)="submitCorporate('Open',title)"
+                                *ngIf="(roles.split(',').includes('Contributor')&& theme.status === 'Open')||(esgHead===true)"
+                                type="button" class="btn btn-secondary">
+                                <i class="feather icon-save btn-icon-prepend"></i>
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+
+            </ngb-panel>
+        </ngb-accordion>
+
+        <!-- Theme: Board and Committee -->
+        <div class="d-flex justify-content-end mt-3 gap-2 mb-4" *ngIf="theme.theme === 'Board and Committee'">
+            <button (click)="updateBoardandCommitteeStatus('Submitted for Review',theme)"
+                *ngIf="roles.split(',').includes('Contributor') && theme.status === 'Open'" type="button"
+                class="btn btn-success">
+                <i class="feather icon-send btn-icon-prepend"></i>
+                Submit
+            </button>
+
+            <div *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'">
+                <button class="btn btn-danger me-2" (click)="updateBoardandCommitteeStatus('Review Failed', theme)">
+                    <i class="feather icon-x-circle btn-icon-prepend"></i>
+                    Review Failed
+                </button>
+                <button class="btn btn-primary me-2"
+                    (click)="updateBoardandCommitteeStatus('Submitted for Approval', theme)">
+                    <i class="feather icon-check-circle btn-icon-prepend"></i>
+                    Review Passed
+                </button>
+
+
+            </div>
+
+            <div>
+                <button
+                    *ngIf="roles.split(',').includes('Approver') && (theme.status === 'Submitted for Approval' || theme.status === 'Rejected')"
+                    class="btn btn-danger me-2" [disabled]="theme.status === 'Rejected'"
+                    (click)="updateBoardandCommitteeStatus('Rejected', theme)">
+                    <i class="feather icon-x-circle btn-icon-prepend"></i>
+                    {{ theme.status === 'Rejected' ? 'Rejected' : 'Reject' }}
+                </button>
+                <button
+                    *ngIf="roles.split(',').includes('Approver') && (theme.status === 'Submitted for Approval' || theme.status === 'Approved')"
+                    class="btn btn-primary me-2" [disabled]="theme.status === 'Approved'"
+                    (click)="updateBoardandCommitteeStatus('Approved', theme)">
+                    <i class="feather icon-check-circle btn-icon-prepend"></i>
+                    {{ theme.status === 'Approved' ? 'Approved' : 'Approve' }}
+                </button>
+
+                <button (click)="updateBoardandCommitteeStatus('Open',theme)"
+                    *ngIf="roles.split(',').includes('Contributor') && (theme.status === 'Rejected' || theme.status === 'Review Failed')"
+                    type="button" class="btn btn-warning">
+                    <i class="feather icon-book-open"></i>
+                    Re-Open
+                </button>
+
+            </div>
+        </div>
+        <!-- Theme: Business Ethics -->
+
+        <div class="d-flex justify-content-end mt-3 gap-2 mb-4" *ngIf="theme.theme === 'Business Ethics'">
+            <button (click)="updateBusinessEthicsStatus('Submitted for Review',theme)"
+                *ngIf="roles.split(',').includes('Contributor') && theme.status === 'Open'" type="button"
+                class="btn btn-success">
+                <i class="feather icon-send btn-icon-prepend"></i>
+                Submit
+            </button>
+
+            <div *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'">
+                <button class="btn btn-danger me-2" (click)="updateBusinessEthicsStatus('Review Failed', theme)">
+                    <i class="feather icon-x-circle btn-icon-prepend"></i>
+                    Review Failed
+                </button>
+                <button class="btn btn-primary me-2"
+                    (click)="updateBusinessEthicsStatus('Submitted for Approval', theme)">
+                    <i class="feather icon-check-circle btn-icon-prepend"></i>
+                    Review Passed
+                </button>
+
+
+            </div>
+            <div>
+                <button
+                    *ngIf="roles.split(',').includes('Approver') && (theme.status === 'Submitted for Approval' || theme.status === 'Rejected')"
+                    class="btn btn-danger me-2" [disabled]="theme.status === 'Rejected'"
+                    (click)="updateBusinessEthicsStatus('Rejected', theme)">
+                    <i class="feather icon-x-circle btn-icon-prepend"></i>
+                    {{ theme.status === 'Rejected' ? 'Rejected' : 'Reject' }}
+                </button>
+
+                <button
+                    *ngIf="roles.split(',').includes('Approver') && (theme.status === 'Submitted for Approval' || theme.status === 'Approved')"
+                    class="btn btn-primary me-2" [disabled]="theme.status === 'Approved'"
+                    (click)="updateBusinessEthicsStatus('Approved', theme)">
+                    <i class="feather icon-check-circle btn-icon-prepend"></i>
+                    {{ theme.status === 'Approved' ? 'Approved' : 'Approve' }}
+                </button>
+
+                <button (click)="updateBusinessEthicsStatus('Open',theme)"
+                    *ngIf="roles.split(',').includes('Contributor') && (theme.status === 'Rejected' || theme.status === 'Review Failed')"
+                    type="button" class="btn btn-warning">
+                    <i class="feather icon-book-open"></i>
+                    Re-Open
+                </button>
+            </div>
+        </div>
+        <!-- Theme: Responsible business conduct -->
+
+        <div class="d-flex justify-content-end mt-3 gap-2 mb-4" *ngIf="theme.theme === 'Responsible business conduct'">
+            <button (click)="updateBusinessConductStatus('Submitted for Review',theme)"
+                *ngIf="roles.split(',').includes('Contributor') && theme.status === 'Open'" type="button"
+                class="btn btn-success">
+                <i class="feather icon-send btn-icon-prepend"></i>
+                Submit
+            </button>
+
+            <div *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'">
+
+
+                <button class="btn btn-danger me-2" (click)="updateBusinessConductStatus('Review Failed', theme)">
+                    <i class="feather icon-x-circle btn-icon-prepend"></i>
+                    Review Failed
+                </button>
+                <button class="btn btn-primary me-2"
+                    (click)="updateBusinessConductStatus('Submitted for Approval', theme)">
+                    <i class="feather icon-check-circle btn-icon-prepend"></i>
+                    Review Passed
+                </button>
+            </div>
+
+            <div>
+                <button
+                    *ngIf="roles.split(',').includes('Approver') && (theme.status === 'Submitted for Approval' || theme.status === 'Rejected')"
+                    class="btn btn-danger me-2" [disabled]="theme.status === 'Rejected'"
+                    (click)="updateBusinessConductStatus('Rejected', theme)">
+                    <i class="feather icon-x-circle btn-icon-prepend"></i>
+                    {{ theme.status === 'Rejected' ? 'Rejected' : 'Reject' }}
+                </button>
+                <button
+                    *ngIf="roles.split(',').includes('Approver') && (theme.status === 'Submitted for Approval' || theme.status === 'Approved')"
+                    class="btn btn-primary me-2" [disabled]="theme.status === 'Approved'"
+                    (click)="updateBusinessConductStatus('Approved', theme)">
+                    <i class="feather icon-check-circle btn-icon-prepend"></i>
+                    {{ theme.status === 'Approved' ? 'Approved' : 'Approve' }}
+                </button>
+
+
+                <button (click)="updateBusinessConductStatus('Open',theme)"
+                    *ngIf="roles.split(',').includes('Contributor') && (theme.status === 'Rejected' || theme.status === 'Review Failed')"
+                    type="button" class="btn btn-warning">
+                    <i class="feather icon-book-open"></i>
+                    Re-Open
+                </button>
+            </div>
+        </div>
+
+        <!-- Theme: Other governance indicators -->
+
+        <div class="d-flex justify-content-end mt-3 gap-2 mb-4" *ngIf="theme.theme === 'Other governance indicators'">
+            <button (click)="updateOtherGovernanceIndicatorsStatus('Submitted for Review',theme)"
+                *ngIf="roles.split(',').includes('Contributor') && theme.status === 'Open'" type="button"
+                class="btn btn-success">
+                <i class="feather icon-send btn-icon-prepend"></i>
+                Submit
+            </button>
+
+
+            <div *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'">
+                <button class="btn btn-danger me-2"
+                    (click)="updateOtherGovernanceIndicatorsStatus('Review Failed', theme)">
+                    <i class="feather icon-x-circle btn-icon-prepend"></i>
+                    Review Failed
+                </button>
+                <button class="btn btn-primary me-2"
+                    (click)="updateOtherGovernanceIndicatorsStatus('Submitted for Approval', theme)">
+                    <i class="feather icon-check-circle btn-icon-prepend"></i>
+                    Review Passed
+                </button>
+
+
+            </div>
+            <div>
+                <button
+                    *ngIf="roles.split(',').includes('Approver') && (theme.status === 'Submitted for Approval' || theme.status === 'Rejected')"
+                    class="btn btn-danger me-2" [disabled]="theme.status === 'Rejected'"
+                    (click)="updateOtherGovernanceIndicatorsStatus('Rejected', theme)">
+                    <i class="feather icon-x-circle btn-icon-prepend"></i>
+                    {{ theme.status === 'Rejected' ? 'Rejected' : 'Reject' }}
+                </button>
+                <button
+                    *ngIf="roles.split(',').includes('Approver') && (theme.status === 'Submitted for Approval' || theme.status === 'Approved')"
+                    class="btn btn-primary me-2" [disabled]="theme.status === 'Approved'"
+                    (click)="updateOtherGovernanceIndicatorsStatus('Approved', theme)">
+                    <i class="feather icon-check-circle btn-icon-prepend"></i>
+                    {{ theme.status === 'Approved' ? 'Approved' : 'Approve' }}
+                </button>
+
+                <button (click)="updateOtherGovernanceIndicatorsStatus('Open',theme)"
+                    *ngIf="roles.split(',').includes('Contributor') && (theme.status === 'Rejected' || theme.status === 'Review Failed')"
+                    type="button" class="btn btn-warning">
+                    <i class="feather icon-book-open"></i>
+                    Re-Open
+                </button>
+
+            </div>
+        </div>
+        <hr class="my-2 w-100">
+    </div>
+    <div class="d-flex justify-content-end mt-3 gap-2 mb-4"
+        *ngIf="allThemesHaveRequiredStatus() && !allThemesAreFullyProcessed() && roles.split(',').includes('Approver')">
+
+        <button (click)="updateAllThemeStatus('Reject All')" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Reject All
+        </button>
+
+        <button (click)="updateAllThemeStatus('Approve All')" type="button" class="btn btn-success">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approve All
+        </button>
+
+    </div>
+</div>
+<div *ngIf="disclosureMode==='view'">
+    <div *ngFor="let theme of groupedData" class="theme-section">
+        <div class="row">
+            <h6 class="mt-2 mb-2">
+                <i class="feather icon-layers me-2"></i>
+                {{ theme.theme }}
+            </h6>
+        </div>
+
+        <ngb-accordion [formGroup]="govDisclosureForm" [closeOthers]="false">
+            <ngb-panel *ngFor="let title of theme.titles" [type]="'hidden'">
+                <ng-template ngbPanelTitle>
+                    <div class="accordion-button custom-header">
+                        <div class="col-md-8">
+                            <span>{{ title.title }}</span>
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            <!-- Check if the title has a corresponding key in titleKeyMapping and show the bookmark icon -->
+                            <ng-container *ngIf="hasDataForTitle(title.title)">
+                                <i class="material-icons text-success" style="font-size: 20px;">bookmark</i>
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <!-- Title :Board of Directors -->
+
+                <ng-template *ngIf="title.title==='Board of Directors'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Governance Body</th>
+                                    <th>Age Group</th>
+                                    <th>Male</th>
+                                    <th>Female</th>
+                                    <th>Other</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of directorDetails.concat(filteredDirectorDetails); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.governance_body }}</td>
+                                        <td class="col-sm-3">{{ item.age_group }}</td>
+                                        <td class="col-sm-1">{{ item.male }}</td>
+                                        <td class="col-sm-1">{{ item.female }}</td>
+                                        <td class="col-sm-1">{{ item.other }}</td>
+                                        <td class="col-sm-3">
+
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewDirectorDetails(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig"
+                                formControlName="directorDetailsNotes" [readOnly]="true">
+                            </quill-editor>
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Director Tenure -->
+
+                <ng-template *ngIf="title.title==='Director Tenure'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-4 mt-2">
+                            <mat-form-field fxFlex appearance="outline" color="primary">
+                                <mat-label>Tenure Type</mat-label>
+                                <mat-select formControlName="tenureType">
+                                    <!-- (selectionChange)="setTenureType($event)" -->
+                                    <mat-option *ngFor="let type of lov[2]?.value" [value]="type.Value"
+                                        [disabled]="true">{{type.Value}}</mat-option>
+                                </mat-select>
+                                <!-- <mat-error>Required Field</mat-error> -->
+                            </mat-form-field>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig"
+                                formControlName="directorTenureNotes" [readOnly]="true">
+                            </quill-editor>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Anti corruption training for governance body -->
+                <ng-template *ngIf="title.title==='Anti corruption training for governance body'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Governance Body Members Informed</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="governanceMembersInformed" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Governance Members Trained on Anti-Corruption</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="governanceMembersTrained" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Man Hours of Training Provided</mat-label>
+                                    <input 
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="manHoursTraining" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig"
+                                formControlName="govBodyTrainingNotes" [readOnly]="true">
+                            </quill-editor>
+                        </div>
+
+
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Anti corruption training for employees -->
+
+                <ng-template *ngIf="title.title==='Anti corruption training for employees'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th title="Employee by Level">Employee Level</th>
+                                    <th title="Employee by Function">Employee Function</th>
+                                    <th title="Employees communicated to">Contacted Employees</th>
+                                    <th title="Employees received training">Trained Employees</th>
+                                    <th title="Man hours of training">Man Hours</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of employeeDetails.concat(filteredEmployeeDetails); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.employee_by_level }}</td>
+                                        <td class="col-sm-3">{{ item.employee_by_function }}</td>
+                                        <td class="col-sm-1">{{ item.employees_communicated }}</td>
+                                        <td class="col-sm-1">{{ item.trained_employees }}</td>
+                                        <td class="col-sm-1">{{ item.man_hours }}</td>
+                                        <td class="col-sm-3">
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewEmployeeDetails(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig" formControlName="empTrainingNotes"
+                                [readOnly]="true">
+                            </quill-editor>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Anti corruption training for business partners -->
+                <ng-template *ngIf="title.title==='Anti corruption training for business partners'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th title="Type of Business Partner">Business Partner Type</th>
+                                    <th title="Number of Business Partners">Business Partners</th>
+                                    <th title="Business Partners communicated to">Contacted Business Partners</th>
+                                    <th title="Business Partners received training">Trained Business Partners</th>
+                                    <th title="Man hours of training">Man Hours</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let item of businessPartnerDetails.concat(filteredBusinessPartnerDetails); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.business_partner_type }}</td>
+                                        <td class="col-sm-3">{{ item.business_partners }}</td>
+                                        <td class="col-sm-1">{{ item.business_partners_communicated }}</td>
+                                        <td class="col-sm-1">{{ item.trained_business_partners }}</td>
+                                        <td class="col-sm-1">{{ item.man_hours }}</td>
+                                        <td class="col-sm-3">
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewBusinessPartnerDetails(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig"
+                                formControlName="businessPartnerNotes" [readOnly]="true">
+                            </quill-editor>
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Anti-competitive behaviour, anti-trust and monopoly practices. -->
+                <ng-template *ngIf="title.title==='Anti-competitive behaviour, anti-trust and monopoly practices'"
+                    ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Legal Actions Count</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="legal_actions_count" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Fines and Settlements Amount</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="fines_settlements_amt" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Currency</mat-label>
+                                    <input type="text" matInput formControlName="anti_competitive_currency" readonly>
+
+                                    <!-- <mat-select formControlName="currency">
+                                        <mat-option *ngFor="let data of currencyCompany" [value]="data"
+                                            [disabled]="true">
+                                            <span>{{ data }}</span>
+                                        </mat-option>
+
+                                    </mat-select> -->
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Outcome of Completed Actions</mat-label>
+                                    <input type="text" matInput formControlName="completed_actions_outcome" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig"
+                                formControlName="antiCompetitiveNotes" [readOnly]="true">
+                            </quill-editor>
+                        </div>
+
+                    </div>
+                </ng-template>
+                <!-- #Title: Anti corruption  -->
+                <ng-template *ngIf="title.title==='Anti corruption'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Total Number of operations</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="operations_AC" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Number of operations assessed</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="corruption_risk_operations" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig" formControlName="antiCorruptNotes"
+                                [readOnly]="true">
+                            </quill-editor>
+                        </div>
+
+                    </div>
+                </ng-template>
+                <!-- #Title: Incidents corruption  -->
+                <ng-template *ngIf="title.title==='Incidents of corruption'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Confirmed Incidents</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="confirmed_corruption_incidents" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Incidents of Board Action</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="corruption_incidents_board_action" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Incidents of KMP action</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="corruption_incidents_kmp_action" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Incidents of Employee Action</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="corruption_incidents_employee_action" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Incidents of Worker Action</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="corruption_incidents_worker_action" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Incidents of Business Partners </mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="business_partner_contracts_corrup_violations" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Organisation Public Legal Cases</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="public_legal_cases_org_emp" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Outcome of Public Legal Cases </mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="public_legal_cases_outcome" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig"
+                                formControlName="incidentsCorruptNotes" [readOnly]="true">
+                            </quill-editor>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Conflicts of Interest -->
+                <ng-template *ngIf="title.title==='Conflicts of Interest'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Complaints</th>
+                                    <th>Description</th>
+                                    <th>Corrective Action</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let item of conflictsInterests.concat(filteredConflictsInterests); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.category }}</td>
+                                        <td class="col-sm-3">{{ item.complaints }}</td>
+                                        <td class="col-sm-1">{{ item.description }}</td>
+                                        <td class="col-sm-1">{{ item.corrective_action }}</td>
+                                        <td class="col-sm-3">
+
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewConflictsInterests(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig" formControlName="conflictsNotes"
+                                [readOnly]="true">
+                            </quill-editor>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Disciplinary action against corruption -->
+                <ng-template *ngIf="title.title==='Disciplinary action against corruption'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Board of directors</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="board_of_director" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Employees</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="employees" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Workers</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="workers" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig"
+                                formControlName="disciplinaryNotes" [readOnly]="true">
+                            </quill-editor>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Awareness program on NGRBC principles -->
+                <ng-template *ngIf="title.title==='Awareness program on NGRBC principles'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Training and Awareness for BODs</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="bod_training_awareness_count" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>BODs Covered</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="bod_covered_training_awareness_count" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Training and Awareness for KMPs</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="kmp_training_awareness_count" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>KMPs Covered</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="kmp_covered_training_awareness_count" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Training and Awareness for Employees</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="employee_training_awareness_count" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Employees Covered</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="employee_covered_training_awareness_count" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Training and Awareness for Workers</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="worker_training_awareness_count" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Workers Covered</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="worker_covered_training_awareness_count" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig" formControlName="ngrbcNotes"
+                                [readOnly]="true">
+                            </quill-editor>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Awareness program for value chain partners on NGRBC principles -->
+                <ng-template *ngIf="title.title==='Awareness program for value chain partners on NGRBC principles'"
+                    ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <div class="row mb-1 mt-2">
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Value Chain Partners</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="value_chain_partners_count" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Awareness Programs</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="awareness_programs_count" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-md-12">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Value Chain Partners Covered Awareness</mat-label>
+                                    <input type="number" (keydown)="handleNumericInput($event)" matInput
+                                        formControlName="value_chain_partners_covered_awareness" readonly>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+
+                        <div id="esgDisclosure" class="row mb-2 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig"
+                                formControlName="valueChainNgrbcNotes" [readOnly]="true">
+                            </quill-editor>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Compliance with laws and regulations -->
+
+                <ng-template *ngIf="title.title==='Compliance with laws and regulations'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Event ID</th>
+                                    <th>NGRBC Principle</th>
+                                    <th>Name of institutions</th>
+                                    <th>Judicial Sanctions</th>
+                                    <th>Monetary Sanctions</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of lawRegulations.concat(filteredLawRegulations); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.event_id }}</td>
+                                        <td class="col-sm-3">{{ item.NGRBC_principle }}</td>
+                                        <td class="col-sm-1">{{ item.agency_or_institution }}</td>
+                                        <td class="col-sm-1">{{ item.judicial_sanctions }}</td>
+                                        <td class="col-sm-1">{{ item.monetary_sanctions }}</td>
+                                        <td class="col-sm-3">
+
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewLawRegulations(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig"
+                                formControlName="lawRegulationNotes" [readOnly]="true">
+                            </quill-editor>
+                        </div>
+
+                    </div>
+                </ng-template>
+                <!-- #Title: Grievances/ Complaints -->
+                <ng-template *ngIf="title.title==='Grievances/Complaints'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Stakeholder Group</th>
+                                    <th>Complaints Received</th>
+                                    <th>Complaints Pending</th>
+                                    <th>Remarks</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of complaints.concat(filteredComplaints); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.stakeholder_group }}</td>
+                                        <td class="col-sm-3">{{ item.complaints_received }}</td>
+                                        <td class="col-sm-1">{{ item.complaints_pending }}</td>
+                                        <td class="col-sm-1">{{ item.remarks }}</td>
+                                        <td class="col-sm-3">
+
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewComplaints(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig" formControlName="grievanceNotes"
+                                [readOnly]="true">
+                            </quill-editor>
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <!-- #Title: Corporate partnership overview -->
+
+                <ng-template *ngIf="title.title==='Corporate partnership overview'" ngbPanelContent>
+                    <div class="table-responsive pt-3">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Name of Venture</th>
+                                    <th>Corporate Partnership Type</th>
+                                    <th>Percentage Share</th>
+                                    <th>Business Participation</th>
+                                    <th>Actions</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of corporate.concat(filteredCorporate); let i = index">
+                                    <ng-container>
+                                        <td class="col-sm-1">{{ item.name_of_venture }}</td>
+                                        <td class="col-sm-3">{{ item.corp_partnership_type }}</td>
+                                        <td class="col-sm-1">{{ item.percentage_share }}</td>
+                                        <td class="col-sm-1">{{ item.business_participation }}</td>
+                                        <td class="col-sm-3">
+
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon btn-xs action-btn me-1"
+                                                (click)="viewCorporate(item)" ngbTooltip="View">
+                                                <i class="feather icon-eye"></i>
+                                            </button>
+
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="esgDisclosure" class="row mb-4 mt-4">
+                            <quill-editor placeholder="Notes" [modules]="quillConfig" formControlName="corporateNotes"
+                                [readOnly]="true">
+                            </quill-editor>
+                        </div>
+
+                    </div>
+                </ng-template>
+
+            </ngb-panel>
+        </ngb-accordion>
+
+        <!-- <hr class="my-2 w-100"> -->
+    </div>
+</div>

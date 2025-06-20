@@ -1,0 +1,79 @@
+<div mat-dialog-content [formGroup]="Form">
+  <div class="container-fluid d-flex justify-content-center w-100">
+    <div class="table-responsive w-100">
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field fxFlex appearance="outline" color="primary">
+            <mat-label>Meter Name</mat-label>
+            <mat-select formControlName="meter_name">
+
+              <mat-option *ngFor="let data of allMeters" [value]="data.attributes.meter_name"
+                (onSelectionChange)="onChange($event, data)">
+                {{ data.attributes.meter_name }}
+              </mat-option>
+
+
+              <mat-option disabled (click)="newMeterAdd()" class="option-btn">
+                <i class="mdi mdi-plus-circle"></i> Add New Meter
+              </mat-option>
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>location</mat-label>
+            <input matInput formControlName="location" type="text">
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+
+
+
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Meter Quantity Unit</mat-label>
+            <input matInput formControlName="meter_quantity_unit">
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Initial Meter Reading</mat-label>
+            <input matInput formControlName="initial_meter_reading" type="number">
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Final Meter Reading</mat-label>
+            <input matInput formControlName="final_meter_reading" type="number">
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Quantity</mat-label>
+            <input matInput formControlName="quantity" type="number">
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-12 text-end">
+          <button type="button" class="btn btn-success btn-icon-text mt-4" *ngIf="!this.data?.meter_name"
+            [disabled]="!Form.valid" (click)="submit()">
+            <i class="feather icon-send btn-icon-prepend"></i>
+            Add
+          </button>
+          <button type="button" class="btn btn-success btn-icon-text mt-4" *ngIf="this.data?.meter_name"
+            [disabled]="!Form.valid" (click)="update()">
+            <i class="feather icon-send btn-icon-prepend"></i>
+            Update
+          </button>
+        </div>
+      </div>
+    </div>

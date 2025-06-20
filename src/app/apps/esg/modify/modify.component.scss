@@ -1,0 +1,48 @@
+.table-responsive {
+    overflow: hidden;
+}
+
+.team-member-table {
+    max-height: 30vh;
+    overflow: auto;
+}
+
+.action-btn {
+    margin-right: 5px;
+}
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+table {
+    thead {
+        tr {
+            th {
+                padding-left: 20px;
+            }
+        }
+
+    }
+
+    tbody {
+        tr {
+            td {
+                padding-left: 20px;
+
+            }
+        }
+    }
+}
+
+.table td {
+    white-space: nowrap;
+    /* Prevents text from wrapping to the next line */
+    overflow: hidden;
+    /* Hides the overflowing text */
+    text-overflow: ellipsis;
+    /* Adds ellipsis (...) to overflowing text */
+    max-width: 150px;
+    /* Adjust this value based on your preferred width */
+}

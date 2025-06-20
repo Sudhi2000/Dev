@@ -1,0 +1,98 @@
+.table-responsive {
+    overflow-x: unset;
+}
+
+.btn-xs {
+    margin-right: 5px;
+}
+
+tr {
+    height: unset !important;
+    vertical-align: middle;
+}
+
+th {
+    height: 40px;
+}
+
+.priorityIcon {
+    vertical-align: auto;
+    text-align: center;
+}
+
+
+
+.table-card {
+    padding: 0px;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.card-body{
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+.high {
+    color: red;
+}
+
+.medium {
+    color: orange;
+}
+
+.low {
+    color: green;
+}
+
+.edit-btn {
+    margin-right: 5px;
+    padding-left: 20px;
+}
+
+.view-btn {
+    padding-left: 20px;
+
+}
+
+.status-btn {
+    width: 100%;
+    text-align: left;
+    // padding-left: 0px;
+
+}
+
+.hide{
+    display: none;
+}
+
+.search{
+    align-self: center;
+}
+
+.btn-reset{
+    margin-left: 5px;
+}
+.btn-icon-text i {
+    margin-right: 5px; /* Adjust this value to increase or decrease the space */
+}
+
+.btn-blue {
+    background-color: blue;
+    color: white;
+  }
+  
+  .btn-grey {
+    background-color: grey;
+    color: white;
+  }
+  
+  .btn-orange {
+    background-color: orange;
+    color: white;
+  }
+  
+  .btn-red {
+    background-color: red;
+    color: white;
+  }

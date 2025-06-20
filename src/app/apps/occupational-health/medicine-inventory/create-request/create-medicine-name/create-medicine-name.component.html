@@ -1,0 +1,74 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Medicine Name</mat-label>
+                        <input type="text" matInput formControlName="name">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                       
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Generic Name</mat-label>
+                        <input type="text" matInput formControlName="generic_name">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+    
+                </div>
+                </div>
+         
+            <div class="row">
+            <div class="col-md-6">
+                <mat-form-field appearance="outline">
+                    <mat-label>Dosage Strength</mat-label>
+                    <input type="text" matInput formControlName="dosage_strength">
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+            </div>
+        
+            <div class="col-md-6">
+                <mat-form-field appearance="outline">
+                    <mat-label>Form</mat-label>
+                    <mat-select formControlName="form">
+                        <mat-option *ngFor="let form of medicineForm"
+                            [value]="form.attributes.Value">
+                            {{ form.attributes.Value }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+            </div>
+            </div>
+            <div class="row">
+            <div class="col-md-6">
+                <mat-form-field appearance="outline">
+                    <mat-label>Medicine Type</mat-label>
+                    <mat-select formControlName="medicine_type">
+                        <mat-option *ngFor="let type of medicineTypes" value="{{type.attributes.type}}">
+                            {{type.attributes.type}}</mat-option>
+                        <mat-option (click)="new_type()" class="option-btn"> <i
+                                class=" mdi mdi-plus-circle"></i> Create a Medicine Type
+                        </mat-option>
+                    </mat-select>
+                    <mat-error>Required Field</mat-error>
+                </mat-form-field>
+            </div>
+            </div>
+                <div class="mb-3">
+                    <button type="button" class="btn btn-success btn-icon-text float-end mt-4 "  *ngIf="mode!='update'" (click)="submit()"
+                        [disabled]="!Form.valid">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Submit
+                    </button>
+                    <button type="button" class="btn btn-success btn-icon-text float-end mt-4 " *ngIf="mode==='update'" (click)="submit()"
+                    [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Update
+                </button>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,2326 @@
+<div *ngFor="let theme of groupedData" class="theme-section">
+    <!-- Theme Name -->
+    <!-- <div class="theme-header">
+        <h3>{{ theme.theme }}</h3>
+    </div> -->
+    <div class="row">
+        <h6 class="mt-2 mb-2">
+            <i class="feather icon-layers me-2"></i>
+            {{ theme.theme }}
+        </h6>
+
+    </div>
+    <ngb-accordion [formGroup]="environmentDisclosureForm" [closeOthers]="false">
+        <ngb-panel *ngFor="let title of theme.titles" [type]="'hidden'">
+            <ng-template ngbPanelTitle>
+                <div class="accordion-button custom-header">
+                    <div class="col-md-8">
+                        <span>{{ title.title }}</span>
+                    </div>
+                    <div class="col-md-4 d-flex justify-content-end">
+                        <!-- Check if the title has a corresponding key in titleKeyMapping and show the bookmark icon -->
+                        <ng-container *ngIf="hasDataForTitle(title.title)">
+                            <i class="material-icons text-success">bookmark</i>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-template>
+
+            <!-- #Title Material Details -->
+            <ng-template *ngIf="title.title==='Materials used by weight or volume'" ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addMaterialUsed(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Material Details</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Material used</th>
+                                <!-- <th>Type</th> -->
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <!-- <th>Source</th> -->
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of MaterialUsedDetails.concat(filteredMaterialUsedDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.material_used}}</td>
+                                    <!-- <td class="col-sm-1">{{data.material_type}}</td> -->
+                                    <td class="col-sm-1">{{data.quantity}}</td>
+                                    <td class="col-sm-1">{{data.unit}}</td>
+                                    <!-- <td class="col-sm-1">{{data.source}}</td> -->
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyMaterialUsed(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewMaterialUsed(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteMaterialUsed(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Notes" [modules]="quillConfig" formControlName="material_used_notes">
+                        </quill-editor>
+                    </div>
+                    <!-- *ngIf="roles.split(',').includes('Contributor') && title.status == 'Open'" -->
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitMaterialDetails('Open',title)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+                        <!--  *ngIf="roles.split(',').includes('Contributor') && title.status == 'Open'"  -->
+                        <!-- <button (click)="submitMaterialDetails('Submitted for Review',title)"
+                       type="button"
+                        class="btn btn-success">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Submit
+                    </button> -->
+
+                        <!-- <div *ngIf="roles.split(',').includes('Reviewer') && title.status == 'Submitted for Review'"
+                        class="btn-group" ngbDropdown role="group">
+                        <button class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle>Review Status</button>
+                        <div ngbDropdownMenu>
+                            <button (click)="updateMaterialDetailsStatus('Submitted for Approval',title)"
+                                ngbDropdownItem>Review Passed</button>
+                            <button (click)="updateMaterialDetailsStatus('Review Failed',title)" ngbDropdownItem>Review
+                                Failed</button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="roles.split(',').includes('Approver') && title.status == 'Submitted for Approval'"
+                        class="btn-group" ngbDropdown role="group">
+                        <button class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle>Approval Status</button>
+                        <div ngbDropdownMenu>
+                            <button (click)="updateMaterialDetailsStatus('Approved',title)"
+                                ngbDropdownItem>Approved</button>
+                            <button (click)="updateMaterialDetailsStatus('Rejected',title)"
+                                ngbDropdownItem>Rejected</button>
+                        </div>
+                    </div> -->
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #TitleRecycled input Material Details -->
+            <ng-template *ngIf="title.title==='Recycled input materials used'" ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist1">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addInputMaterialUsed(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Recycled input material Details</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Recycled input materials used</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of InputMaterialUsedDetails.concat( filteredInputMaterialUsedDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.input_material_used}}</td>
+                                    <td class="col-sm-1">{{data.quantity}}</td>
+                                    <td class="col-sm-1">{{data.unit}}</td>
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyInputMaterialUsed(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewInputMaterialUsed(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteInputMaterialUsed(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor placeholder="Notes" [modules]="quillConfig"
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            formControlName="input_material_used_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitInputMaterialDetails('Open',title)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+                        <!-- <button (click)="submitInputMaterialDetails('Submitted for Review',title)"
+                        type="button"
+                        class="btn btn-success">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Submit
+                    </button> -->
+
+                        <!-- <div *ngIf="roles.split(',').includes('Reviewer') && title.status == 'Submitted for Review'"
+                        class="btn-group" ngbDropdown role="group">
+                        <button class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle>Review Status</button>
+                        <div ngbDropdownMenu>
+                            <button (click)="updateInputMaterialDetailsStatus('Submitted for Approval',title)"
+                                ngbDropdownItem>Review Passed</button>
+                            <button (click)="updateInputMaterialDetailsStatus('Review Failed',title)"
+                                ngbDropdownItem>Review Failed</button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="roles.split(',').includes('Approver') && title.status == 'Submitted for Approval'"
+                        class="btn-group" ngbDropdown role="group">
+                        <button class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle>Approval Status</button>
+                        <div ngbDropdownMenu>
+                            <button (click)="updateInputMaterialDetailsStatus('Approved',title)"
+                                ngbDropdownItem>Approved</button>
+                            <button (click)="updateInputMaterialDetailsStatus('Rejected',title)"
+                                ngbDropdownItem>Rejected</button>
+                        </div>
+                    </div> -->
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Reclaimed products and their packaging material -->
+            <ng-template *ngIf="title.title==='Reclaimed products and their packaging material'" ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist2">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addReclaimedProduct(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Reclaimed products and their packaging material</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Products/Material</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of ReclaimedProductDetails.concat(filteredReclaimedProductDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.reclaimed_product}}</td>
+                                    <td class="col-sm-1">{{data.quantity}}</td>
+                                    <td class="col-sm-1">{{data.unit}}</td>
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyReclaimedProduct(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewReclaimedProduct(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteReclaimedProduct(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor placeholder="Notes" [modules]="quillConfig"
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            formControlName="reclaimed_product_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitReclaimedProductDetails('Open',title)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+                        <!-- <button (click)="submitReclaimedProductDetails('Submitted for Review',title)"
+                        type="button"
+                        class="btn btn-success">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Submit
+                    </button> -->
+
+                        <!-- <div *ngIf="roles.split(',').includes('Reviewer') && title.status == 'Submitted for Review'"
+                        class="btn-group" ngbDropdown role="group">
+                        <button class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle>Review Status</button>
+                        <div ngbDropdownMenu>
+                            <button (click)="updateInputMaterialDetailsStatus('Submitted for Approval',title)"
+                                ngbDropdownItem>Review Passed</button>
+                            <button (click)="updateInputMaterialDetailsStatus('Review Failed',title)"
+                                ngbDropdownItem>Review Failed</button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="roles.split(',').includes('Approver') && title.status == 'Submitted for Approval'"
+                        class="btn-group" ngbDropdown role="group">
+                        <button class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle>Approval Status</button>
+                        <div ngbDropdownMenu>
+                            <button (click)="updateInputMaterialDetailsStatus('Approved',title)"
+                                ngbDropdownItem>Approved</button>
+                            <button (click)="updateInputMaterialDetailsStatus('Rejected',title)"
+                                ngbDropdownItem>Rejected</button>
+                        </div>
+                    </div> -->
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Water withdrawal from all areas -->
+            <ng-template *ngIf="title.title==='Water withdrawal from all areas'" ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist2">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addWaterWithdrawal(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Water withdrawal from all areas</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Water Source</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of WaterWithdrawalDetails.concat(filteredWaterWithdrawalDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.water_source}}</td>
+                                    <td class="col-sm-1">{{data.quantity}}</td>
+                                    <td class="col-sm-1">{{data.unit}}</td>
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyWaterWithdrawal(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewWaterWithdrawal(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteWaterWithdrawal(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor placeholder="Notes" [modules]="quillConfig"
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            formControlName="water_withdrawal_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitWaterWithdrawal('Open',title)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Water withdrawal from all areas with water stress -->
+            <ng-template *ngIf="title.title==='Water withdrawal from all areas with water stress'" ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist2">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addWaterWithdrawalStress(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Water withdrawal from all areas with water stress</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Water Source</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of WaterWithdrawalStressDetails.concat(filteredWaterWithdrawalStressDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.water_source}}</td>
+                                    <td class="col-sm-1">{{data.quantity}}</td>
+                                    <td class="col-sm-1">{{data.unit}}</td>
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyWaterWithdrawalStress(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewWaterWithdrawalStress(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteWaterWithdrawalStress(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Notes" [modules]="quillConfig" formControlName="water_stress_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitWaterWithdrawalStress('Open',title)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Water discharge to all areas -->
+            <ng-template *ngIf="title.title==='Water discharge to all areas'" ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist2">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addWaterDischarge(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Water discharge to all areas</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Water Discharged to</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of WaterDischargeDetails.concat(filteredWaterDischargeDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.water_discharged_to}}</td>
+                                    <td class="col-sm-1">{{data.quantity}}</td>
+                                    <td class="col-sm-1">{{data.unit}}</td>
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyWaterDischarge(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewWaterDischarge(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteWaterDischarge(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor placeholder="Notes" [modules]="quillConfig"
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            formControlName="water_discharge_to_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitWaterDischarge('Open',title)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Water discharge to all areas with water stress -->
+            <ng-template *ngIf="title.title==='Water discharge to all areas with water stress'" ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist2">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addWaterDischargeStress(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Water discharge to all areas with water stress</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Water Discharged to</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of WaterDischargeStressDetails.concat(filteredWaterDischargeStressDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.water_discharged_to}}</td>
+                                    <td class="col-sm-1">{{data.quantity}}</td>
+                                    <td class="col-sm-1">{{data.unit}}</td>
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyWaterDischargeStress(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewWaterDischargeStress(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteWaterDischargeStress(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor placeholder="Notes" [modules]="quillConfig"
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            formControlName="discharge_stress_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitWaterDischargeStress('Open',title)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Species affected by Operations -->
+            <ng-template *ngIf="title.title==='Species affected by Operations'" ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist2">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addSpeciesAffected(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Species affected by Operations</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of SpeciesAffectedDetails.concat(filteredSpeciesAffectedDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.species_name}}</td>
+                                    <td class="col-sm-1">{{data.category}}</td>
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifySpeciesAffected(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewSpeciesAffected(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteSpeciesAffected(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor placeholder="Notes" [modules]="quillConfig"
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            formControlName="species_affected_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitSpeciesAffected('Open',title)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Impact of Activities on Protected/High Biodiversity Areas -->
+            <ng-template *ngIf="title.title==='Impact of Activities on Protected/High Biodiversity Areas'"
+                ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist2">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addImpactofActivities(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Impact of Activities on Protected/High Biodiversity Areas</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Site Name</th>
+                                <th>Type of operation</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of ImpactofActivitiesDetails.concat(filteredImpactofActivitiesDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.site_name}}</td>
+                                    <td class="col-sm-1">{{data.type_of_operation}}</td>
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyImpactofActivities(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewImpactofActivities(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteImpactofActivities(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor placeholder="Notes" [modules]="quillConfig"
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            formControlName="impact_of_activities_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitImpactofActivities('Open',title)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Environmental Impact Assessments (EIA) of Projects -->
+            <ng-template *ngIf="title.title==='Environmental Impact Assessments (EIA) of Projects'" ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist2">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addEIAofrojects(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Environmental Impact Assessments (EIA) of Projects</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name of the project</th>
+                                <th>EIA Notification number</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of EIAodProjectsDetails.concat(filteredEIAodProjectsDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.name_of_project}}</td>
+                                    <td class="col-sm-1">{{data.eia_notification_number}}</td>
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyEIAofrojects(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewEIAofrojects(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteEIAofrojects(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor placeholder="Notes" [modules]="quillConfig"
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            formControlName="eia_of_project_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitEIAofrojects('Open',title)" type="button"
+                            class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Nitrogen oxides (NOx), sulfur oxides (SOx), and other significant air emissions -->
+            <ng-template
+                *ngIf="title.title==='Nitrogen oxides (NOx), sulfur oxides (SOx), and other significant air emissions'"
+                ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist2">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addAirEmission(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Nitrogen oxides (NOx), sulfur oxides (SOx), and other significant air emissions</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Air Emission</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of AirEmissionDetails.concat(filteredAirEmissionDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.type}}</td>
+                                    <td class="col-sm-3">{{data.air_emission}}</td>
+                                    <!-- <td class="col-sm-1">{{data.eia_notification_number}}</td> -->
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyAirEmission(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewAirEmission(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteAirEmission(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor placeholder="Notes" [modules]="quillConfig"
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            formControlName="air_emission_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitAirEmission('Open',title)" type="button"
+                            class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Waste generated -->
+            <ng-template *ngIf="title.title==='Waste generated'" ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist2">
+                    <!-- <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)"
+                            (click)="addWasteGenertedMultiple(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Waste generated</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Type of Waste</th>
+                                <th>Category</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of WasteGenertedMultipleDetails.concat(filteredWasteGenertedMultipleDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.type_of_waste}}</td>
+                                    <td class="col-sm-1">{{data.category}}</td>
+                                    <td class="col-sm-3">
+                                        <button
+                                            *ngIf="isButtonVisible(theme)"
+                                            type="button" class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyWasteGenertedMultiple(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewWasteGenertedMultiple(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button
+                                            *ngIf="isButtonVisible(theme)"
+                                            type="button" class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteWasteGenertedMultiple(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table> -->
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addWasteGenerted(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Waste generated</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Type of Waste</th>
+                                <th>Category</th>
+                                <th>Waste Generated</th>
+                                <th>Waste disposed</th>
+                                <th>Waste Recovered</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of WasteGenertedDetails.concat(filteredWasteGenertedDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.type_of_waste}}</td>
+                                    <td class="col-sm-1">{{data.category}}</td>
+                                    <td class="col-sm-3">{{data.waste_generated}}</td>
+                                    <td class="col-sm-1">{{data.waste_disposed}}</td>
+                                    <td class="col-sm-1">{{data.waste_recovered}}</td>
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyWasteGenerted(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewWasteGenerted(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteWasteGenerted(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addWasteDirected(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Waste directed to disposal</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Type of disposal</th>
+                                <th>Waste disposed</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of WasteDirectedDetails.concat(filteredWasteDirectedDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.type_of_disposal}}</td>
+                                    <td class="col-sm-1">{{data.waste_disposed}}</td>
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyWasteDirected(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewWasteDirected(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteWasteDirected(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table> -->
+                    <!-- <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addWasteDiverted(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Waste diverted from disposal</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Type of Recovery</th>
+                                <th>Waste Recovered</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of WasteDivertedDetails.concat(filteredWasteDivertedDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.type_of_recovery}}</td>
+                                    <td class="col-sm-1">{{data.waste_recovered}}</td>
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyWasteDiverted(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewWasteDiverted(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteWasteDiverted(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table> -->
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor placeholder="Notes" [modules]="quillConfig"
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            formControlName="waste_generated_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitWasteGenertedMultiple('Open',title)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Direct and Indirect Emission -->
+            <ng-template [formGroup]="directEmission" *ngIf="title.title==='Direct and Indirect Emission'"
+                ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist2">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Scope 1 (Direct Emission)</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" matInput formControlName="scope1">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Unit </mat-label>
+                                <mat-select formControlName="scope1_unit"
+                                    [disabled]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)">
+                                    <mat-option *ngFor="let data of lov[45]?.value" [value]="data.Value">
+                                        <span>{{ data.Value }}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Scope 2 (Indirect Emission)</mat-label>
+                                <input type="number"
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    matInput formControlName="scope2">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Unit</mat-label>
+                                <mat-select formControlName="scope2_unit"
+                                    [disabled]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)">
+                                    <mat-option *ngFor="let data of lov[45]?.value" [value]="data.Value">
+                                        <span>{{ data.Value }}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Scope 3 (Indirect Emission) (Repeated Values)</mat-label>
+                                <mat-select formControlName="scope3">
+                                    <mat-option *ngFor="let data of lov[18]?.value" [value]="data.Value">
+                                        <span>{{ data.Value }}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 mb-3">
+                        <button
+                            *ngIf="isButtonVisible(theme) && directEmission.value.scope3 == 'Upstream' && disclosureMode!== 'view'"
+                            (click)="addUpstreamCategory()" type="button" class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Upstream categories</button>
+                        <!-- <div class="d-grid gap-2"> -->
+                        <!-- <button *ngIf="isButtonVisible(theme)" (click)="addDirectEmission(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Direct and Indirect Emission</button> -->
+
+                        <div class="row mb-2"
+                            *ngIf="UpstreamCategoriesarray.concat(filteredUpstreamCategoriesarray).length !== 0">
+                            <div class="pollutants-table-responsive pt-3" id="consumption">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <!-- <th>#</th> -->
+                                            <th>Upstream Category</th>
+                                            <th>Quantity</th>
+                                            <th>Unit</th>
+                                            <th *ngIf="disclosureMode!='view'">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of UpstreamCategoriesarray.concat(filteredUpstreamCategoriesarray); let i = index">
+                                            <!-- <td></td> -->
+                                            <td>{{ item.upstream_category_name }}</td>
+                                            <td>{{ item.quantity }}</td>
+                                            <td>{{ item.unit }}</td>
+                                            <td *ngIf="disclosureMode!='view'">
+                                                <button *ngIf="disclosureMode!=='view'" type="button"
+                                                    class="btn btn-primary btn-icon-text btn-xs action-btn float-start me-1"
+                                                    (click)="editUpstreamCategory(item, i)">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                                <button *ngIf="disclosureMode!=='view'" type="button"
+                                                    class="btn btn-danger btn-icon-text btn-xs action-btn float-start me-1"
+                                                    (click)="deleteUpstreamCategory(item, i)">
+                                                    <i class="feather icon-trash-2"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <button
+                            *ngIf="isButtonVisible(theme) && directEmission.value.scope3 == 'Downstream' && disclosureMode!== 'view'"
+                            (click)="addDownstreamCategory()" type="button" class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Downstream categories</button>
+                        <div class="row mb-2"
+                            *ngIf="DownstreamCategoriesarray.concat(filteredDownstreamCategoriesarray).length !== 0">
+                            <div class="pollutants-table-responsive pt-3" id="consumption">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <!-- <th>#</th> -->
+                                            <th>Downstream Category</th>
+                                            <th>Quantity</th>
+                                            <th>Unit</th>
+                                            <th *ngIf="disclosureMode!='view'">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of DownstreamCategoriesarray.concat(filteredDownstreamCategoriesarray); let i = index">
+                                            <!-- <td></td> -->
+                                            <td>{{ item.downstream_category_name }}</td>
+                                            <td>{{ item.quantity }}</td>
+                                            <td>{{ item.unit }}</td>
+                                            <td *ngIf="disclosureMode!='view'">
+                                                <button type="button"
+                                                    class="btn btn-primary btn-icon-text btn-xs action-btn float-start me-1"
+                                                    (click)="editDownstreamCategory(item, i)">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                                <button type="button"
+                                                    class="btn btn-danger btn-icon-text btn-xs action-btn float-start me-1"
+                                                    (click)="deleteDownstreamCategory(item, i)">
+                                                    <i class="feather icon-trash-2"></i>
+                                                </button>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Emission Intensity Base</mat-label>
+                                <mat-select formControlName="emission_intensity_base"
+                                    [disabled]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)">
+                                    <mat-option (click)="EmissionChange(data)" *ngFor="let data of lov[19]?.value"
+                                        [value]="data.value">
+                                        <span>{{ data.value }}</span>
+                                    </mat-option>
+                                    <mat-option (click)="new_emission_intensity_base()" class="option-btn">
+                                        <i class="mdi mdi-plus-circle"></i> Create New Emission Intensity Base
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Emission Intensity Quantity</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" matInput formControlName="emission_intensity_quantity">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Unit</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="text" matInput formControlName="emission_intensity_base_unit">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor placeholder="Notes" [modules]="quillConfig"
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            formControlName="direct_emission_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitDirectEmission('Open',title)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Energy consumption within the organization -->
+            <ng-template *ngIf="title.title==='Energy consumption within the organization'" ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist2">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addConsumptionWithin(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Energy consumption within the organization</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Energy Type</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <!-- <th>EIA Notification number</th> -->
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of ConsumptionWithinDetails.concat(filteredConsumptionWithinDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-3">{{data.energy_type}}</td>
+                                    <td class="col-sm-3">
+                                        {{ getTotalQuantity(data) }}
+                                      </td>                                                                                                            
+                              <td class="col-sm-3">{{data.unit}}</td>
+                                    <!-- <td class="col-sm-1">{{data.eia_notification_number}}</td> -->
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyConsumptionWithin(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewConsumptionWithin(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteConsumptionWithin(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor placeholder="Notes" [modules]="quillConfig"
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            formControlName="energy_consumption_within_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitConsumptionWithin('Open',title)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Energy consumption Outside the organization -->
+            <ng-template *ngIf="title.title==='Energy consumption Outside the organization'" ngbPanelContent>
+                <div class="table-responsive pt-3" id="environmentChecklist2">
+                    <div class="d-grid gap-2">
+                        <button *ngIf="isButtonVisible(theme)" (click)="addConsumptionOutside(title)" type="button"
+                            class="btn btn-secondary btn-icon-text"><i
+                                class="feather icon-check-square btn-icon-prepend"></i>
+                            Add Energy consumption Outside the organization</button>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Energy Type</th>
+                                <th>Energy Category</th>
+                                <!-- <th>EIA Notification number</th> -->
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                *ngFor="let data of ConsumptionOutsideDetails.concat(filteredConsumptionOutsideDetails); let i = index">
+                                <ng-container>
+                                    <td class="col-sm-2">{{data.energy_type}}</td>
+                                    <td class="col-sm-3">{{data.energy_category}}</td>
+                                    <!-- <td class="col-sm-1">{{data.eia_notification_number}}</td> -->
+                                    <td class="col-sm-3">
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-success btn-icon btn-xs  action-btn me-1"
+                                            (click)="ModifyConsumptionOutside(data,i)" ngbTooltip="Modify">
+                                            <i class="feather icon-edit"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary btn-icon btn-xs action-btn me-1 "
+                                            (click)="viewConsumptionOutside(data,i)" ngbTooltip="View">
+                                            <i class="feather icon-eye"></i>
+                                        </button>
+
+
+                                        <button *ngIf="isButtonVisible(theme)" type="button"
+                                            class="btn btn-danger btn-icon btn-xs action-btn me-1"
+                                            (click)="deleteConsumptionOutside(data,i)" ngbTooltip="Delete">
+                                            <i class="feather icon-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="esgDisclosure" class="row mb-4 mt-4">
+                        <quill-editor placeholder="Notes" [modules]="quillConfig"
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            formControlName="energy_consumption_outside_notes">
+                        </quill-editor>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button *ngIf="isButtonVisible(theme)" (click)="submitConsumptionOutside('Open',title)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+            </ng-template>
+            <!-- #Title Emissions of ozone-depleting substances (ODS) -->
+            <ng-template [formGroup]="emissionofODS"
+                *ngIf="title.title==='Emissions of ozone-depleting substances (ODS)'" ngbPanelContent>
+                <div class="table-responsive pt-2" id="socialChecklist">
+                    <!-- <div class="row">
+                        <p class="mt-1 mb-1">Number of Employees who are part of association(s) or Union</p>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Type of ODS</mat-label>
+                                <mat-select formControlName="type_of_ods"
+                                    [disabled]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)">
+                                    <mat-option *ngFor="let data of lov[20]?.value" [value]="data.value">
+                                        <span class="option-container">{{ data.value }}
+                                            <span>
+                                                <i class="feather icon-edit modifyicon"
+                                                    (click)="modifyTypeofODS(data)"></i>
+                                                <i class="feather icon-trash-2 deleteicon"
+                                                    (click)="deleteTypeofODS(data)"></i>
+                                            </span>
+                                        </span>
+                                    </mat-option>
+                                    <mat-option (click)="newTypeOfODS()" class="option-btn">
+                                        <i class="mdi mdi-plus-circle"></i> Create New Type of ODS
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Quantity</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" matInput formControlName="ods_quantity">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Unit</mat-label>
+                                <mat-select formControlName="ods_unit"
+                                    [disabled]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)">
+                                    <mat-option *ngFor="let data of lov[42]?.value" [value]="data.Value">
+                                        <span>{{ data.Value }}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div id="esgDisclosure" class="row mb-4 ">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Notes" [modules]="quillConfig" formControlName="ods_notes">
+                        </quill-editor>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button (click)="submitTypeOfODS('Open',title)" *ngIf="isButtonVisible(theme)" type="button"
+                            class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+            <!-- #Title Supplier Environmental Assessment -->
+            <ng-template [formGroup]="supplierEnvAssesment" *ngIf="title.title==='Supplier Environmental Assessment'"
+                ngbPanelContent>
+                <div class="table-responsive pt-2" id="socialChecklist">
+
+                    <!-- <div class="row">
+                        <p class="mt-1 mb-1">Number of Employees who are part of association(s) or Union</p>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Number of new suppliers that were screened
+                                    using environmental criteria</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" matInput formControlName="number_of_suppliers">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div id="esgDisclosure" class="row mb-4 ">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Notes" [modules]="quillConfig" formControlName="assessment_notes">
+                        </quill-editor>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button (click)="submitSupplierAssessment('Open',title)" *ngIf="isButtonVisible(theme)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+            <!-- #Title Water Recycled -->
+            <ng-template [formGroup]="WaterRecycled" *ngIf="title.title==='Water Recycled'" ngbPanelContent>
+                <div class="table-responsive pt-2" id="socialChecklist">
+                    <!-- <div class="row">
+                        <p class="mt-1 mb-1">Number of Employees who are part of association(s) or Union</p>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Quantity</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" matInput formControlName="recycled_quantity">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Unit</mat-label>
+                                <mat-select formControlName="recycled_unit"
+                                    [disabled]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)">
+                                    <mat-option *ngFor="let data of lov[44]?.value" [value]="data.Value">
+                                        <span>{{ data.Value }}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div id="esgDisclosure" class="row mb-4 ">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Notes" [modules]="quillConfig" formControlName="recycled_notes">
+                        </quill-editor>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button (click)="submitWaterRecycled('Open',title)" *ngIf="isButtonVisible(theme)" type="button"
+                            class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+            <!-- #Title Environmental Impact Assessment of Value Chain Partners -->
+            <ng-template [formGroup]="ImpactAssessment"
+                *ngIf="title.title==='Environmental Impact Assessment of Value Chain Partners'" ngbPanelContent>
+                <div class="table-responsive pt-2" id="socialChecklist">
+
+                    <!-- <div class="row">
+                    <p class="mt-1 mb-1">Number of Employees who are part of association(s) or Union</p>
+                </div> -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Total number of value chain partners</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" matInput formControlName="no_of_partners">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Number of value chain partners assessed for environmental impacts</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="text" matInput formControlName="no_of_partners_for_impact">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div id="esgDisclosure" class="row mb-4 ">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Notes" [modules]="quillConfig" formControlName="impact_assessment_notes">
+                        </quill-editor>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button (click)="submitImpactAssessment('Open',title)" *ngIf="isButtonVisible(theme)"
+                            type="button" class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+            <!-- #Title Habitat Protected or Restored -->
+            <ng-template [formGroup]="Habitat" *ngIf="title.title==='Habitat Protected or Restored'" ngbPanelContent>
+                <div class="table-responsive pt-2" id="socialChecklist">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Size of habitat area protected or restored</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" matInput formControlName="habitat_area_size">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Unit</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="text" matInput formControlName="habitat_unit">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Status of habitat area at close of the reporting period</mat-label>
+                                <mat-select formControlName="habitat_area_status"
+                                    [disabled]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)">
+                                    <mat-option *ngFor="let data of lov[34]?.value" [value]="data.Value">
+                                        <span>{{ data.Value }}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div id="esgDisclosure" class="row mb-4 ">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Notes" [modules]="quillConfig" formControlName="habitate_note">
+                        </quill-editor>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button (click)="submitHabitat('Open',title)" *ngIf="isButtonVisible(theme)" type="button"
+                            class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+            <!-- #Title Compliance with Environmental Laws and Regulations -->
+            <ng-template [formGroup]="Compliance"
+                *ngIf="title.title==='Compliance with Environmental Laws and Regulations'" ngbPanelContent>
+                <div class="table-responsive pt-2" id="socialChecklist">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Number of incidents of non-compliance</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" matInput formControlName="no_of_incident">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Type of penalty</mat-label>
+                                <mat-select formControlName="type_of_penalty"
+                                    [disabled]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)">
+                                    <mat-option *ngFor="let data of lov[38]?.value" [value]="data.Value">
+                                        <span>{{ data.Value }}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Name of environmental law and regulation the organization was non-compliant
+                                    with</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="text" matInput formControlName="name_of_laws">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" *ngIf="Compliance.value.type_of_penalty==='Fines'">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Amount (INR)</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="text" matInput formControlName="amount">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div id="esgDisclosure" class="row mb-4 ">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Details of the non-compliance" [modules]="quillConfig"
+                            formControlName="details_of_noncompliance">
+                        </quill-editor>
+                    </div>
+                    <div id="esgDisclosure" class="row mb-4 ">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Corrective actions taken" [modules]="quillConfig"
+                            formControlName="corrective_actions">
+                        </quill-editor>
+                    </div>
+                    <div id="esgDisclosure" class="row mb-4 ">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Notes" [modules]="quillConfig" formControlName="compliance_notes">
+                        </quill-editor>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button (click)="submitCompliance('Open',title)" *ngIf="isButtonVisible(theme)" type="button"
+                            class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+            <!-- #Title Negative Environmental Impacts in the Supply Chain -->
+            <ng-template [formGroup]="Negetive"
+                *ngIf="title.title==='Negative Environmental Impacts in the Supply Chain'" ngbPanelContent>
+                <div class="table-responsive pt-2" id="socialChecklist">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-secondary btn-icon-text mb-2">
+                            Provide the number of suppliers</button>
+                    </div>
+                    <!-- <div class="row">
+                 <p class="mt-1 mb-1">Number of Employees who are part of association(s) or Union</p>
+             </div> -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Assessed for environmental impacts</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" matInput formControlName="assessed_for_environmental_impacts">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Identified as having significant actual and potential negative environmental
+                                    impacts</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" matInput formControlName="potential_negetive_impact">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="mat-hint long-hint">Identified as having significant actual and potential
+                                negative environmental
+                                impacts with which improvements were agreed upon as a result of
+                                assessment</span>
+                            <mat-form-field appearance="outline">
+                                <!-- <mat-label>Identified as having significant actual and potential negative environmental
+                                    impacts with which improvements were agreed upon as a result of
+                                    assessment</mat-label> -->
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" matInput formControlName="improvements_agreed">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="mat-hint long-hint">Identified as having significant actual and potential
+                                negative environmental
+                                impacts with which relationships were terminated as a result of
+                                assessment</span>
+                            <mat-form-field appearance="outline">
+                                <!-- <mat-label>Identified as having significant actual and potential negative environmental
+                                    impacts with which relationships were terminated as a result of
+                                    assessment</mat-label> -->
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="number" matInput formControlName="relationships_terminated">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div id="esgDisclosure" class="row mb-4 ">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Details on the termination of relationships as a result of assessment"
+                            [modules]="quillConfig" formControlName="termination_of_relationship_details">
+                        </quill-editor>
+                    </div>
+                    <div id="esgDisclosure" class="row mb-4 ">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Notes" [modules]="quillConfig" formControlName="negetive_impact_notes">
+                        </quill-editor>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button (click)="submitNegetive('Open',title)" *ngIf="isButtonVisible(theme)" type="button"
+                            class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+            <!-- #Title Life Cycle Assessment of Products/Services -->
+            <ng-template [formGroup]="LifecycleAssessment"
+                *ngIf="title.title==='Life Cycle Assessment of Products/Services'" ngbPanelContent>
+                <div class="table-responsive pt-2" id="socialChecklist">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <mat-form-field appearance="outline">
+                                <mat-label>NIC Code</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="text" matInput formControlName="nic_code">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Name of Product/Service</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="text" matInput formControlName="name_of_product">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-5">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Percentage of Total Turnover Contributed</mat-label>
+                                <input
+                                    [readonly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                                    type="text" matInput formControlName="turnover_contributed">
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Boundary for which the Life Cycle Perspective/Assessment was
+                                    conducted</mat-label>
+                                <mat-select formControlName="boundary"
+                                    [disabled]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)">
+                                    <mat-option *ngFor="let data of lov[37]?.value" [value]="data.Value">
+                                        <span>{{ data.Value }}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Whether conducted by independent external agency</mat-label>
+                                <mat-select formControlName="conducted_by"
+                                    [disabled]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)">
+                                    <mat-option *ngFor="let data of lov[39]?.value" [value]="data.Value">
+                                        <span>{{ data.Value }}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-5">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Results communicated in public domain</mat-label>
+                                <mat-select formControlName="results_communicated"
+                                    [disabled]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)">
+                                    <mat-option *ngFor="let data of lov[39]?.value" [value]="data.Value">
+                                        <span>{{ data.Value }}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div id="esgDisclosure" class="row mb-4 ">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Details of any significant social or environmental concerns and/or risks arising from production or disposal of your products / services"
+                            [modules]="quillConfig" formControlName="details">
+                        </quill-editor>
+                    </div>
+                    <div id="esgDisclosure" class="row mb-4 ">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Corrective actions taken" [modules]="quillConfig"
+                            formControlName="corrective_actions">
+                        </quill-editor>
+                    </div>
+                    <div id="esgDisclosure" class="row mb-4 ">
+                        <quill-editor
+                            [readOnly]="!(((roles && roles.split(',').includes('Contributor')) && (theme && theme.status === 'Open')) || esgHead)"
+                            placeholder="Notes" [modules]="quillConfig" formControlName="lifecycle_notes">
+                        </quill-editor>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mb-4">
+                        <button (click)="submitLifecycle('Open',title)" *ngIf="isButtonVisible(theme)" type="button"
+                            class="btn btn-secondary">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-panel>
+    </ngb-accordion>
+
+    <div *ngIf="theme.theme=== 'Materials'" class="d-flex justify-content-end mt-3 gap-2 mb-4">
+        <button (click)="updateMaterialThemeStatus('Submitted for Review',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && theme.status === 'Open'&&disclosureMode!=='view'"
+            type="button" class="btn btn-success">
+            <i class="feather icon-send btn-icon-prepend"></i>
+            Submit
+        </button>
+        <button (click)="updateMaterialThemeStatus('Review Failed',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+        <button (click)="updateMaterialThemeStatus('Submitted for Approval',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Review Passed
+        </button>
+        <button *ngIf=" theme.status === 'Review Failed'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+
+        <button (click)="updateMaterialThemeStatus('Rejected',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateMaterialThemeStatus('Approved',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Approved'" type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Rejected'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateMaterialThemeStatus('Open',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && (theme.status === 'Rejected' || theme.status === 'Review Failed')"
+            type="button" class="btn btn-warning">
+            <i class="feather icon-book-open"></i>
+            Re-Open
+        </button>
+    </div>
+    <div *ngIf="theme.theme=== 'Water'" class="d-flex justify-content-end mt-3 gap-2 mb-4">
+        <button (click)="updateWaterThemeStatus('Submitted for Review',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && theme.status === 'Open'&&disclosureMode!=='view'"
+            type="button" class="btn btn-success">
+            <i class="feather icon-send btn-icon-prepend"></i>
+            Submit
+        </button>
+        <button (click)="updateWaterThemeStatus('Review Failed',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+        <button (click)="updateWaterThemeStatus('Submitted for Approval',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Review Passed
+        </button>
+        <button *ngIf=" theme.status === 'Review Failed'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+
+        <button (click)="updateWaterThemeStatus('Rejected',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateWaterThemeStatus('Approved',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Approved'" type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Rejected'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateWaterThemeStatus('Open',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && (theme.status === 'Rejected' || theme.status === 'Review Failed')"
+            type="button" class="btn btn-warning">
+            <i class="feather icon-book-open"></i>
+            Re-Open
+        </button>
+    </div>
+    <div *ngIf="theme.theme=== 'Energy'" class="d-flex justify-content-end mt-3 gap-2 mb-4">
+        <button (click)="updateEnergyThemeStatus('Submitted for Review',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && theme.status === 'Open'&&disclosureMode!=='view'"
+            type="button" class="btn btn-success">
+            <i class="feather icon-send btn-icon-prepend"></i>
+            Submit
+        </button>
+        <button (click)="updateEnergyThemeStatus('Review Failed',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+        <button (click)="updateEnergyThemeStatus('Submitted for Approval',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Review Passed
+        </button>
+        <button *ngIf=" theme.status === 'Review Failed'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+
+        <button (click)="updateEnergyThemeStatus('Rejected',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateEnergyThemeStatus('Approved',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Approved'" type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Rejected'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateEnergyThemeStatus('Open',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && (theme.status === 'Rejected' || theme.status === 'Review Failed')"
+            type="button" class="btn btn-warning">
+            <i class="feather icon-book-open"></i>
+            Re-Open
+        </button>
+    </div>
+    <div *ngIf="theme.theme=== 'Emission'" class="d-flex justify-content-end mt-3 gap-2 mb-4">
+        <button (click)="updateEmissionThemeStatus('Submitted for Review',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && theme.status === 'Open'&&disclosureMode!=='view'"
+            type="button" class="btn btn-success">
+            <i class="feather icon-send btn-icon-prepend"></i>
+            Submit
+        </button>
+        <button (click)="updateEmissionThemeStatus('Review Failed',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+        <button (click)="updateEmissionThemeStatus('Submitted for Approval',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Review Passed
+        </button>
+        <button *ngIf=" theme.status === 'Review Failed'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+
+        <button (click)="updateEmissionThemeStatus('Rejected',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateEmissionThemeStatus('Approved',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Approved'" type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Rejected'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateEmissionThemeStatus('Open',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && (theme.status === 'Rejected' || theme.status === 'Review Failed')"
+            type="button" class="btn btn-warning">
+            <i class="feather icon-book-open"></i>
+            Re-Open
+        </button>
+    </div>
+    <div *ngIf="theme.theme=== 'Waste'" class="d-flex justify-content-end mt-3 gap-2 mb-4">
+        <button (click)="updateWasteThemeStatus('Submitted for Review',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && theme.status === 'Open'&&disclosureMode!=='view'"
+            type="button" class="btn btn-success">
+            <i class="feather icon-send btn-icon-prepend"></i>
+            Submit
+        </button>
+        <button (click)="updateWasteThemeStatus('Review Failed',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+        <button (click)="updateWasteThemeStatus('Submitted for Approval',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Review Passed
+        </button>
+        <button *ngIf=" theme.status === 'Review Failed'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+
+        <button (click)="updateWasteThemeStatus('Rejected',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateWasteThemeStatus('Approved',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Approved'" type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Rejected'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateWasteThemeStatus('Open',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && (theme.status === 'Rejected' || theme.status === 'Review Failed')"
+            type="button" class="btn btn-warning">
+            <i class="feather icon-book-open"></i>
+            Re-Open
+        </button>
+    </div>
+    <div *ngIf="theme.theme=== 'Biodiversity'" class="d-flex justify-content-end mt-3 gap-2 mb-4">
+        <button (click)="updateBiodiversityThemeStatus('Submitted for Review',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && theme.status === 'Open'&&disclosureMode!=='view'"
+            type="button" class="btn btn-success">
+            <i class="feather icon-send btn-icon-prepend"></i>
+            Submit
+        </button>
+        <button (click)="updateBiodiversityThemeStatus('Review Failed',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+        <button (click)="updateBiodiversityThemeStatus('Submitted for Approval',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Review Passed
+        </button>
+        <button *ngIf=" theme.status === 'Review Failed'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+
+        <button (click)="updateBiodiversityThemeStatus('Rejected',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateBiodiversityThemeStatus('Approved',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Approved'" type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Rejected'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateBiodiversityThemeStatus('Open',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && (theme.status === 'Rejected' || theme.status === 'Review Failed')"
+            type="button" class="btn btn-warning">
+            <i class="feather icon-book-open"></i>
+            Re-Open
+        </button>
+    </div>
+    <div *ngIf="theme.theme=== 'Environmental Supply Chain Management'"
+        class="d-flex justify-content-end mt-3 gap-2 mb-4">
+        <button (click)="updateEnvSupplyCHainThemeStatus('Submitted for Review',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && theme.status === 'Open'&&disclosureMode!=='view'"
+            type="button" class="btn btn-success">
+            <i class="feather icon-send btn-icon-prepend"></i>
+            Submit
+        </button>
+        <button (click)="updateEnvSupplyCHainThemeStatus('Review Failed',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+        <button (click)="updateEnvSupplyCHainThemeStatus('Submitted for Approval',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Review Passed
+        </button>
+        <button *ngIf=" theme.status === 'Review Failed'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+
+        <button (click)="updateEnvSupplyCHainThemeStatus('Rejected',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateEnvSupplyCHainThemeStatus('Approved',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Approved'" type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Rejected'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateEnvSupplyCHainThemeStatus('Open',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && (theme.status === 'Rejected' || theme.status === 'Review Failed')"
+            type="button" class="btn btn-warning">
+            <i class="feather icon-book-open"></i>
+            Re-Open
+        </button>
+    </div>
+    <div *ngIf="theme.theme=== 'Other Environmental Factors'" class="d-flex justify-content-end mt-3 gap-2 mb-4">
+        <button (click)="updateOtherEnvFactorsThemeStatus('Submitted for Review',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && theme.status === 'Open'&&disclosureMode!=='view'"
+            type="button" class="btn btn-success">
+            <i class="feather icon-send btn-icon-prepend"></i>
+            Submit
+        </button>
+        <button (click)="updateOtherEnvFactorsThemeStatus('Review Failed',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+        <button (click)="updateOtherEnvFactorsThemeStatus('Submitted for Approval',theme)"
+            *ngIf="roles.split(',').includes('Reviewer') && theme.status === 'Submitted for Review'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Review Passed
+        </button>
+        <button *ngIf=" theme.status === 'Review Failed'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Review Failed
+        </button>
+
+        <button (click)="updateOtherEnvFactorsThemeStatus('Rejected',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateOtherEnvFactorsThemeStatus('Approved',theme)"
+            *ngIf="roles.split(',').includes('Approver') && theme.status === 'Submitted for Approval'&&disclosureMode!=='view'"
+            type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Approved'" type="button" class="btn btn-primary">
+            <i class="feather icon-check-circle btn-icon-prepend"></i>
+            Approved
+        </button>
+        <button *ngIf=" theme.status === 'Rejected'" type="button" class="btn btn-danger">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Rejected
+        </button>
+        <button (click)="updateOtherEnvFactorsThemeStatus('Open',theme)"
+            *ngIf="roles.split(',').includes('Contributor') && (theme.status === 'Rejected' || theme.status === 'Review Failed')"
+            type="button" class="btn btn-warning">
+            <i class="feather icon-book-open"></i>
+            Re-Open
+        </button>
+    </div>
+    <hr class="my-2 w-100">
+
+</div>
+<div class="d-flex justify-content-end mt-3 gap-2 mb-4"
+    *ngIf="allThemesHaveRequiredStatus() && !allThemesAreFullyProcessed() && roles.split(',').includes('Approver')&&disclosureMode!=='view'">
+
+    <button (click)="updateAllThemeStatus('Reject All')" type="button" class="btn btn-danger">
+        <i class="feather icon-x-circle btn-icon-prepend"></i>
+        Reject All
+    </button>
+
+    <button (click)="updateAllThemeStatus('Approve All')" type="button" class="btn btn-success">
+        <i class="feather icon-check-circle btn-icon-prepend"></i>
+        Approve All
+    </button>
+
+</div>

@@ -1,0 +1,44 @@
+
+  /* Styles for button group */
+ 
+  .logo {
+    img {
+        width: 200px;
+    }
+    margin-bottom: 10px;
+}
+.auth-form {
+    background-color: white;
+    height: 100vh;
+    padding: 55px;
+    padding-top: 12%;
+
+    .auth-description {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .logo {
+        img {
+            width: 200px;
+        }
+    }
+
+    .auth-submit {
+        margin-top: 20px;
+    }
+}
+
+.form-control {
+    // border-radius: 5px;
+    border-color: #08c15b;
+}
+
+.form-control:focus {
+    outline: none !important;
+    /* border:1px solid #08c15b; */
+    /* box-shadow: 0 0 10px #08c15b; */
+}
+.table-responsive{
+    overflow-x: unset;
+}

@@ -1,0 +1,134 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justsify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Chemical</mat-label>
+                        <input type="text" matInput formControlName="chemical">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Transaction Date</mat-label>
+                        <input matInput [matDatepicker]="dp" placeholder="Choose a date" [formControl]="transactiondate"
+                            (dateChange)="transactionDate($event)">
+                        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                        <mat-datepicker #dp></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Available Quantity</mat-label>
+                        <input type="text" matInput formControlName="total_quantity_val">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Division</mat-label>
+                        <mat-select [formControl]="Division" (selectionChange)="BusinessUnit($event)">
+                            <mat-option [value]="data"
+                                *ngFor="let data of divisions">{{data.attributes.division_name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Department</mat-label>
+                        <mat-select formControlName="department">
+                            <mat-option *ngFor="let department of departments"
+                                value="{{department.attributes.department_name}}">
+                                {{department.attributes.department_name}}</mat-option>
+
+                            <mat-option (click)="create_new_department()" class="option-btn"> <i
+                                    class=" mdi mdi-plus-circle"></i> Create department </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-12">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Authorised Person</mat-label>
+                        <input type="text" matInput formControlName="authorised_person">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+
+                </div>
+            </div>
+
+
+            <div class="row mb-2" *ngIf="stock">
+                <button class="btn btn-warning" type="button">
+                    There is not enough quantity of the selected chemical to issue.
+                </button>
+            </div>
+
+            <div class="row ">
+
+
+
+
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Issuing Quantity</mat-label>
+                        <input type="number" matInput formControlName="issuing_quantity" (change)="balCalc($event)">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Cost</mat-label>
+                        <input type="text" matInput formControlName="cost_val">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Balance Quantity</mat-label>
+                        <input type="text" matInput formControlName="balance_quantity">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+
+
+                <!-- <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Issued Quantity</mat-label>.
+                        <input type="text"  matInput formControlName="total_quantity_val" (change)="balCalc($event)">
+                        <mat-error>Required Field, Numbers only</mat-error>
+                    </mat-form-field>
+                </div> -->
+
+            </div>
+            <div class="row mb-2" *ngIf="unavailable">
+                <button class="btn btn-warning" type="button">
+                    Unable to issue, the quantity is not available.
+                </button>
+            </div>
+             
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4" (click)="confirm()"
+                    [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

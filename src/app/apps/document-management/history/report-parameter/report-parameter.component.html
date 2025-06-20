@@ -1,0 +1,180 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+
+            <div class="row ">
+                <div class="col-md-12">
+
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Document Type</mat-label>
+                        <mat-select [formControl]="documentTypes" multiple (selectionChange)="documentTypeVal($event)">
+                            <mat-select-trigger>
+                                {{documentTypes.value ? documentTypes.value[0] : ''}}
+                                <span *ngIf="documentTypes.value?.length > 1" class="example-additional-selection">
+                                    (+{{documentTypes.value.length - 1}}
+                                    {{documentTypes.value?.length === 2 ?
+                                    'other' :
+                                    'others'}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let type of documentType"
+                                [value]="type.attributes.Value">{{type.attributes.Value}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+
+
+                    <!-- <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Document Type</mat-label>
+                        <mat-select formControlName="document_type">
+                            <mat-option value="{{data.attributes.Value}}" *ngFor="let data of documentType">
+                                {{data.attributes.Value}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field> -->
+                </div>
+            </div>
+
+            <div class="row ">
+                <div class="col-md-6">
+
+
+                    <!-- <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Issued Year</mat-label>
+                        <mat-select [formControl]="issuedYearTypes" multiple (selectionChange)="issuedYearVal($event)">
+                            <mat-select-trigger>
+                                {{issuedYearTypes.value ? issuedYearTypes.value[0] : ''}}
+                                <span *ngIf="issuedYearTypes.value?.length > 1" class="example-additional-selection">
+                                    (+{{issuedYearTypes.value.length - 1}}
+                                    {{issuedYearTypes.value?.length === 2 ?
+                                    'other' :
+                                    'others'}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let data of years" [value]="data.year">{{data.year}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field> -->
+
+                    <mat-form-field appearance="outline" color="primary" id="dashboard">
+                        <mat-label>Year</mat-label>
+                        <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+                            <input matStartDate formControlName="start" placeholder="Start year" readonly
+                                 />
+                            <input matEndDate formControlName="end" placeholder="End year" readonly
+                                />
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker startView="multi-year"
+                            (yearSelected)="onYearSelected($event,picker)"
+                            panelClass="year-picker"></mat-date-range-picker>
+                        <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">
+                            Invalid start year
+                        </mat-error>
+                        <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">
+                            Invalid end year
+                        </mat-error>
+                    </mat-form-field>
+
+
+                    <!-- <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Issued Year</mat-label>
+                        <mat-select formControlName="year">
+                            <mat-option value="{{data.year}}" *ngFor="let data of years">
+                                {{data.year}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field> -->
+                </div>
+                <div class="col-md-6">
+
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Division</mat-label>
+                        <mat-select [formControl]="divisionTypes" multiple (selectionChange)="divisionVal($event)">
+                            <mat-select-trigger>
+                                {{divisionTypes.value ? divisionTypes.value[0] : ''}}
+                                <span *ngIf="divisionTypes.value?.length > 1" class="example-additional-selection">
+                                    (+{{divisionTypes.value.length - 1}}
+                                    {{divisionTypes.value?.length === 2 ?
+                                    'other' :
+                                    'others'}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let data of divisions"
+                                [value]="data.division_name">{{data.division_name}}</mat-option>
+                            <mat-option [value]="allUnits">All units</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+
+
+
+                    <!-- <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Division</mat-label>
+                        <mat-select formControlName="division">
+                            <mat-option value="{{data.division_name}}" *ngFor="let data of divisions">
+                                {{data.division_name}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field> -->
+                </div>
+
+
+
+            </div>
+
+            <div class="row ">
+                <div class="col-md-6">
+                    <!-- <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="status">
+                            <mat-option value="Active">Active</mat-option>
+                            <mat-option value="Expired">Expired</mat-option>
+
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field> -->
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Status</mat-label>
+                        <mat-select [formControl]="statusesForm" multiple (selectionChange)="statusVal($event)">
+                            <mat-select-trigger>
+                                {{statusesForm.value ? statusesForm.value[0] : '' }}
+                                <span *ngIf="statusesForm.value?.length > 1" class="example-additional-selection">
+                                    (+{{statusesForm.value.length - 1 }}
+                                    {{ statusesForm.value?.length === 2 ? 'other' : 'others' }})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let status of statuses" [value]="status">{{ status }}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Form.controls['status'].hasError('required')">Required Field</mat-error>
+                    </mat-form-field>
+
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Format</mat-label>
+                        <mat-select formControlName="format">
+                            <mat-option value="PDF">PDF</mat-option>
+                            <mat-option value="EXCEL">Excel</mat-option>
+
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                    (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+
+                <button type="button" class="btn btn-secondary btn-icon-text float-end mt-4" [mat-dialog-close]="true">
+
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

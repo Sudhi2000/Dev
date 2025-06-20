@@ -1,0 +1,213 @@
+<h2 mat-dialog-title>Non-Compliance</h2>
+<mat-dialog-content class="mat-typography" [formGroup]="Form">
+    <div class="question-container">
+        <p innerHTML="{{defaults.question || defaults[0].question}}"></p>
+    </div>
+    <div class="row mt-3 mb-4 text-center">
+        <div class="d-grid gap-2">
+
+            <button type="button" class="btn btn-secondary" id="ai-suggest" (click)="checkNonCompliance()">AI -
+                Suggest Non-Compliance</button>
+            <p class="error hide" id="error-text">Question is not Properly Found</p>
+            <button type="button" class="btn btn-success hide" id="ai-loader">
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                Please wait our AI is looking recommendations for non-compliance.
+            </button>
+
+        </div>
+
+    </div>
+    <div class="row ">
+        <quill-editor placeholder="Please provide non-compliance" [modules]="quillConfig" formControlName="remarks">
+        </quill-editor>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <mat-form-field appearance="outline">
+                <mat-label>Severity</mat-label>
+                <mat-select formControlName="priority">
+                    <mat-option *ngFor="let value of priority_dropdown" value="{{value}}">
+                        {{value}}</mat-option>
+                </mat-select>
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="col-md-6">
+            <mat-form-field appearance="outline" color="primary">
+                <mat-label>Reported Date</mat-label>
+                <input matInput [matDatepicker]="RpApproval" placeholder="Choose a date" formControlName="reported_date"
+                    (dateChange)="report_Date($event)">
+                <mat-datepicker-toggle matSuffix [for]="RpApproval"></mat-datepicker-toggle>
+                <mat-datepicker #RpApproval></mat-datepicker>
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <mat-form-field appearance="outline" color="primary">
+                <mat-label>Due Date</mat-label>
+                <input matInput [matDatepicker]="dpApproval" placeholder="Choose a date" [formControl]="dueDate"
+                    (dateChange)="due_date($event)">
+                <mat-datepicker-toggle matSuffix [for]="dpApproval"></mat-datepicker-toggle>
+                <mat-datepicker #dpApproval></mat-datepicker>
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col">
+            <mat-form-field fxFlex appearance="outline" color="primary">
+                <mat-label>Assignee</mat-label>
+                <mat-select formControlName="assignee">
+                    <mat-option *ngFor="let assignee of peopleList" [value]="assignee.id">
+                        <span>{{ assignee?.attributes?.first_name }}
+                            {{assignee?.attributes?.last_name}}</span>
+                    </mat-option>
+                </mat-select>
+                <mat-error>Required Field</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <button type="button" class="btn btn-icon-text btn-outline-twitter" (click)="view_action_plan_document()"
+            *ngIf="Form.value.evidence_id">
+            <i class="feather icon-file-text btn-icon-prepend"></i>
+            Download Action Plan Evidence
+        </button>
+
+    </div>
+    <div class="row mt-3">
+
+        <button type="button" class="btn btn-icon-text btn-outline-twitter " (click)="remove_action_plan_document()"
+            *ngIf="Form.value.evidence_id">
+            <i class="feather icon-x-circle btn-icon-prepend"></i>
+            Remove Action Plan Evidence
+        </button>
+    </div>
+
+    <div class="col-md-12">
+        <div class="row mt-3">
+            <p class="mt-1 mb-1" *ngIf="multiple_evidence_Before">Multiple Evidence Before</p>
+
+        </div>
+        <div class="custom-dropzone-container-multiple">
+            <div *ngFor="let file of MultipleDoumentBeforeFiles; let i = index;" class="custom-dropzone-multiple">
+                <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [file]="file"
+                    (click)="openmultipleBeforeDocument(i); $event.stopPropagation();">
+                    <ngx-dropzone-label class="preview-text">
+                        <div class="preview-text">{{ file.name }}</div>
+                    </ngx-dropzone-label>
+                </ngx-dropzone-preview>
+            </div>
+        </div>
+
+    </div>
+    <!-- <div class="col-md-12" *ngIf="Form.value.evidence!==0">
+        <div class="row mt-3">
+            <p class="mt-1 mb-1" *ngIf="evidence_Before">Evidence Before</p>
+
+        </div>
+        <div class="custom-dropzone-container">
+            <div *ngFor="let file of DocumentFiles; let i = index;" class="custom-dropzone">
+                <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [file]="file"
+                    (click)="openDocument(i); $event.stopPropagation();">
+                    <ngx-dropzone-label class="preview-text">
+                        <div class="preview-text">{{ file.name }}</div>
+                    </ngx-dropzone-label>
+                </ngx-dropzone-preview>
+            </div>
+        </div>
+
+    </div> -->
+
+    <div class="row mt-3" *ngIf="!Form.value.evidence_id">
+        <div class="custom-dropzone" ngx-dropzone
+            [accept]="'application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, image/jpeg, image/png'"
+            (change)="onSelect($event)">
+            <ngx-dropzone-label>Drop your Action Plan evidence. Please ensure that the document size is less
+                than 10 MB</ngx-dropzone-label>
+            <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true" *ngFor="let f of files"
+                [file]="f" (removed)="onRemove(f)">
+                <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+            </ngx-dropzone-preview>
+        </div>
+
+    </div>
+
+    <div class="form-check form-switch mb-3 mt-3" *ngIf="addMoreEvidence">
+        <input type="checkbox" class="form-check-input" id="formSwitch1"
+            formControlName="add_more_evidence">
+        <label class="form-check-label" for="formSwitch1">Add more evidence</label>
+    </div>
+    <!-- <div class="row mt-3" *ngIf="addMoreEvidence">
+        <button type="button" class="btn btn-primary" (click)="uploadEvidence()">Add more evidence</button>
+    </div> -->
+
+    <!-- <div class="row mt-3 mb-3" *ngIf="evidenceList.length > 0">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Image</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of evidenceList; let i=index">
+                        <td>{{ item.title }}</td>
+                        <td>
+                           
+                            <div class="custom-dropzone" ngx-dropzone [disableClick]="true">
+                                <ng-container>
+                                    <ngx-dropzone-image-preview
+                                        *ngIf="item.file.type === 'image/png' || item.file.type === 'image/jpeg' || item.file.type === 'image/jpg'"
+                                        ngProjectAs="ngx-dropzone-preview" [removable]="false" [file]="item.file">
+                                    </ngx-dropzone-image-preview>
+                                </ng-container>
+            
+            
+                                <ng-container>
+                                    <ngx-dropzone-preview *ngIf="item.file.type === 'application/pdf'" ngProjectAs="ngx-dropzone-preview"
+                                        [removable]="true" [file]="item.file" (click)="openPdf(item.file)">
+                                        <ngx-dropzone-label>{{ item.file.name }}</ngx-dropzone-label>
+                                    </ngx-dropzone-preview>
+                                </ng-container>
+                            </div>
+                            
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-icon-text btn-xs action-btn float-start"
+                                (click)="deleteImage(i)" ngbTooltip="Delete">
+                                <i class="feather icon-trash-2"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div> -->
+
+
+    <div class="row mt-3" *ngIf="Form.value.add_more_evidence">
+        <div class="custom-dropzone" ngx-dropzone 
+           [accept]="'application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, image/jpeg, image/png'"
+            (change)="onSelectMoreEvidence($event)">
+            <ngx-dropzone-label>Drop your Action Plan evidence. Please ensure that the document size is less
+                than 10 MB</ngx-dropzone-label>
+            <ngx-dropzone-preview ngProjectAs="ngx-dropzone-preview" [removable]="true"
+                *ngFor="let f of moreFiles" [file]="f" (removed)="onRemoveMoreEvidence(f)">
+                <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+            </ngx-dropzone-preview>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button type="button" class="btn btn-primary btn-icon-text" (click)="submit()" [disabled]="!Form.valid">
+        <i class="feather icon-send btn-icon-prepend"></i>
+        Submit
+    </button>
+    <button type="button" class="btn btn-secondary" mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

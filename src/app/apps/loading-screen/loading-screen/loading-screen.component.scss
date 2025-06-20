@@ -1,0 +1,47 @@
+.loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.loading-screen-row{
+  margin-top: 10px;
+}
+
+.loading-screen-cell {
+  margin-right:0px;
+  margin-left: 10px;
+
+}
+
+.loading-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 25px;
+  margin-left: 10px;
+
+  // width: 100%;
+  text-align: center;
+  /* Add this line to center the loading text */
+  background-color: #F1F1F1;
+  margin-bottom: 5px;
+  animation: pulse2 1s ease-in-out infinite;
+}
+
+@keyframes pulse2 {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

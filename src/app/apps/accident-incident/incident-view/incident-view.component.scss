@@ -1,0 +1,28 @@
+.table-responsive {
+    overflow: hidden;
+}
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+.action-btn {
+    margin-right: 5px;
+}
+
+.btn-previous {
+    margin-right: 2px;
+}
+
+.evidence{
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.injuryType{
+    display: grid;
+    .injuryTypeOption{
+        border-bottom: solid 1px #e7e7e7;
+        border-left:none
+    }
+}

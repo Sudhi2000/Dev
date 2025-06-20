@@ -1,0 +1,391 @@
+<div class="container-fluid" id="dashboard">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a routerLink="." class="nobleui-logo d-block ">Grievance <span>
+                            Management</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                    <span class="badge ">
+                        <form class="d-flex my-2 my-lg-0" [formGroup]="filterForm">
+                            <div class="input-group me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Period</mat-label>
+                                    <mat-select formControlName="period" (selectionChange)="onPeriodChange($event)">
+                                        <mat-option [value]="data.attributes.Value"
+                                            *ngFor="let data of periodValues">{{data.attributes.Value}}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field appearance="outline" color="primary" id="dashboard">
+                                    <mat-label>Enter a date range</mat-label>
+                                    <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+                                        <input matStartDate formControlName="start" placeholder="Start date"
+                                            (dateChange)="startDateChange($event)">
+                                        <input matEndDate formControlName="end" placeholder="End date"
+                                            (dateChange)="endDateChange($event)">
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                                    <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                                        start date</mat-error>
+                                    <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end
+                                        date
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0" *ngIf="(divisions.length > 1)">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Business Unit</mat-label>
+                                    <mat-select formControlName="division">
+                                        <mat-option [value]="data.division_uuid"
+                                            *ngFor="let data of divisions">{{data.division_name}}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Category</mat-label>
+                                    <mat-select formControlName="category">
+                                        <mat-option [value]="data.attributes.Value"
+                                            *ngFor="let data of categories">{{data.attributes.Value}}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <mat-form-field fxFlex appearance="outline">
+                                    <mat-label>Year</mat-label>
+                                    <mat-select formControlName="year" (selectionChange)="yearVal($event)">
+                                        <mat-option [value]="data.year"
+                                            *ngFor="let data of years">{{data.year}}</mat-option>
+                                    </mat-select>
+                                    <mat-error>Required Field</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-primary btn-icon" (click)="search()">
+                                    <i class="feather icon-search btn-icon-prepend"></i>
+                                </button>
+                            </div>
+
+                            <div class="input-group  me-2 mb-2 mb-md-0">
+                                <button type="button" class="btn btn-danger btn-icon" (click)="reset()">
+                                    <i class="feather icon-rotate-cw btn-icon-prepend"></i>
+                                </button>
+                            </div>
+                        </form>
+
+                    </span>
+                </li>
+
+
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12 col-xl-12 stretch-card">
+            <div class="row flex-grow-1">
+                <div class="col-md-2 grid-margin stretch-card" *ngFor="let data of summaryCardData">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-baseline mb-3">
+                                <h6 class="card-title mb-0"><i class="feather {{data.icon}}"></i> {{data.title}}</h6>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-12 col-xl-12">
+                                    <h3 class="mb-2">{{data.value}}</h3>
+                                    <div class="d-flex align-items-baseline">
+                                        <p class="{{data.attri_bg}}">
+                                            <span>{{data.attrition}}</span>
+                                            <i class="feather {{data.attri_icon}} icon-sm mb-1"></i>
+                                            From previous period
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 col-xl-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Summary</h6>
+                    </div>
+                    <apx-chart dir="ltr" class="apex-charts" [chart]="grvTypeChart.chart" [series]="grvTypeChart.series"
+                        [legend]="grvTypeChart.legend" [colors]="grvTypeChart.colors" [fill]="grvTypeChart.fill"
+                        [dataLabels]="grvTypeChart.dataLabels" [xaxis]="grvTypeChart.xaxis"
+                        [plotOptions]="grvTypeChart.plotOptions">
+                    </apx-chart>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0">Grievance Type Breakdown</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="grvBreakdownChart.series"
+                        [chart]="grvBreakdownChart.chart" [plotOptions]="grvBreakdownChart.plotOptions"
+                        [legend]="grvBreakdownChart.legend" [labels]="grvBreakdownChart.labels"
+                        [colors]="grvBreakdownChart.colors">
+                    </apx-chart>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12 d-flex justify-content-center">
+                        <div class="grvType">
+                            <label class="d-flex align-items-center  tx-10 text-uppercase fw-bold "><span
+                                    class="p-1 ms-1 rounded-circle bg-danger"></span>Grievance </label>
+                            <h5 class="fw-bolder mb-0 text-end">{{grvTotal}}</h5>
+                        </div>
+                        <div class="grvType">
+                            <label class="d-flex align-items-center tx-10 text-uppercase fw-bold "><span
+                                    class="p-1 me-1 rounded-circle bg-warning"></span> Complaint</label>
+                            <h5 class="fw-bolder mb-0">{{complaintTotal}}</h5>
+                        </div>
+                        <div class="grvType">
+                            <label class="d-flex align-items-center  tx-10 text-uppercase fw-bold "><span
+                                    class="p-1 ms-1 rounded-circle bg-success"></span>Appreciation </label>
+                            <h5 class="fw-bolder mb-0 text-end">{{appreciationTotal}}</h5>
+                        </div>
+                        <div class="grvType">
+                            <label class="d-flex align-items-center tx-10 text-uppercase fw-bold "><span
+                                    class="p-1 me-1 rounded-circle bg-secondary"></span> Suggestion</label>
+                            <h5 class="fw-bolder mb-0">{{suggestionTotal}}</h5>
+                        </div>
+                        <div class="grvType">
+                            <label class="d-flex align-items-center  tx-10 text-uppercase fw-bold "><span
+                                    class="p-1 ms-1 rounded-circle bg-primary"></span>Question </label>
+                            <h5 class="fw-bolder mb-0 text-end">{{questionTotal}}</h5>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0"> Category Breakdown</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="grvCategoryChart.series"
+                        [chart]="grvCategoryChart.chart" [plotOptions]="grvCategoryChart.plotOptions"
+                        [legend]="grvCategoryChart.legend" [labels]="grvCategoryChart.labels">
+                    </apx-chart>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-xl-8 grid-margin stretch-card">
+            <div class="card custom-height">
+                <div class="card-body custom-height">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-4">Grievance Topic </h6>
+                    </div>
+                    <apx-chart dir="ltr" [series]="topicChart.series" [chart]="topicChart.chart"
+                        [dataLabels]="topicChart.dataLabels" [plotOptions]="topicChart.plotOptions"
+                        [xaxis]="topicChart.xaxis" [colors]="topicChart.colors" [legend]="topicChart.legend"
+                        [yaxis]="topicChart.yaxis"></apx-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0">Grievance Channel</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="channelChart.series" [chart]="channelChart.chart"
+                        [plotOptions]="channelChart.plotOptions" [legend]="channelChart.legend"
+                        [labels]="channelChart.labels" [colors]="channelChart.colors">
+                    </apx-chart>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <h4 class="card-title mb-4">Response Time</h4>
+                    <div>
+                        <apx-chart class="apex-charts" dir="ltr" [series]="responseTimeChart.series"
+                            [chart]="responseTimeChart.chart" [stroke]="responseTimeChart.stroke"
+                            [dataLabels]="responseTimeChart.dataLabels" [colors]="responseTimeChart.colors"
+                            [fill]="responseTimeChart.fill" [xaxis]="responseTimeChart.xaxis"
+                            [yaxis]="responseTimeChart.yaxis" [legend]="responseTimeChart.legend"
+                            [plotOptions]="responseTimeChart.plotOptions">
+                        </apx-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 col-xl-8 grid-margin stretch-card">
+            <div class="card custom-height">
+                <div class="card-body custom-height">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-4">Department</h6>
+                    </div>
+                    <apx-chart dir="ltr" [series]="departmentChart.series" [chart]="departmentChart.chart"
+                        [dataLabels]="departmentChart.dataLabels" [plotOptions]="departmentChart.plotOptions"
+                        [xaxis]="departmentChart.xaxis" [colors]="departmentChart.colors"
+                        [legend]="departmentChart.legend" [yaxis]="departmentChart.yaxis"></apx-chart>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0"> Grievance Severity Score</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="grvSeverityScoreChart.series"
+                        [chart]="grvSeverityScoreChart.chart" [plotOptions]="grvSeverityScoreChart.plotOptions"
+                        [yaxis]="grvSeverityScoreChart.yaxis" [legend]="grvSeverityScoreChart.legend"
+                        [labels]="grvSeverityScoreChart.labels" [xaxis]="grvSeverityScoreChart.xaxis">
+                    </apx-chart>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-7 col-xl-4 grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Grievance Rating</h6>
+                    </div>
+
+                    <p *ngIf="grvRatingCard.length === 0">
+                        There is no enough data to populate this chart. {{ grvRatingCard.length }}
+                    </p>
+
+                    <apx-chart [series]="RatingChart.series" [chart]="RatingChart.chart"
+                        [plotOptions]="RatingChart.plotOptions" [labels]="RatingChart.labels"
+                        [legend]="RatingChart.legend" [colors]="RatingChart.colors"
+                        [responsive]="RatingChart.responsive"></apx-chart>
+
+                    <div class="row mb-3">
+                        <div class="col-3" *ngFor="let data of grvRatingCard">
+                            <div class="ml-5">
+                                <label class="d-flex align-items-center tx-10 text-uppercase fw-bold tat-label">
+                                    {{ data.title }}
+                                    <span class="p-1 ms-1 rounded-circle bg-secondary"></span>
+                                </label>
+                                <h5 class="fw-bolder align-items-center mb-0 ">{{ data.count }} Cases</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4  grid-margin stretch-card">
+            <div class="card custom-height" [perfectScrollbar]>
+                <div class="card-body custom-height" [perfectScrollbar]>
+                    <div class="d-flex justify-content-between align-items-baseline mb-2 mt-2">
+                        <h6 class="card-title mb-0">Anonymous vs. Non-Anonymous</h6>
+                    </div>
+                    <apx-chart class="apex-charts" dir="ltr" [series]="anonymousChart.series"
+                        [chart]="anonymousChart.chart" [colors]="anonymousChart.colors"
+                        [plotOptions]="anonymousChart.plotOptions" [legend]="anonymousChart.legend"
+                        [labels]="anonymousChart.labels">
+                    </apx-chart>
+                    <div class="row mb-3">
+                        <div class="col-6 d-flex justify-content-end">
+                            <div>
+                                <label
+                                    class="d-flex align-items-center justify-content-end tx-10 text-uppercase fw-bold">Anonymous
+                                    <span class="p-1 ms-1 rounded-circle bg-primary"></span></label>
+                                <h6 class="fw-bolder mb-0 text-end">{{anonymous}} </h6>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div>
+                                <label class="d-flex align-items-center tx-10 text-uppercase fw-bold"><span
+                                        class="p-1 me-1 rounded-circle bg-success"></span> Non-Anonymous</label>
+                                <h6 class="fw-bolder mb-0">{{nonAnonymous}} </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5 col-xl-4 grid-margin stretch-card">
+            <div class="card" *ngFor="let data of closureRateData">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline mb-2">
+                        <h6 class="card-title mb-0">Closure Rate</h6>
+                    </div>
+                    <apx-chart [series]="[data.comPercentage]" [chart]="closureRateChart.chart"
+                        [plotOptions]="closureRateChart.plotOptions" [labels]="closureRateChart.labels"></apx-chart>
+                    <div class="row mb-3">
+
+                        <div class="col-12 status">
+                            <div>
+                                <label class="align-items-center tx-10 text-uppercase fw-bold status-label">This
+                                    Month</label>
+                                <h5 class="fw-bolder mb-0">{{data.completed}} Cases</h5>
+                            </div>
+                        </div>
+                        <!-- </div>
+                    <div class="d-grid text-center">
+                        <p class="text-success">
+                            <span>{{data.attrition}}</span>
+                            <i class="feather {{data.attritionIcon}} icon-sm mb-1"></i> From
+                            Previous Period
+                        </p>
+                    </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-xl-8 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-baseline mb-2">
+                            <h6 class="card-title mb-0">Grievance Status</h6>
+                        </div>
+                        <apx-chart dir="ltr" class="apex-charts" [chart]="grvStatusChart.chart"
+                            [series]="grvStatusChart.series" [legend]="grvStatusChart.legend" [colors]="grvStatusChart.colors"
+                            [fill]="grvStatusChart.fill" [dataLabels]="grvStatusChart.dataLabels"
+                            [xaxis]="grvStatusChart.xaxis" [plotOptions]="grvStatusChart.plotOptions">
+                        </apx-chart>
+                    </div>
+                </div>
+            </div>
+        </div>

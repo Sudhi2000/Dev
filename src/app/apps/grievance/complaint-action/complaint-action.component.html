@@ -1,0 +1,420 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Grievance<span>
+                                </span></a>
+                            <h6 class=" mb-3 pb-2"># {{Form.value.case_id}}</h6>
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Reported Date</h6>
+                            <h6 class="text-end mb-5 ">{{Form.value.reported_date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+                                <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex">
+
+                                    <mat-tab *ngIf="Form.value.anonymous===false" [formGroup]="anonymousForm">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">layers</mat-icon>
+                                            Personal and Employment Details
+                                        </ng-template>
+                                        <div class="row ">
+
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Person Type</mat-label>
+                                                    <input type="text" matInput formControlName="person_type">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Name</mat-label>
+                                                    <input type="text" matInput formControlName="name">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+                                        </div>
+                                        <div class="row " *ngIf="anonymousForm.value.person_type==='Employee'">
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Employee ID</mat-label>
+                                                    <input type="text" matInput formControlName="employee_id">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Division</mat-label>
+                                                    <input type="text" matInput formControlName="division">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-6">
+                                                <mat-form-field fxFlex appearance="outline" color="primary">
+                                                    <mat-label>Gender</mat-label>
+                                                    <input type="text" matInput formControlName="gender">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Supervisor</mat-label>
+                                                    <input type="text" matInput formControlName="supervisor">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-6">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Employee Shift</mat-label>
+                                                    <input type="text" matInput formControlName="employee_shift">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row" *ngIf="anonymousForm.value.person_type==='Employee'">
+
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline" color="primary">
+                                                    <mat-label>Date of Join</mat-label>
+                                                    <input matInput [matDatepicker]="joindp" placeholder="Choose a date"
+                                                        [formControl]="joindate">
+                                                    <mat-datepicker-toggle matSuffix
+                                                        [for]="joindp"></mat-datepicker-toggle>
+                                                    <mat-datepicker #joindp></mat-datepicker>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Service Period</mat-label>
+                                                    <input type="text" matInput formControlName="service_period">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Tenure Split</mat-label>
+                                                    <input type="text" matInput formControlName="tenure_split">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row " *ngIf="anonymousForm.value.person_type==='Employee'">
+
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Designation</mat-label>
+                                                    <input type="text" matInput formControlName="designation">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Department</mat-label>
+                                                    <input type="text" matInput formControlName="department">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                        </div>
+
+                                    </mat-tab>
+
+                                    <mat-tab [formGroup]="Form">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">image</mat-icon>
+                                            Helpdesk Details
+                                        </ng-template>
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <mat-form-field fxFlex appearance="outline" color="primary">
+                                                    <mat-label>Channel</mat-label>
+                                                    <input type="text" matInput formControlName="channel">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <mat-form-field fxFlex appearance="outline" color="primary">
+                                                    <mat-label>Category</mat-label>
+                                                    <input type="text" matInput formControlName="category">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Topic</mat-label>
+                                                    <input type="text" matInput formControlName="topic">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <mat-form-field fxFlex appearance="outline" color="primary">
+                                                    <mat-label>Submissions</mat-label>
+                                                    <input type="text" matInput formControlName="submissions">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row ">
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Alleged party</mat-label>
+                                                    <input type="text" matInput formControlName="alleged_party">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            </div>
+
+                                        <div class="row mb-4 mt-4">
+                                            <quill-editor placeholder="Description" [modules]="quillConfig"
+                                                formControlName="description">
+                                            </quill-editor>
+                                        </div>
+                                        <div class="row mb-4 mt-4">
+                                            <quill-editor placeholder="Remarks" [modules]="quillConfig"
+                                                formControlName="remarks">
+                                            </quill-editor>
+                                        </div>
+
+                                        <div class="row ">
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Helpdesk Person</mat-label>
+                                                    <input type="text" matInput formControlName="helpdesk_person">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Responsible Department</mat-label>
+                                                    <input type="text" matInput
+                                                        formControlName="responsible_department">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <mat-form-field fxFlex appearance="outline" color="primary">
+                                                    <mat-label>Human Rights Violation</mat-label>
+                                                    <input type="text" matInput
+                                                        formControlName="human_rights_violation">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <mat-form-field fxFlex appearance="outline" color="primary">
+                                                    <mat-label>Scale</mat-label>
+                                                    <input type="text" matInput formControlName="scale">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <mat-form-field fxFlex appearance="outline" color="primary">
+                                                    <mat-label>Frequency Rate</mat-label>
+                                                    <input type="text" matInput formControlName="frequency_rate">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Severity Score</mat-label>
+                                                    <input type="text" matInput formControlName="severity_score">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <div class="row image">
+                                            <a href="" (click)="false" class="col-md-2 ps-1 pe-1"
+                                                *ngFor="let image of evidences; let i=index">
+                                                <figure class="mb-2">
+                                                    <img class="img-fluid rounded" [src]="image.src" (click)="open(i)"
+                                                        width="150" alt="">
+                                                </figure>
+                                            </a>
+                                        </div>
+
+                                        <!-- <div class="row mt-3">
+                                            <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'">
+                                                <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview"
+                                                    *ngFor="let f of files" [file]="f">
+                                                </ngx-dropzone-image-preview>
+                                            </div>
+                                        </div> -->
+
+                                    </mat-tab>
+                                    <mat-tab [disabled]="Form.value.status!=='In-Progress'">
+                                        <form [formGroup]="solutionForm">
+                                            <ng-template mat-tab-label>
+                                                <mat-icon class="example-tab-icon">add_task</mat-icon>
+                                                Solution
+                                            </ng-template>
+
+                                            <div class="row ">
+                                                <button type="button" class="btn btn-secondary" id="ai-suggest"
+                                                    (click)="GenerateDescription()"> Generate
+                                                    Solution</button>
+
+                                                <p class="error hide" id="error-text">Please provide your Channel
+                                                    description.
+                                                </p>
+                                                <button type="button" class="btn btn-success hide" id="ai-loader">
+                                                    <span class="spinner-grow spinner-grow-sm" role="status"
+                                                        aria-hidden="true"></span>
+                                                    Please wait our AI is looking recommendations for Solution.
+                                                </button>
+                                            </div>
+
+
+                                            <div class="row mb-4 mt-4">
+                                                <quill-editor placeholder="Solution Provided *" [modules]="quillConfig"
+                                                    formControlName="solution_provided">
+                                                </quill-editor>
+                                                <p *ngIf="!solutionForm.controls['solution_provided'].valid &&solutionForm.controls['solution_provided'].touched"
+                                                    class="quill-editor-error"> Required Field *</p>
+                                            </div>
+                                            <div class="row mb-4 mt-4">
+                                                <quill-editor placeholder="Remarks" [modules]="quillConfig"
+                                                    formControlName="solution_remarks">
+                                                </quill-editor>
+                                            </div>
+                                            <div class="row add-btn">
+                                                <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'"
+                                                    (change)="selectEvidenceAfter($event)">
+                                                    <ngx-dropzone-label>Drop your Evidence After here. Please ensure
+                                                        that the document size is less
+                                                        than 5 MB</ngx-dropzone-label>
+                                                    <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview"
+                                                        [removable]="true" *ngFor="let f of evidenceafterfiles"
+                                                        [file]="f" (removed)="removeEvidenceAfter(f)">
+                                                    </ngx-dropzone-image-preview>
+                                                </div>
+                                            </div>
+                                            <div class="row add-btn">
+                                                <div class="col-md-6">
+                                                    <div class="form-check form-switch mb-2">
+                                                        <input type="checkbox" class="form-check-input" id="formSwitch3"
+                                                            formControlName="follow_up">
+                                                        <label class="form-check-label" for="formSwitch3">
+                                                            Follow Up?</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="mb-3">
+                                                <button type="button"
+                                                    class="btn btn-success btn-icon-text float-end mt-4"
+                                                    (click)="submit()" [disabled]="!solutionForm.valid">
+                                                    <i class="feather icon-send btn-icon-prepend"></i>
+                                                    Save
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </mat-tab>
+                                </mat-tab-group>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <form [formGroup]="Form">
+                        <div class="mt-3">
+                            <div class="btn-group">
+                                <button [disabled]="Form.value.status==='Completed'" type="button"
+                                    class="btn btn-primary">{{Form.value.status}}</button>
+                                <div class="btn-group" ngbDropdown role="group">
+                                    <button class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle></button>
+                                    <div ngbDropdownMenu>
+                                        <button [disabled]="Form.value.status!=='Open'" ngbDropdownItem
+                                            (click)="inProgress()">In-Progress</button>
+                                        <button [disabled]="Form.value.status!=='In-Progress'" ngbDropdownItem
+                                            (click)="completed()">Completed</button>
+                                    </div>
+                                </div>
+                                <button (click)="navigate()" class="btn btn-success status-btn ms-2" mat-icon-button
+                                    aria-label="Example icon-button with a menu">
+                                    <i class="feather icon-chevron-left"></i> Back to History
+
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Submission Date</mat-label>
+                                <input matInput readonly [matDatepicker]="dpSubDate" placeholder="Choose a date"
+                                    formControlName="submission_date" [disabled]="true">
+                                <mat-datepicker-toggle matSuffix [for]="dpSubDate"></mat-datepicker-toggle>
+                                <mat-datepicker #dpSubDate></mat-datepicker>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+
+                        </div>
+                        <div class="mt-3">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Due Date</mat-label>
+                                <input matInput readonly [matDatepicker]="dpDueDate" placeholder="Choose a date"
+                                    formControlName="due_date" [disabled]="true">
+                                <mat-datepicker-toggle matSuffix [for]="dpDueDate"></mat-datepicker-toggle>
+                                <mat-datepicker #dpDueDate></mat-datepicker>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+
+                        </div>
+
+                        <div class="mt-3">
+                            <div class="form-check form-switch mb-2">
+                                <input type="checkbox" class="form-check-input" id="formSwitch1"
+                                    formControlName="anonymous">
+                                <label class="form-check-label" for="formSwitch1">Anonymous?</label>
+                            </div>
+                        </div>
+
+                    </form>
+                    <form [formGroup]="solutionForm">
+                        <div class="mt-3">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Resolution Date</mat-label>
+                                <input matInput [matDatepicker]="dpResDate" placeholder="Choose a date"
+                                    [formControl]="resolutiondate" (dateChange)="resolutionDate($event)"
+                                    [disabled]="Form.value.status==='Open'">
+                                <mat-datepicker-toggle matSuffix [for]="dpResDate"></mat-datepicker-toggle>
+                                <mat-datepicker #dpResDate></mat-datepicker>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

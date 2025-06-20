@@ -1,0 +1,65 @@
+.table-responsive {
+    overflow: hidden;
+}
+.pollutants-table-responsive {
+    overflow: scroll;
+    overflow-y: hidden;
+}
+
+.action-btn {
+    margin-right: 5px;
+}
+
+#refrigerant {
+    table {
+        counter-reset: no -1;
+    }
+
+    table tr {
+        counter-increment: no;
+    }
+
+    table tr td:first-child:before {
+        content: counter(no);
+    }
+
+    table th.ghg {
+        text-transform: none;
+    }
+}
+#consumption {
+    table {
+        counter-reset: no -1;
+    }
+
+    table tr {
+        counter-increment: no;
+    }
+
+    table tr td:first-child:before {
+        content: counter(no);
+    }
+
+    table th.ghg {
+        text-transform: none;
+    }
+}
+.special-field{
+    align-content:center
+}
+.titleicon_delete
+{
+color: red;
+//margin-left: 80%;
+}
+.titleicon_edit{
+   color: green;
+}
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.icon-container {
+    margin-left: 8px; /* Adjust the margin as needed to control the spacing between the title and the icon */
+}

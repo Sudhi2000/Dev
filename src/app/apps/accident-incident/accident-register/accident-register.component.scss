@@ -1,0 +1,46 @@
+.table-responsive {
+    overflow-x: unset;
+}
+
+.btn-xs {
+    margin-right: 5px;
+}
+
+tr {
+    height: 35px !important;
+    vertical-align: middle;
+}
+
+th {
+    height: 40px;
+}
+
+.table-card {
+    padding: 0px;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.card-body{
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+.hide{
+    display: none;
+}
+
+
+.status-btn {
+    width: 100%;
+}
+
+
+.input-group .input-group-text{
+    background:#fff;
+    color:#7987a1
+}
+
+.search{
+    align-self: center;
+}

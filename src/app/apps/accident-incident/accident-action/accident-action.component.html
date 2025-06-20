@@ -1,0 +1,1060 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Accident<span>
+                                    Management</span></a>
+                            <h6 class=" mb-3 pb-2"># {{Form.value.reference_number}}</h6>
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Reported Date</h6>
+                            <h6 class="text-end mb-3 pb-2">{{Form.value.reported_date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+                                <mat-tab-group mat-align-tabs="start">
+                                    <mat-tab [formGroup]="Form">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">article</mat-icon>
+                                            General Details
+                                        </ng-template>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Division</mat-label>
+                                                    <input type="text" matInput formControlName="division">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Location</mat-label>
+                                                    <input type="text" matInput formControlName="location">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Department</mat-label>
+                                                    <input type="text" matInput formControlName="department">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Supervisor</mat-label>
+                                                    <input type="text" matInput formControlName="supervisor">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <h6 class="mb-3">Witness Details</h6>
+                                        </div>
+                                        <div class="row mb-5">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Employee ID</th>
+                                                        <th>Name</th>
+                                                        <th>Division</th>
+                                                        <th>Department</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let data of witnessList">
+                                                        <td>{{data.attributes.employee_id}}</td>
+                                                        <td>{{data.attributes.name}}</td>
+                                                        <td>{{data.attributes.division}}</td>
+                                                        <td>{{data.attributes?.department}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="row">
+                                            <h6 class="mb-3">Evidence</h6>
+                                        </div>
+                                        <div class="row image">
+                                            <a href="" (click)="false" class="col-md-2 ps-1 pe-1"
+                                                *ngFor="let image of evidences; let i=index">
+                                                <figure class="mb-2">
+                                                    <img class="img-fluid rounded" [src]="image.src" (click)="open(i)"
+                                                        width="150" alt="">
+                                                </figure>
+                                            </a>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab [formGroup]="AccidentForm">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">warning</mat-icon>
+                                            Accident Details
+                                        </ng-template>
+                                        <div class="row">
+                                            <h6 class="mb-3">Person Details</h6>
+                                        </div>
+                                        <div class="row">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Person Type</th>
+                                                        <th>Person Name</th>
+                                                        <th>Gender</th>
+                                                        <th>Designation</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let data of peopleList">
+                                                        <td>{{data.attributes.person_type}}</td>
+                                                        <td>{{data.attributes.person_name}}</td>
+                                                        <td>{{data.attributes.gender}}</td>
+                                                        <td>{{data.attributes.designation}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="row mt-5">
+                                            <h6 class="mb-3">Accident Details</h6>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-3">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Category</mat-label>
+                                                    <input type="text" matInput formControlName="category">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Sub Category</mat-label>
+                                                    <input type="text" matInput formControlName="sub_category">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Accident Type</mat-label>
+                                                    <input type="text" matInput formControlName="accident_type">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="row">
+                                            <div class="col-md-12">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Affected Body Parts</mat-label>
+                                                    <mat-chip-list #chipList aria-label="Body part">
+                                                        <mat-chip *ngFor="let part of bodypart"
+                                                            (removed)="remove(part)">
+                                                            {{part}}
+
+                                                        </mat-chip>
+                                                    </mat-chip-list>
+                                                </mat-form-field>
+                                            </div>
+                                        </div> -->
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Body Primary Region</mat-label>
+                                                    <mat-chip-list class="custom-chip-list" #primarychipList
+                                                        aria-label="Body Primary Region">
+                                                        <mat-chip *ngFor="let part of primarybodypart"
+                                                            (removed)="removeprimary(part)">
+                                                            {{part}}
+
+                                                        </mat-chip>
+                                                        <input placeholder="Primary Body part..." #primarybodyPartInput
+                                                            [formControl]="primarybodyPartCtrl"
+                                                            [matAutocomplete]="primaryAuto"
+                                                            [matChipInputFor]="primarychipList"
+                                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                            (matChipInputTokenEnd)="addprimary($event)">
+                                                    </mat-chip-list>
+                                                    <mat-autocomplete #primaryAuto="matAutocomplete"
+                                                        (optionSelected)="selectedprimary($event)">
+                                                    </mat-autocomplete>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label> Body Secondary Region</mat-label>
+                                                    <mat-chip-list class="custom-chip-list" #secondarychipList
+                                                        aria-label=" Body Secondary Region">
+                                                        <mat-chip *ngFor="let part of secondarybodypart"
+                                                            (removed)="removesecondary(part)">
+                                                            {{part}}
+
+                                                        </mat-chip>
+                                                        <input placeholder="Secondary Body part..."
+                                                            #secondarybodyPartInput
+                                                            [formControl]="secondarybodyPartCtrl"
+                                                            [matAutocomplete]="secondaryAuto"
+                                                            [matChipInputFor]="secondarychipList"
+                                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                            (matChipInputTokenEnd)="addsecondary($event)">
+                                                    </mat-chip-list>
+                                                    <mat-autocomplete #secondaryAuto="matAutocomplete"
+                                                        (optionSelected)="selectedsecondary($event)">
+                                                    </mat-autocomplete>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label> Body Tertiary Region</mat-label>
+                                                    <mat-chip-list #tertiaryChipList aria-label="Body Tertiary Region">
+                                                        <mat-chip *ngFor="let part of tertiarybodypart"
+                                                            (removed)="removetertiary(part)">
+                                                            {{part}}
+
+                                                        </mat-chip>
+                                                        <input placeholder="Tertiary Body part..."
+                                                            #tertiarybodyPartInput [formControl]="tertiarybodyPartCtrl"
+                                                            [matAutocomplete]="tertiaryAuto"
+                                                            [matChipInputFor]="tertiaryChipList"
+                                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                            (matChipInputTokenEnd)="addtertiary($event)">
+                                                    </mat-chip-list>
+                                                    <mat-autocomplete #tertiaryAuto="matAutocomplete"
+                                                        (optionSelected)="selectedtertiary($event)">
+                                                    </mat-autocomplete>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Type</mat-label>
+                                                    <input type="text" matInput formControlName="injury_type">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Cause</mat-label>
+                                                    <input type="text" matInput formControlName="injury_cause">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Consulted Hospital</mat-label>
+                                                    <input type="text" matInput formControlName="hospital">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Consulted Doctor</mat-label>
+                                                    <input type="text" matInput formControlName="doctor">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <div class="row"
+                                            *ngIf="Form.value.injury_temp=='Non-Reportable Accident' || Form.value.injury_temp=='Reportable Accident'">
+                                            <div class="col-md-12">
+                                                <label class="tx-11  mb-0 ">Expected Time of Work:</label><br>
+                                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style"
+                                                    formControlName="time_of_work" #group="matButtonToggleGroup">
+                                                    <mat-button-toggle value="0 Days"
+                                                        *ngIf="Form.value.injury_temp=='Non-Reportable Accident'">0
+                                                        Days</mat-button-toggle>
+                                                    <mat-button-toggle value="≤ 2 Days"
+                                                        *ngIf="Form.value.injury_temp=='Non-Reportable Accident'">≤ 2
+                                                        Days</mat-button-toggle>
+                                                    <mat-button-toggle value="> 2 Days"
+                                                        *ngIf="Form.value.injury_temp=='Reportable Accident'">> 2
+                                                        Days</mat-button-toggle>
+                                                    <mat-button-toggle value="Permenent"
+                                                        *ngIf="Form.value.injury_temp=='Reportable Accident'">Permenent</mat-button-toggle>
+                                                </mat-button-toggle-group>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3 mt-3">
+                                            <div class="col-md-3">
+                                                <label class="tx-11  mb-2 ">Employee Return for Work:</label><br>
+                                                <ngb-timepicker formControlName="return_of_work_temp"></ngb-timepicker>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="tx-11  mb-0 ">Expected Time of Work:</label><br>
+                                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style"
+                                                    formControlName="time_of_work" #group="matButtonToggleGroup">
+                                                    <mat-button-toggle value="0 Days">0 Days</mat-button-toggle>
+                                                    <mat-button-toggle value="≤ 3 Days">≤ 3 Days</mat-button-toggle>
+                                                    <mat-button-toggle value="> 3 Days">> 3 Days</mat-button-toggle>
+                                                    <mat-button-toggle value="Permenent">Permenent</mat-button-toggle>
+                                                </mat-button-toggle-group>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3"
+                                            *ngIf="Form.value.injury=='Reportable Injury' || Form.value.injury=='Non-Reportable Injury'">
+                                            <div class="col-md-12">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Employee Return for Work:</mat-label>
+                                                    <input type="text" matInput formControlName="return_of_work">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3" *ngIf="Form.value.injury=='First Aid'">
+                                            <div class="col-md-12">
+                                                <label class="tx-11  mb-0 ">Employee Return for Work:</label><br>
+                                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style"
+                                                    formControlName="return_of_work" #group="matButtonToggleGroup">
+                                                    <mat-button-toggle value="5 Min">5 Min</mat-button-toggle>
+                                                    <mat-button-toggle value="10 Min">10 Min</mat-button-toggle>
+                                                    <mat-button-toggle value="20 Min">20 Min</mat-button-toggle>
+                                                    <mat-button-toggle value="30 Min">30 Min</mat-button-toggle>
+                                                    <mat-button-toggle value="40 Min">40 Min</mat-button-toggle>
+                                                    <mat-button-toggle value="50 Min">50 Min</mat-button-toggle>
+                                                    <mat-button-toggle value="60 Min">60 Min</mat-button-toggle>
+                                                </mat-button-toggle-group>
+                                            </div>
+                                        </div> -->
+                                        <div class="row mb-4 mt-4">
+                                            <quill-editor placeholder="Type of Work Performed" [modules]="quillConfig"
+                                                formControlName="work_performed">
+                                            </quill-editor>
+                                        </div>
+                                        <div class="row mb-4 mt-4">
+                                            <quill-editor placeholder="Description" [modules]="quillConfig"
+                                                formControlName="description">
+                                            </quill-editor>
+                                        </div>
+                                        <div class="row mb-4 mt-4">
+                                            <quill-editor placeholder="Action Taken" [modules]="quillConfig"
+                                                formControlName="action_taken">
+                                            </quill-editor>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab *ngIf="AccidentForm.value.investigationTemp==='Required'">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">group</mat-icon>
+                                            Investigation Team
+                                        </ng-template>
+                                        <div class="row" *ngIf="Form.value.assignee===Form.value.userId">
+                                            <div class="col-md-6">
+                                                <button type="button" class="btn btn-primary btn-icon-text btn-xs"
+                                                    (click)="addMember()">
+                                                    <i class="feather icon-plus btn-icon-prepend"></i>
+                                                    Add Team Member
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Member Name</th>
+                                                        <th>Designation</th>
+                                                        <th>Email</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let data of memberList">
+                                                        <td>{{data.attributes.date | date:'dd-MMM-yyyy'}}</td>
+                                                        <td>{{data.attributes.name}}</td>
+                                                        <td>{{data.attributes.designation}}</td>
+                                                        <td>{{data.attributes.email}}</td>
+                                                        <td *ngIf="Form.value.assignee===Form.value.userId">
+                                                            <button type="button"
+                                                                class="btn btn-danger btn-icon-text btn-xs"
+                                                                (click)="deleteMember(data)">
+                                                                <i class="feather icon-trash-2"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab [formGroup]="overviewForm"
+                                        [disabled]="Form.value.status!=='Under Investigation'">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">view_timeline</mat-icon>
+                                            Overview
+                                        </ng-template>
+                                        <ul class="list-group">
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center active">
+                                                Overview of Events Prior to the Time of Accident / Incident:
+                                                <span>
+                                                    <button type="button" class="btn btn-primary btn-icon-text"
+                                                        (click)="addEvent()">
+                                                        <i class="feather icon-plus-circle btn-icon-prepend"></i>
+                                                        Add an Event
+                                                    </button>
+                                                </span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                                *ngFor="let overview of accident_overview | callback: filterEvents">
+                                                {{overview.attributes.title}}
+                                                <span>
+                                                    <button type="button" class="btn btn-icon btn-secondary  btn-xs"
+                                                        (click)="delEvent(overview)">
+                                                        <i class="feather icon-trash-2"></i>
+                                                    </button>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <ul class="list-group mt-3">
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center active">
+                                                What was the procedure taken after the occurrence of the accident /
+                                                incident?:
+                                                <span>
+                                                    <button type="button" class="btn btn-primary btn-icon-text"
+                                                        (click)="addProcedure()">
+                                                        <i class="feather icon-plus-circle btn-icon-prepend"></i>
+                                                        Add a Procedure
+                                                    </button>
+                                                </span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                                *ngFor="let overview of accident_overview | callback: filterProcedure">
+                                                {{overview.attributes.title}}
+                                                <span>
+                                                    <button type="button" class="btn btn-icon btn-secondary  btn-xs"
+                                                        (click)="delEvent(overview)">
+                                                        <i class="feather icon-trash-2"></i>
+                                                    </button>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <div class="row mt-3">
+                                            <div class="col-md-3">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Atmosphere Condition</mat-label>
+                                                    <mat-select formControlName="atmospere_condition">
+                                                        <mat-option
+                                                            *ngFor="let condition of dropdownValues | callback: filterAtmosphereCondition"
+                                                            value="{{condition.attributes.Value}}">
+                                                            {{condition.attributes.Value}}</mat-option>
+                                                    </mat-select>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Lighting Condition</mat-label>
+                                                    <mat-select formControlName="lighting_condition">
+                                                        <mat-option
+                                                            *ngFor="let condition of dropdownValues | callback: filterLightingCondition"
+                                                            value="{{condition.attributes.Value}}">
+                                                            {{condition.attributes.Value}}</mat-option>
+                                                    </mat-select>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Work Surface Condition</mat-label>
+                                                    <mat-select formControlName="work_surface_condition">
+                                                        <mat-option
+                                                            *ngFor="let condition of dropdownValues | callback: filterWorkSurfaceCondition"
+                                                            value="{{condition.attributes.Value}}">
+                                                            {{condition.attributes.Value}}</mat-option>
+                                                    </mat-select>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Housekeeping Condition</mat-label>
+                                                    <mat-select formControlName="housekeeping_condition">
+                                                        <mat-option
+                                                            *ngFor="let condition of dropdownValues | callback: filterHousekeepingCondition"
+                                                            value="{{condition.attributes.Value}}">
+                                                            {{condition.attributes.Value}}</mat-option>
+                                                    </mat-select>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-12">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Damage</mat-label>
+                                                    <mat-chip-list #chipList aria-label="Damage selection">
+                                                        <mat-chip *ngFor="let damage of damages"
+                                                            (removed)="removeDamage(damage)">
+                                                            {{damage}}
+                                                            <button matChipRemove>
+                                                                <mat-icon>cancel</mat-icon>
+                                                            </button>
+                                                        </mat-chip>
+                                                        <input placeholder="New damage..." #damagePartInput
+                                                            [formControl]="damageCtrl" [matAutocomplete]="auto"
+                                                            [matChipInputFor]="chipList"
+                                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                            (matChipInputTokenEnd)="addDamage($event)">
+                                                    </mat-chip-list>
+                                                    <mat-autocomplete #auto="matAutocomplete"
+                                                        (optionSelected)="selectedDamage($event)">
+                                                        <mat-option *ngFor="let damage of filteredDamages | async"
+                                                            [value]="damage">
+                                                            {{damage}}
+                                                        </mat-option>
+                                                    </mat-autocomplete>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-12">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Disease / Illness</mat-label>
+                                                    <mat-chip-list #chipListDisease aria-label="Diease selection">
+                                                        <mat-chip *ngFor="let disease of diseases"
+                                                            (removed)="removeDisease(disease)">
+                                                            {{disease}}
+                                                            <button matChipRemove>
+                                                                <mat-icon>cancel</mat-icon>
+                                                            </button>
+                                                        </mat-chip>
+                                                        <input placeholder="New disease..." #diseasePartInput
+                                                            [formControl]="diseaseCtrl" [matAutocomplete]="autoDisease"
+                                                            [matChipInputFor]="chipListDisease"
+                                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                            (matChipInputTokenEnd)="addDisease($event)">
+                                                    </mat-chip-list>
+                                                    <mat-autocomplete #autoDisease="matAutocomplete"
+                                                        (optionSelected)="selectedDisease($event)">
+                                                        <mat-option *ngFor="let disease of filteredDiseases | async"
+                                                            [value]="disease">
+                                                            {{disease}}
+                                                        </mat-option>
+                                                    </mat-autocomplete>
+                                                </mat-form-field>
+
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-12">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Environmental</mat-label>
+                                                    <mat-chip-list #chipListEnvironment
+                                                        aria-label="Environment selection">
+                                                        <mat-chip *ngFor="let environment of environments"
+                                                            (removed)="removeEnvironment(environment)">
+                                                            {{environment}}
+                                                            <button matChipRemove>
+                                                                <mat-icon>cancel</mat-icon>
+                                                            </button>
+                                                        </mat-chip>
+                                                        <input placeholder="New environment..." #environmentPartInput
+                                                            [formControl]="environmentCtrl"
+                                                            [matAutocomplete]="autoEnvironment"
+                                                            [matChipInputFor]="chipListEnvironment"
+                                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                            (matChipInputTokenEnd)="addEnvironment($event)">
+                                                    </mat-chip-list>
+                                                    <mat-autocomplete #autoEnvironment="matAutocomplete"
+                                                        (optionSelected)="selectedEnvironment($event)">
+                                                        <mat-option
+                                                            *ngFor="let environment of filteredEnvironment | async"
+                                                            [value]="environment">
+                                                            {{environment}}
+                                                        </mat-option>
+                                                    </mat-autocomplete>
+                                                </mat-form-field>
+
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                                (click)="save('overview')">
+                                                <i class="feather icon-send btn-icon-prepend"></i>
+                                                Save
+                                            </button>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab [formGroup]="AccidentForm"
+                                        [disabled]="Form.value.status!=='Under Investigation'">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">bolt</mat-icon>
+                                            Root Cause
+                                        </ng-template>
+                                        <ul class="list-group">
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center active">
+                                                Sub-standard Practices or Unsafe acts:
+                                                <span>
+                                                    <button type="button" class="btn btn-primary btn-icon-text"
+                                                        (click)="addUnsafeActs()">
+                                                        <i class="feather icon-plus-circle btn-icon-prepend"></i>
+                                                        Add an Unsafe Act
+                                                    </button>
+                                                </span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                                *ngFor="let cause of rootCause | callback: filterUnsafeActs">
+                                                {{cause.attributes.title}}
+                                                <span>
+                                                    <button type="button" class="btn btn-icon btn-secondary  btn-xs"
+                                                        (click)="delRootCause(cause)">
+                                                        <i class="feather icon-trash-2"></i>
+                                                    </button>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <ul class="list-group mt-3">
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center active">
+                                                Sub-standard Conditions or Unsafe Conditions:
+                                                <span>
+                                                    <button type="button" class="btn btn-primary btn-icon-text"
+                                                        (click)="addUnsafeCondition()">
+                                                        <i class="feather icon-plus-circle btn-icon-prepend"></i>
+                                                        Add a Unsafe Condition
+                                                    </button>
+                                                </span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                                *ngFor="let cause of rootCause | callback: filterUnsafeConditions">
+                                                {{cause.attributes.title}}
+                                                <span>
+                                                    <button type="button" class="btn btn-icon btn-secondary  btn-xs"
+                                                        (click)="delRootCause(cause)">
+                                                        <i class="feather icon-trash-2"></i>
+                                                    </button>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <ul class="list-group mt-3">
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center active">
+                                                Personal Factors:
+                                                <span>
+                                                    <button type="button" class="btn btn-primary btn-icon-text"
+                                                        (click)="addPersonalFactors()">
+                                                        <i class="feather icon-plus-circle btn-icon-prepend"></i>
+                                                        Add Personal Factors
+                                                    </button>
+                                                </span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                                *ngFor="let cause of rootCause | callback: filterPersonalFactors">
+                                                {{cause.attributes.title}}
+                                                <span>
+                                                    <button type="button" class="btn btn-icon btn-secondary  btn-xs"
+                                                        (click)="delRootCause(cause)">
+                                                        <i class="feather icon-trash-2"></i>
+                                                    </button>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <ul class="list-group mt-3">
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center active">
+                                                Job Factors:
+                                                <span>
+                                                    <button type="button" class="btn btn-primary btn-icon-text"
+                                                        (click)="addJobFactors()">
+                                                        <i class="feather icon-plus-circle btn-icon-prepend"></i>
+                                                        Add Job Factors
+                                                    </button>
+                                                </span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                                *ngFor="let cause of rootCause | callback: filterJobFactors">
+                                                {{cause.attributes.title}}
+                                                <span>
+                                                    <button type="button" class="btn btn-icon btn-secondary  btn-xs"
+                                                        (click)="delRootCause(cause)">
+                                                        <i class="feather icon-trash-2"></i>
+                                                    </button>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <div class="row mt-5 mb-4 text-center">
+                                            <div class="d-grid gap-2">
+
+                                                <button type="button" class="btn btn-secondary" id="ai-suggest"
+                                                    (click)="checkDescription()">AI -
+                                                    Suggest Root Cause</button>
+                                                <p class="error hide" id="error-text">Please provide your description in
+                                                    description field
+                                                </p>
+                                                <button type="button" class="btn btn-success hide" id="ai-loader">
+                                                    <span class="spinner-grow spinner-grow-sm" role="status"
+                                                        aria-hidden="true"></span>
+                                                    Please wait our AI is looking recommendations for root cause.
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="row mt-1">
+                                            <p class="mb-2">Root Cause</p>
+                                        </div>
+                                        <div class="row mb-3 mt-2">
+                                            <quill-editor placeholder="Please provide the Root Cause"
+                                                [modules]="quillConfig" formControlName="root_cause">
+                                            </quill-editor>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                                (click)="save('root_cause')">
+                                                <i class="feather icon-send btn-icon-prepend"></i>
+                                                Save
+                                            </button>
+                                        </div>
+                                    </mat-tab>
+
+                                    <mat-tab [disabled]="Form.value.status!=='Under Investigation'">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">add_task</mat-icon>
+                                            Corrective Actions
+                                        </ng-template>
+                                        <button type="button" class="btn btn-primary btn-icon-text"
+                                            (click)="addAction()">
+                                            <i class="feather icon-plus-circle btn-icon-prepend"></i>
+                                            Add Action
+                                        </button>
+                                        <div class="table-responsive pt-3" id="correctiveAction">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Corrective / Preventive Action</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let action of actions">
+                                                        <td></td>
+                                                        <td class="col-sm-7">
+                                                            <p
+                                                                innerHTML="{{action.attributes.action | slice:0:700 }}{{action.attributes.action.length > 20 ? '...' : ''}}">
+                                                            </p>
+                                                        </td>
+                                                        <td class="action">
+                                                            <div class="table-responsive" id="correctiveSetting">
+                                                                <table class="table">
+                                                                    <tbody>
+                                                                        <tr class="action-item">
+                                                                            <td>Assignee: </td>
+                                                                            <td class="text-end">
+                                                                                <img style="vertical-align:middle; margin-right: 4px;"
+                                                                                    src={{action.attributes.assignee.data.attributes.image.data.attributes.image}}
+                                                                                    height="20" />
+                                                                                {{action.attributes.assignee.data.attributes.first_name}}
+                                                                                {{action.attributes.assignee.data.attributes.last_name}}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr class="action-item bg-light">
+                                                                            <td>Due Date</td>
+                                                                            <td class="text-danger text-end">
+                                                                                {{action.attributes.due_date |
+                                                                                date:'dd-MMM-yyyy'}}</td>
+                                                                        </tr>
+                                                                        <tr class="action-item">
+                                                                            <td class="text-bold-800">Status</td>
+                                                                            <td class="text-bold-800 text-end"><span
+                                                                                    class="badge {{status(action.attributes.status)}} ">{{action.attributes.status}}</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr class="action-item bg-light">
+                                                                            <td>Completed Date</td>
+                                                                            <td class="text-danger text-end">
+                                                                                {{action.attributes.completed_date |
+                                                                                date:'dd-MMM-yyyy'}}</td>
+                                                                        </tr>
+                                                                        <tr class="action-item">
+                                                                            <div class="d-grid gap-2 mt-3"
+                                                                                *ngIf="action.attributes.corrective_action_evidences.data.length!==0 ">
+                                                                                <button type="button"
+                                                                                    class="btn btn-primary"
+                                                                                    (click)="viewEvidence(action)"
+                                                                                    style="white-space: nowrap;">View
+                                                                                    Evidence</button>
+                                                                            </div>
+                                                                        </tr>
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab [disabled]="Form.value.status!=='Under Investigation'"
+                                        [formGroup]="trainingForm">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">diversity_3</mat-icon>
+                                            Training
+                                        </ng-template>
+                                        <div class="row">
+                                            <div class="col-md-12 grid-margin">
+                                                <quill-editor placeholder="Training Accrued" [modules]="quillConfig"
+                                                    formControlName="training">
+                                                </quill-editor>
+                                                <div
+                                                    *ngIf="trainingForm.get('training')?.touched && trainingForm.get('training')?.invalid">
+                                                    <small class="text-danger">This field is required.</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 grid-margin">
+                                                <quill-editor placeholder="Lessons Learnt" [modules]="quillConfig"
+                                                    formControlName="lesson">
+                                                </quill-editor>
+                                                <div
+                                                    *ngIf="trainingForm.get('lesson')?.touched && trainingForm.get('lesson')?.invalid">
+                                                    <small class="text-danger">This field is required.</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                                (click)="saveTraining()" [disabled]="!trainingForm.valid">
+                                                <i class="feather icon-send btn-icon-prepend"></i>
+                                                Save
+                                            </button>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab [disabled]="Form.value.status!=='Under Investigation'">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">payments</mat-icon>
+                                            Costing
+                                        </ng-template>
+                                        <button type="button" class="btn btn-primary btn-icon-text"
+                                            (click)="addExpense()">
+                                            <i class="feather icon-plus-circle btn-icon-prepend"></i>
+                                            Add an Expense
+                                        </button>
+                                        <div class="table-responsive w-100 mt-3" id="expenseTable">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">#</th>
+                                                        <th>Category</th>
+                                                        <th>Particular</th>
+                                                        <th class="text-end">Cost</th>
+                                                        <th class="text-end"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="text-end" *ngFor="let expense of expenses">
+                                                        <td class="text-center"></td>
+                                                        <td class="text-start">{{expense.attributes.category}}</td>
+                                                        <td class="text-start">{{expense.attributes.particular}}</td>
+                                                        <td>{{costSymbol(expense)}}</td>
+                                                        <td>
+                                                            <button type="button"
+                                                                class="btn btn-primary btn-icon btn-xs edit-btn"
+                                                                (click)="editCosting(expense)">
+                                                                <i class="feather icon-edit"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-danger btn-icon btn-xs"
+                                                                (click)="delCosting(expense)">
+                                                                <i class="feather icon-trash-2"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-6 ms-auto">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <tbody>
+                                                            <tr class="bg-light">
+                                                                <td class="text-bold-800">Total Cost: </td>
+                                                                <td class="text-bold-800 text-end">
+                                                                    {{costSymbolTotal(expenseTotal)}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab [disabled]="Form.value.status!=='Under Investigation'">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">face</mat-icon>
+                                            Statements
+                                        </ng-template>
+                                        <div class="table-responsive w-100 mt-3" id="expenseTable">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">#</th>
+                                                        <th>Employee ID</th>
+                                                        <th>Name</th>
+                                                        <th>Division</th>
+                                                        <th>Department</th>
+                                                        <th>Status</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="text-end" *ngFor="let witness of witnessList">
+                                                        <td class="text-center"></td>
+                                                        <td class="text-start">{{witness.attributes.employee_id}}</td>
+                                                        <td class="text-start">{{witness.attributes.name}}</td>
+                                                        <td class="text-start">{{witness.attributes.division}}</td>
+                                                        <td class="text-start">{{witness.attributes?.department}}</td>
+                                                        <td class="text-start">
+                                                            <div class="form-check form-switch mb-2">
+                                                                <input type="checkbox"
+                                                                    [checked]="witness.attributes.statement"
+                                                                    class="form-check-input" id="formSwitch1"
+                                                                    (change)="checkValue($event,witness)">
+
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-start">
+                                                            <label class="btn btn-secondary btn-icon-attach">
+                                                                <input type="file"
+                                                                    (change)="evidence($event,witness)" />
+                                                                <i class="feather icon-paperclip btn-icon-prepend"></i>
+                                                            </label>
+                                                            <button type="button"
+                                                                class="btn btn-success btn-icon btn-xs"
+                                                                *ngIf="witness.attributes.evidence_name"
+                                                                (click)="viewStatement(witness)">
+                                                                <i class="feather icon-eye"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </mat-tab>
+                                </mat-tab-group>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <form [formGroup]="Form">
+                        <div class="mt-3">
+                            <div class="btn-group">
+                                <button [disabled]="Form.value.status==='Completed'" type="button"
+                                    class="btn btn-primary">{{Form.value.status}}</button>
+                                <div class="btn-group" ngbDropdown role="group">
+                                    <button class="btn btn-primary dropdown-toggle-split" ngbDropdownToggle></button>
+                                    <div ngbDropdownMenu>
+                                        <button [disabled]="Form.value.status!=='Open'" ngbDropdownItem
+                                            (click)="inProgress()">In-Progress</button>
+                                        <button [disabled]="!startInves" ngbDropdownItem
+                                            (click)="startInvestigation()">Start Investigation</button>
+                                        <button [disabled]="!completionStatus" ngbDropdownItem
+                                            (click)="complete()">Completed</button>
+                                    </div>
+                                </div>
+                                <button (click)="navigate()" class="btn btn-success status-btn ms-2" mat-icon-button
+                                    aria-label="Example icon-button with a menu">
+                                    <i class="feather icon-chevron-left"></i> Back to History
+
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <label class="tx-11 fw-bolder mb-0 text-uppercase">Reported By:</label>
+                            <p class="text-muted">{{Form.value.reporter}}, {{Form.value.reporter_designation}}</p>
+                        </div>
+                        <div class="mt-3">
+                            <mat-form-field appearance="outline" color="primary">
+                                <mat-label>Accident Date</mat-label>
+                                <input matInput [matDatepicker]="accdp" placeholder="Choose a date"
+                                    [formControl]="accidentdate">
+                                <mat-datepicker-toggle matSuffix [for]="accdp"></mat-datepicker-toggle>
+                                <mat-datepicker #accdp></mat-datepicker>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                            <mat-form-field fxFlex appearance="outline" color="warning">
+                                <mat-label>Accident Time</mat-label>
+                                <input matTimepicker #t="matTimepicker" [strict]="false" id="timepicker-example"
+                                    mode="12h" placeholder="Please select time..." name="time"
+                                    [formControl]="accidenttime">
+                                <mat-icon matSuffix (click)="t.showDialog()">access_time</mat-icon>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="mt-3">
+                            <label class="tx-11 fw-bolder mb-0 text-uppercase">Injury Type:</label><br>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="injury"
+                                #group="matButtonToggleGroup" class="injuryType">
+                                <mat-button-toggle value="First Aid" class="injuryTypeOption">First Aid
+                                </mat-button-toggle>
+                                <mat-button-toggle value="Reportable Accident" class="injuryTypeOption">Reportable
+                                    Accident
+                                </mat-button-toggle>
+                                <mat-button-toggle value="Non-Reportable Accident"
+                                    class="injuryTypeOption">Non-Reportable Accident
+                                </mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                        <div class="mt-1">
+                            <label class="tx-11 fw-bolder mb-0 text-uppercase">Severity:</label><br>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style" formControlName="severity"
+                                #group="matButtonToggleGroup">
+                                <mat-button-toggle value="Major">Major</mat-button-toggle>
+                                <mat-button-toggle value="Minor">Minor</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                    </form>
+
+                    <form [formGroup]="AccidentForm">
+                        <div class="mt-1">
+                            <label class="tx-11 fw-bolder mb-0 text-uppercase">Investigation:</label><br>
+                            <mat-button-toggle-group name="fontStyle" aria-label="Font Style"
+                                formControlName="investigation" #group="matButtonToggleGroup"
+                                (change)="investigation($event)">
+                                <mat-button-toggle value="Required">Required</mat-button-toggle>
+                                <mat-button-toggle value="Not-Required">Not Required</mat-button-toggle>
+                            </mat-button-toggle-group>
+                        </div>
+                        <div class="mt-3" *ngIf="Form.value.injury==='Reportable Accident'">
+                            <mat-form-field appearance="outline" color="primary">
+                                <mat-label>Date Reported to GOVT / Police</mat-label>
+                                <input matInput [matDatepicker]="GOVRepdp" placeholder="Choose a date"
+                                    [formControl]="GOVRepdate" (dateChange)="GovRepDate($event)"
+                                    [disabled]="Form.value.status==='Open'">
+                                <mat-datepicker-toggle matSuffix [for]="GOVRepdp"></mat-datepicker-toggle>
+                                <mat-datepicker #GOVRepdp></mat-datepicker>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" color="primary">
+                                <mat-label>Date Reported to ESI</mat-label>
+                                <input matInput [matDatepicker]="ESIRepdp" placeholder="Choose a date"
+                                    [formControl]="ESIRepdate" (dateChange)="ESIRepDate($event)"
+                                    [disabled]="Form.value.status==='Open'">
+                                <mat-datepicker-toggle matSuffix [for]="ESIRepdp"></mat-datepicker-toggle>
+                                <mat-datepicker #ESIRepdp></mat-datepicker>
+                                <mat-error>Required Field</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

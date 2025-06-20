@@ -1,0 +1,243 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Satisfaction<span>
+                                    Survey</span></a>
+                            <p class="mt-1 mb-1"><b>Create a Question</b></p>
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Date</h6>
+                            <h6 class="text-end mb-5 ">{{Form.value.created_date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <quill-editor placeholder="Question *" [modules]="quillConfig"
+                                        formControlName="question">
+                                    </quill-editor>
+                                    <p *ngIf="!Form.controls['question'].valid &&Form.controls['question'].touched"
+                                        class="quill-editor-error"> Required Field *</p>
+                                </div>
+                            </div>
+                            <div class="row " *ngIf="showNewField">
+                                <div class="col-md-12">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Choices</mat-label>
+                                        <input type="text" matInput formControlName="multiplechoice_options">
+                                        <mat-hint>Values should be separated with comma</mat-hint>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Tags</mat-label>
+                                        <mat-chip-list #primaryChipList aria-label="Tags">
+                                            <mat-chip *ngFor="let tag of tag" (removed)="removeprimary(tag)">
+                                                {{tag}}
+                                                <button matChipRemove>
+                                                    <mat-icon>cancel</mat-icon>
+                                                </button>
+                                            </mat-chip>
+                                            <input placeholder="Tags..." #tagInput [formControl]="tagCtrl"
+                                                [matAutocomplete]="primaryAuto" [matChipInputFor]="primaryChipList"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                (matChipInputTokenEnd)="addprimary($event)">
+                                        </mat-chip-list>
+                                        <mat-autocomplete #primaryAuto="matAutocomplete"
+                                            (optionSelected)="selectedprimary($event)">
+                                            <mat-option *ngFor="let tag of filteredtag | async" [value]="tag"
+                                                (onSelectionChange)="tagInput.value=''">
+                                                {{tag}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-hint>To create a new tag, enter the tag name and press enter key</mat-hint>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+
+                            <div class="row mt-3">
+                                <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'"
+                                    (change)="onSelect($event)">
+                                    <ngx-dropzone-label>Drop your question image here. Please ensure the image
+                                        size is less than 2 MB</ngx-dropzone-label>
+                                    <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" [removable]="true"
+                                        *ngFor="let f of files" [file]="f" (removed)="onRemove(f)">
+                                    </ngx-dropzone-image-preview>
+                                </div>
+                            </div>
+
+
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+
+                                    <div class="d-grid gap-2 mb-2">
+                                        <button type="button" class="btn btn-primary" (click)="addLanguage()">Add other
+                                            languages</button>
+                                    </div>
+                                    <div class="row language-overflow">
+                                        <div id="language">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 15px;">SlNo</th>
+                                                        <th>Language</th>
+                                                        <th>Question</th>
+                                                        <th style="width: 130px;">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let data of multiLanguage; let i = index">
+                                                        <td>{{ i + 1 }}</td>
+                                                        <td>{{data.language}}</td>
+                                                        <td [innerHTML]="getTruncatedQuestion(data.question)"></td>
+                                                        <td>
+
+                                                            <button type="button"
+                                                                class="btn btn-success btn-icon btn-xs  action-btn"
+                                                                (click)="ModifyLanguage(data)" placement="top"
+                                                                ngbTooltip="Modify">
+                                                                <i class="feather icon-edit"></i>
+                                                            </button>
+
+                                                            <button type="button"
+                                                                class="btn btn-primary btn-icon btn-xs action-btn "
+                                                                (click)="viewLanguage(data)" ngbTooltip="View">
+                                                                <i class="feather icon-eye"></i>
+                                                            </button>
+
+
+                                                            <button type="button"
+                                                                class="btn btn-danger btn-icon btn-xs action-btn"
+                                                                (click)="deleteLanguage(data)" ngbTooltip="Delete">
+                                                                <i class="feather icon-trash-2"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <button type="button" class="btn btn-primary btn-icon-text float-end mt-4" (click)="submit()"
+                            [disabled]="!Form.valid">
+                            <i class="feather icon-send btn-icon-prepend"></i>
+                            Submit
+                        </button>
+
+                        &nbsp;<button type="button" class="btn btn-secondary btn-icon-text float-end mt-4 action-btn"
+                            (click)="saveAsDraft()">
+                            <i class="feather icon-save btn-icon-prepend"></i>
+                            Save as Draft
+                        </button>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-3">
+                        <button class="btn btn-primary" mat-icon-button aria-label="Example icon-button with a menu">
+
+                            <i class=" btn-icon-prepend"></i> {{Form.value.status}}
+                        </button>
+
+                    </div>
+
+                    <!-- <div class="mt-3">
+                        <mat-form-field fxFlex appearance="outline">
+                            <mat-label>Business Unit</mat-label>
+                            <mat-select [formControl]="Business_Unit" (selectionChange)="BusinessUnit($event)">
+                                <mat-option *ngFor="let data of divisions" [value]="data">
+                                    {{data.division_name}}</mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div> -->
+
+                    <div class="mt-3">
+                        <mat-form-field fxFlex appearance="outline">
+                            <mat-label>Survey Category</mat-label>
+                            <mat-select (selectionChange)="onSurveyCatChange($event)" formControlName="category"  >
+                                <mat-option  *ngFor="let category of categories" value="{{category.attributes.value}}">
+                                    <div class="option-container">
+                                        {{ category.attributes.value }}
+                                        <div class="icon-container" (click)="$event.stopPropagation()">
+                                          <i class="feather icon-edit titleicon_edit" (click)="editSurveycat(category)"></i>&nbsp;
+                                          <i class="feather icon-trash-2 titleicon_delete" (click)="deleteSurveycat(category)"></i>
+                                        </div>
+                                      </div>
+                                </mat-option>
+                                <mat-option [disabled]="true" (click)="new_survey_cat()" class="option-btn">
+                                    <i class="mdi mdi-plus-circle"></i> Create New Survey category
+                                  </mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mt-3">
+                        <mat-form-field fxFlex appearance="outline">
+                            <mat-label>Question Category</mat-label>
+                            <mat-select formControlName="question_category">
+                                <mat-option *ngFor="let questioncategory of filteredquestioncategories"
+                                    value="{{questioncategory.attributes.value}}">
+                                    <div class="option-container">
+                                        {{ questioncategory.attributes.value }}
+                                        <div class="icon-container" (click)="$event.stopPropagation()">
+                                          <i class="feather icon-edit titleicon_edit" (click)="editSurveyQuestioncat(questioncategory)"></i>&nbsp;
+                                          <i class="feather icon-trash-2 titleicon_delete" (click)="deleteSurveyQuestioncat(questioncategory)"></i>
+                                        </div>
+                                      </div>
+                                </mat-option>
+                                <mat-option [disabled]="true" *ngIf="Form.controls['category'].value" (click)="new_survey_question_cat()" class="option-btn">
+                                    <i class="mdi mdi-plus-circle"></i> Create New Survey category
+                                  </mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mt-3">
+                        <mat-form-field fxFlex appearance="outline">
+                            <mat-label>Response Type </mat-label>
+                            <mat-select formControlName="response_options"
+                                (selectionChange)="onResponseOptionChange($event)">
+                                <mat-option *ngFor="let responseoption of responseoptions"
+                                    value="{{responseoption.attributes.Value}}">
+                                    {{responseoption.attributes.Value}}</mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="mt-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Question Weightage</mat-label>
+                            <input type="number" matInput formControlName="question_weighting">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

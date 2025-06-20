@@ -1,0 +1,227 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Name</mat-label>
+                        <input type="text" matInput formControlName="legal_name" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Nature of Ownership and Legal Form</mat-label>
+                        <input type="text" matInput formControlName="nature_of_ownership_and_legal_form" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Location of its Headquarters</mat-label>
+                        <input type="text" matInput formControlName="location_of_its_headquarters" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Countries of Operation</mat-label>
+                        <input type="text" matInput formControlName="countries_of_operation" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Organisation Email</mat-label>
+                        <input type="email" matInput formControlName="organisation_email" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Telephone</mat-label>
+                        <input type="number" matInput formControlName="telephone" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Website</mat-label>
+                        <input type="text" matInput formControlName="website" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Registered Office Address</mat-label>
+                        <input type="text" matInput formControlName="registered_office_address" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Corporate Identity Number</mat-label>
+                        <input type="text" matInput formControlName="corporate_identity_number" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <!-- <mat-label>Year of Incorporation</mat-label>
+                        <input matInput [matDatepicker]="yearPicker" formControlName="year_of_incorporation" readonly>
+                        <mat-datepicker-toggle matSuffix [for]="yearPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #yearPicker startView="multi-year" panelClass="year-picker"
+                            (yearSelected)="onCalendarYearSelected($event, yearPicker)">
+                        </mat-datepicker> -->
+                        <!-- <mat-error *ngIf="Form.controls['year_of_incorporation'].hasError('matDatepickerMin')">
+                            Invalid year
+                        </mat-error> -->
+                        <mat-label>Year of Incorporation</mat-label>
+                        <input type="number" matInput formControlName="year_of_incorporation" />
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Name of Stock Exchanges</mat-label>
+                        <input type="text" matInput formControlName="name_of_stock_exchanges" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Paid Up Capital</mat-label>
+                        <input type="number" matInput formControlName="paid_up_capital" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Turnover</mat-label>
+                        <input type="number" matInput formControlName="turnover" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Net Worth</mat-label>
+                        <input type="number" matInput formControlName="net_worth" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Entities Included</mat-label>
+                        <mat-select formControlName="entities_included" multiple>
+                            <mat-option *ngFor="let div of divisions" (click)="onDivisionSelected(div)"
+                                [value]="div.id">{{div.division_name}}</mat-option>
+
+                        </mat-select>
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Reporting Frequency</mat-label>
+                        <input type="text" matInput formControlName="reporting_frequency" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Designation</mat-label>
+                        <input type="text" matInput formControlName="designation" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Email</mat-label>
+                        <input type="email" matInput formControlName="email" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Phone Number</mat-label>
+                        <input type="number" matInput formControlName="phone_number" />
+                        <!-- <mat-error>Required Field</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <!-- <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Year</mat-label>
+                        <input matInput [matDatepicker]="reportYearPicker" formControlName="year" readonly>
+                        <mat-datepicker-toggle matSuffix [for]="reportYearPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #reportYearPicker startView="multi-year" panelClass="year-picker"
+                            (yearSelected)="onYearSelected($event, reportYearPicker)">
+                        </mat-datepicker>
+                        <mat-error *ngIf="Form.controls['year'].hasError('matDatepickerMin')">
+                            Invalid year
+                        </mat-error>
+                    </mat-form-field>
+                </div> -->
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Year</mat-label>
+                        <mat-select formControlName="year">
+                            <mat-option *ngFor="let data of years" [value]="data.year">
+                                {{ data.year }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Form.get('year')?.hasError('required')">Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <!-- <div class="col-md-4">
+
+                    <mat-form-field appearance="outline" color="primary" id="dashboard">
+                        <mat-label>Financial Year *</mat-label>
+                        <mat-date-range-input [formGroup]="FinancialYearRange" [rangePicker]="picker">
+                            <input matStartDate formControlName="start" placeholder="Start date"
+                                (dateChange)="startDateChange($event)">
+                            <input matEndDate formControlName="end" placeholder="End date"
+                                (dateChange)="endDateChange($event)">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                        <mat-error *ngIf="FinancialYearRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                            start date</mat-error>
+                        <mat-error *ngIf="FinancialYearRange.controls.end.hasError('matEndDateInvalid')">Invalid end
+                            date
+                        </mat-error>
+                    </mat-form-field>
+                </div> -->
+            </div>
+
+            <div class="mb-3">
+
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4 me-2" (click)="submit()"
+                    [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                <!-- <button type="button" class="btn btn-secondary btn-icon-text float-end mt-4 me-2"
+                    (click)="draft()">
+                    <i class="feather icon-save btn-icon-prepend"></i>
+                    Save as Draft
+                </button> -->
+                <button type="button" class="btn btn-secondary btn-icon-text float-end mt-4 me-2" (click)="close()">
+
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

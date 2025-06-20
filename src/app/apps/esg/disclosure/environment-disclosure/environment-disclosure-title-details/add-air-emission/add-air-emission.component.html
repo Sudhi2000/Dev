@@ -1,0 +1,100 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Type</mat-label>
+                        <mat-select formControlName="type">
+                            <mat-option *ngFor="let data of lov[21]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}</span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check form-switch mt-3">
+                        <input type="checkbox" class="form-check-input" id="formSwitch1"
+                            formControlName="air_emission_yes_no"
+                            (change)="onAirEmissionChange($event)">
+                        <label class="form-check-label" for="formSwitch1">Air Emission available</label>
+                    </div>
+                </div>
+                <div class="col-md-4" *ngIf="Form.value.air_emission_yes_no">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Air Emission</mat-label>
+                        <input type="number" matInput formControlName="air_emission">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4" *ngIf="!Form.value.air_emission_yes_no">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Flow Rate</mat-label>
+                        <input type="number" matInput formControlName="flow_rate">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4" *ngIf="Form.value.air_emission_yes_no">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Unit</mat-label>
+                        <input type="text" matInput formControlName="unit">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>   
+                <div class="col-md-4" *ngIf="!Form.value.air_emission_yes_no">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Unit</mat-label>
+                        <input type="text" matInput formControlName="flow_unit">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>              
+                <div class="col-md-4" *ngIf="!Form.value.air_emission_yes_no">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Concentration</mat-label>
+                        <input type="number" matInput formControlName="concentration">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4" *ngIf="!Form.value.air_emission_yes_no">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Unit</mat-label>
+                        <input type="text" matInput formControlName="concentration_unit">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>  
+            </div>
+            <div class="row">
+                <div class="col-md-4" *ngIf="!Form.value.air_emission_yes_no">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Running Time</mat-label>
+                        <input type="number" matInput formControlName="running_time">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4" *ngIf="!Form.value.air_emission_yes_no">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Unit</mat-label>
+                        <input type="text" matInput formControlName="running_time_unit">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>  
+            </div>
+            <div class="row">
+                <div class="mb-3">
+                    <button *ngIf="data.mode!=='view'" type="button"
+                        class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                        (click)="submit()">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Submit
+                    </button>
+                    <button *ngIf="data.mode=='view'" type="button" class="btn btn-secondary float-end mt-4"
+                        mat-dialog-close>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,121 @@
+.table-responsive {
+    overflow: hidden;
+}
+
+.reminder-checkboxes {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkbox-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.checkbox-container .form-check {
+    margin-right: 20px; /* Adjust spacing between checkboxes */
+    margin-bottom: 10px; /* Adjust spacing between lines */
+}
+
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+table {
+    thead {
+        tr {
+            th {
+                padding-left: 20px;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                padding-left: 20px;
+
+            }
+        }
+    }
+}
+
+.btn-previous {
+    margin-right: 2px;
+}
+
+.action-btn {
+    margin-right: 5px;
+}
+
+
+mat-chip {
+    background-color: #05A34A !important;
+    color: white !important;
+}
+
+.injuryType{
+    display: grid;
+    .injuryTypeOption{
+        border-bottom: solid 1px #e7e7e7;
+        border-left:none
+    }
+}
+.time-dropdown{
+    display: inline-flex;
+    mat-form-field{
+        margin-right: 5px;
+    }
+}
+
+
+.action-btn {
+    margin-right: 5px;
+}
+.table-responsive {
+    overflow-x: auto; 
+}
+
+table {
+    width: 100%; 
+    table-layout: auto; 
+}
+
+th, td {
+    white-space: normal !important;
+    word-wrap: break-word !important; 
+    max-width: 300px; 
+}
+
+td {
+    vertical-align: top; 
+}
+.qr-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .download-button {
+    // padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  
+
+  

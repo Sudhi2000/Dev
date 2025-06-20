@@ -1,0 +1,164 @@
+<div mat-dialog-content [formGroup]="Form">
+  <div class="container-fluid  d-flex justify-content-center w-100">
+    <div class="table-responsive w-100">
+
+      <div class="row ">
+        <div class="col-md-6">
+          <mat-form-field fxFlex appearance="outline">
+            <mat-label>Industry</mat-label>
+            <mat-select [formControl]="industryControl">
+              <mat-option *ngFor="let data of industries" [value]="data.attributes.value" (click)="set_industry(data)">
+                <div class="option-container">
+                  {{ data.attributes.value }}
+                  <div class="icon-container" (click)="$event.stopPropagation()">
+                    <i class="feather icon-edit titleicon_edit" (click)="editIndustry(data)"></i>&nbsp;
+                    <i class="feather icon-trash-2 titleicon_delete" (click)="deleteIndustry(data)"></i>
+                  </div>
+                </div>
+              </mat-option>
+              <mat-option (click)="new_industry()" class="option-btn">
+                <i class="mdi mdi-plus-circle"></i> Create Industry
+              </mat-option>
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-md-6">
+
+
+
+
+
+
+          <mat-form-field fxFlex appearance="outline">
+            <mat-label>Framework</mat-label>
+            <mat-select [formControl]="Frameworks" multiple>
+              <mat-option *ngFor="let data of frameworks" [value]="data?.attributes?.value">
+                <div class="option-container">
+                  {{ data.attributes.value }}
+                  <div class="icon-container" (click)="$event.stopPropagation()">
+                    <i class="feather icon-edit titleicon_edit" (click)="editFramework(data)"></i>&nbsp;
+                    <i class="feather icon-trash-2 titleicon_delete" (click)="deleteFramework(data)"></i>
+                  </div>
+                </div>
+              </mat-option>
+              <mat-option (click)="new_framework()" class="option-btn">
+                <i class="mdi mdi-plus-circle"></i> Create new framework
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="Frameworks.invalid && Frameworks.touched">Required Field</mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div class="row ">
+        <!-- <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Category</mat-label>
+                        <mat-select [formControl]="Categories" multiple>
+                          <mat-option *ngFor="let data of categories" [value]="data.attributes.value">
+                            <div class="option-container">
+                              {{ data.attributes.value }}
+                              <div class="icon-container" (click)="$event.stopPropagation()">
+                                <i class="feather icon-edit titleicon_edit" (click)="editCategory(data)"></i>&nbsp;
+                                <i class="feather icon-trash-2 titleicon_delete" (click)="deleteCategory(data)"></i>
+                              </div>
+                            </div>
+                          </mat-option>
+                          <mat-option (click)="new_category()" class="option-btn">
+                            <i class="mdi mdi-plus-circle"></i> Create new Category
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="Categories.invalid && Categories.touched">Required Field</mat-error>
+                      </mat-form-field>
+                      
+                  </div> -->
+
+
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Topic</mat-label>
+            <mat-select formControlName="topic">
+              <mat-option value="{{data}}" *ngFor="let data of materialityTopic" (click)="setTopic()">
+                {{data}}</mat-option>
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field fxFlex appearance="outline">
+            <mat-label>Sub Topic</mat-label>
+            <mat-select [formControl]="subTopics" multiple>
+              <mat-option *ngFor="let data of materialitysubTopic" [value]="data.attributes.value"
+                (click)="setindividualTopic()">
+                <div class="option-container">
+                  {{ data.attributes.value }}
+                </div>
+              </mat-option>
+              <mat-option (click)="new_subtopic()" class="option-btn">
+                <i class="mdi mdi-plus-circle"></i> Create new Subtopic
+              </mat-option>
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field fxFlex appearance="outline">
+            <mat-label>Individual Topic</mat-label>
+            <mat-select [formControl]="individualTopics" multiple>
+              <mat-option *ngFor="let data of materialityindividualTopic" [value]="data.attributes.value">
+                <div class="option-container">
+                  {{ data.attributes.value }}
+                </div>
+              </mat-option>
+              <mat-option (click)="new_individualtopic()" class="option-btn">
+                <i class="mdi mdi-plus-circle"></i> Create new Subtopic
+              </mat-option>
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Stakeholder Category</mat-label>
+            <mat-select formControlName="stakeholder_category">
+              <mat-option value="{{data}}" *ngFor="let data of stackholderCategory" (click)="setstakeholder_type(data)">
+                {{data}}</mat-option>
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <!-- <mat-form-field appearance="outline">
+                            <mat-label>Stakeholder Type</mat-label>
+                            <mat-select formControlName="stakeholder_type">
+                                <mat-option value="{{data}}" *ngFor="let data of stackholderType" >
+                                    {{data}}</mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field> -->
+          <mat-form-field fxFlex appearance="outline">
+            <mat-label>Stakeholder Type</mat-label>
+            <mat-select [formControl]="stakeholderTypes" multiple>
+              <mat-option *ngFor="let data of stackholderType" [value]="data">
+                <div class="option-container">
+                  {{ data }}
+                </div>
+              </mat-option>
+            </mat-select>
+            <mat-error>Required Field</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <button type="button" class="btn btn-success btn-icon-text float-end mt-4 " (click)="update()"
+          [disabled]="!Form.valid">
+          <i class="feather icon-send btn-icon-prepend"></i>
+          Update
+        </button>
+      </div>
+
+    </div>
+  </div>

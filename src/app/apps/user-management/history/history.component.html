@@ -1,0 +1,97 @@
+<div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <nav aria-label="breadcrumb ">
+            <ol class="breadcrumb breadcrumb-dot">
+              <li class="breadcrumb-item"><a routerLink="/apps/insight">Home</a></li>
+              <li class="breadcrumb-item"><a routerLink="/apps/user-management/history">User Management</a></li>
+              <li class="breadcrumb-item"><a routerLink="/apps/user-management/history">History</a></li>
+            </ol>
+          </nav>
+  
+        </div>
+        <div class="col-md-5 search">
+          <div>
+            <div class="input-group">
+              <div class="input-group-text">
+                <i class="feather icon-search"></i>
+              </div>
+              <input type="text" class="form-control" id="navbarForm" placeholder="Search here..."
+                (keyup)="applyFilter($event)">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-1 search">
+            <div>
+                <button type="button" class="btn btn-primary btn-icon-text btn-xs"
+                (click)="createUser()">
+                    <i class="feather icon-plus btn-icon-prepend"></i>
+                    CREATE
+                </button>
+          </div>
+      </div>
+      
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 stretch-card">
+      <div class="card">
+        <div class="card-body table-card">
+          <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" matSort>
+
+              <ng-container matColumnDef="employee_id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Employee ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.employee_id}} {{element.employee_id}}</td>
+              </ng-container>
+              <ng-container matColumnDef="first_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.first_name}} </td>
+              </ng-container>
+              <ng-container matColumnDef="last_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header >Last Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.last_name}} </td>
+              </ng-container>
+              <ng-container matColumnDef="gender">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header > Gender
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+              </ng-container>
+              <ng-container matColumnDef="designation">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header > Designation
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.designation}} </td>
+              </ng-container>
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header > Email
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+              </ng-container>
+               
+              <ng-container matColumnDef="actions">
+                <th *matHeaderCellDef class="actions-cell" mat-header-cell mat-sort-header>Actions</th>
+                <td *matCellDef="let row" class="actions-cell" mat-cell>
+                  <button type="button" class="btn btn-success btn-icon btn-xs" (click)="modifyUser(row)" placement="top" ngbTooltip="Modify">
+                    <i class="feather icon-edit"></i>
+                  </button>
+                 
+                  <button type="button" class="btn btn-primary btn-icon btn-xs hide" id="{{row.document_number}}_1" >
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="visually-hidden">Loading...</span>
+                  </button>
+
+                   
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="visibleColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: visibleColumns;"></tr>
+            </table>
+            <mat-paginator [pageSize]="10" showFirstLastButtons [showFirstLastButtons]="true"
+              aria-label="Select page of periodic elements">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

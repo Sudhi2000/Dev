@@ -1,0 +1,177 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-4">
+        <a routerLink="." class="nobleui-logo d-block mt-3">Consumption <span>Management</span></a>
+        <nav aria-label="breadcrumb ">
+          <ol class="breadcrumb breadcrumb-dot">
+            <li class="breadcrumb-item"><a routerLink="/apps/insight">Home</a></li>
+            <li class="breadcrumb-item"><a routerLink="/apps/environment/dashboard">Environment</a></li>
+            <li class="breadcrumb-item"><a routerLink="/apps/environment/dashboard">Consumption</a></li>
+            <li class="breadcrumb-item"><a routerLink="/apps/environment/history">History</a></li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 search">
+        <div class="input-group">
+          <div class="input-group-text">
+            <i class="feather icon-search"></i>
+          </div>
+          <input type="text" class="form-control" [(ngModel)]="serachReference" id="navbarForm"
+            placeholder="Please provide the reference number">
+        </div>
+      </div>
+      <div *ngIf="(corporateUser === true) || (divisions.length > 1)" class="col-2 search mt-4 ">
+        <mat-form-field fxFlex appearance="outline" color="primary">
+          <mat-label>Division</mat-label>
+          <mat-select [formControl]="Division" multiple (selectionChange)="EnvDiv($event)">
+            <mat-select-trigger>
+              {{Division.value[0]?.division_name? Division.value[0]?.division_name : ''}}
+              <span *ngIf="Division?.value?.length > 1" class="example-additional-selection">
+                (+{{Division.value.length - 1}}
+                {{Division.value?.length === 2 ?
+                'other' :
+                'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let division of divisions" [value]="division">{{division.division_name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 search">
+        <button type="button" class="btn btn-primary btn-icon-text" (click)="generate()">
+          <i class="btn-icon-prepend" data-feather="search"></i>
+          Search
+        </button>
+
+        <button type="button" class="btn btn-secondary btn-icon-text btn-reset" (click)="reset()">
+          <i class="btn-icon-prepend" data-feather="rotate-cw"></i>
+
+          Reset
+        </button>
+
+        <button type="button" class="btn btn-primary btn-icon-text btn-report" (click)="generateReport()"
+          id="waste_report">
+          <i class="btn-icon-prepend" data-feather="printer"></i>
+          Generate Report
+        </button>
+
+        <button type="button" class="btn btn-primary btn-icon-text hide btn-reset" id="waste_report_loader">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          &nbsp; Please wait...
+        </button>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 stretch-card">
+    <div class="card">
+      <div class="card-body table-card">
+        <div class="table-responsive">
+          <ng-container *ngIf="isLoading">
+            <app-loading-screen [rows]="9"></app-loading-screen>
+          </ng-container>
+          <ng-container *ngIf="!isLoading">
+            <table mat-table [dataSource]="dataSource" matSort>
+              <ng-container matColumnDef="reference_number">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Reference </th>
+                <td mat-cell *matCellDef="let element"> {{element.reference_number}} </td>
+              </ng-container>
+              <ng-container matColumnDef="year">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Year </th>
+                <td mat-cell *matCellDef="let element"> {{element.year}} </td>
+              </ng-container>
+              <ng-container matColumnDef="month">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>month</th>
+                <td mat-cell *matCellDef="let element"> {{element.month}} </td>
+              </ng-container>
+              <ng-container matColumnDef="division">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Division</th>
+                <td mat-cell *matCellDef="let element"> {{element.division}} </td>
+              </ng-container>
+              <ng-container matColumnDef="work_force">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Work Force</th>
+                <td mat-cell *matCellDef="let element"> {{element.work_force}} </td>
+              </ng-container>
+              <ng-container matColumnDef="days_worked">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Days Worked</th>
+                <td mat-cell *matCellDef="let element"> {{element.days_worked}} </td>
+              </ng-container>
+              <ng-container matColumnDef="product_produced_kg">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Produced</th>
+                <td mat-cell *matCellDef="let element"> {{element.product_produced_kg}} KG |
+                  {{element.product_produced_pieces}} Pieces</td>
+              </ng-container>
+              <ng-container matColumnDef="area">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Area</th>
+                <td mat-cell *matCellDef="let element"> {{element.area}} </td>
+              </ng-container>
+              <ng-container matColumnDef="reviewer">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Reviewer
+                </th>
+                <td mat-cell *matCellDef="let element">
+
+                  {{element.reviewer.data?.attributes.first_name}} {{element.reviewer.data?.attributes.last_name}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="approver">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Approver
+                </th>
+                <td mat-cell *matCellDef="let element">
+
+                  {{element.approver.data?.attributes.first_name}} {{element.approver.data?.attributes.last_name}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="pending_consumption">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Category Status</th>
+                <td mat-cell *matCellDef="let element">
+                  <p ngbTooltip="Pending: {{element.pending_consumption}}">
+                    <ngb-progressbar [type]="element.pending_color_code" [value]="element.pending_percentage"
+                      [striped]="true" [animated]="true"></ngb-progressbar>
+                  </p>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Due Date"> Status
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <button type="button" class="btn {{statusButton(element.status)}} status-btn btn-icon-text btn-xs">
+                    {{element.status}}
+                  </button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th *matHeaderCellDef class="actions-cell" mat-header-cell mat-sort-header>Actions</th>
+                <td *matCellDef="let row" class="actions-cell" mat-cell>
+
+                  <button type="button" class="btn btn-secondary btn-icon btn-xs action-btn " (click)="view(row)"
+                    placement="top" ngbTooltip="View">
+                    <i class="feather icon-eye"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger btn-icon btn-xs" (click)="modify(row)" placement="top"
+                    ngbTooltip="Modify"
+                    *ngIf="row.status==='Draft'||(row.status==='Rejected'&&userID===row.created_user.data.id)">
+                    <i class="feather icon-edit"></i>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="visibleColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: visibleColumns;"></tr>
+            </table>
+
+          </ng-container>
+          <mat-paginator [pageSize]="pageSize" showFirstLastButtons [showFirstLastButtons]="true" [length]="totalItems"
+            (page)="onPaginate($event)" aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

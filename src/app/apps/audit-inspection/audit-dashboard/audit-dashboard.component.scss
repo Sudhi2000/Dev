@@ -1,0 +1,129 @@
+nav{
+    padding-left: 2% !important;
+    padding-right: 4% !important;
+}
+.icon{
+    text-align: right;
+}
+.value{
+    align-self: center;
+}
+
+.tab-card{
+    padding: 0px !important;
+}
+
+.nav-link{
+    color: black !important;
+
+}
+
+.nav-link.active{
+    color: white !important;
+
+}
+
+
+
+.search-btn{
+    margin-left: 5px;
+}
+
+.custom-height{
+    height: 500px!important;
+    position: relative;
+
+}
+
+.age-card,.gender-card{
+    height: 100%;
+}
+
+
+.nobleui-logo{
+    font-size: 20px;
+}
+
+.status{
+    text-align: center;
+}
+
+.level{
+    display:inline-flex
+}
+
+/* Reset */
+
+
+  
+  /* Utility Class */
+.markPer{
+    margin-right: 5px;
+    text-align-last:center
+}
+
+.col-md-2-5 {
+    flex: 0 0 20%;
+    max-width: 20%;
+}
+.bg-low{
+    background-color: #87CEFA;
+} 
+.expired{
+    color: red;
+}
+body {
+    background: #fff;
+  }
+  
+   
+  
+  .chart-box {
+    padding-left: 0;
+  }
+  
+  #chart-year,
+  #chart-quarter {
+    width: 96%;
+    max-width: 48%;
+    box-shadow: none;
+    padding-left: 0;
+    padding-top: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+  }
+  
+  #chart-year {
+    float: left;
+    position: relative;
+    transition: 1s ease transform;
+    z-index: 3;
+  }
+  
+  #chart-year.chart-quarter-activated {
+    transform: translateX(0);
+    transition: 1s ease transform;
+  }
+  
+  #chart-quarter {
+    float: left;
+    position: relative;
+    z-index: -2;
+    transition: 1s ease transform;
+  }
+  
+  #chart-quarter.active {
+    transition: 1.1s ease-in-out transform;
+    transform: translateX(0);
+    z-index: 1;
+  }
+  
+  @media screen and (min-width: 240px) {
+    #chart-year {
+      transform: translateX(50%);
+    }
+    #chart-quarter {
+      transform: translateX(-50%);
+    }
+  }
+  

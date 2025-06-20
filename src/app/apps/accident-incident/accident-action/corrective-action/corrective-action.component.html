@@ -1,0 +1,46 @@
+<div mat-dialog-content class="row" [formGroup]="Form">
+  <div class="col-md-12 grid-margin">
+    <h6 class="card-title">Corrective / Preventive Action:</h6>
+    <quill-editor
+      placeholder="Enter Text"
+      [modules]="quillConfig"
+      formControlName="action"
+    >
+    </quill-editor>
+  </div>
+  <div class="col-md-6 field-row" >
+    <mat-form-field fxFlex appearance="outline" color="primary">
+      <mat-label>Assignee</mat-label>
+      <mat-select formControlName="assignee">
+        <mat-option *ngFor="let assignee of peopleList" [value]="assignee.id">
+          <span>{{ assignee.attributes.first_name }} {{ assignee.attributes.last_name }}</span>
+        </mat-option>
+      </mat-select>
+      <mat-error>Required Field</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary" style="margin-left: 10px;">
+      <mat-label>Due Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="accdp"
+        placeholder="Choose a date"
+        [formControl]="dueDate"
+        (dateChange)="dueDateVal($event)"
+      />
+      <mat-datepicker-toggle matSuffix [for]="accdp"></mat-datepicker-toggle>
+      <mat-datepicker #accdp></mat-datepicker>
+      <mat-error>Required Field</mat-error>
+    </mat-form-field>
+  </div>
+</div>
+<div class="mb-3">
+  <button
+    type="button"
+    class="btn btn-success btn-icon-text float-end mt-4"
+    (click)="submit()"
+    [disabled]="!Form.valid"
+  >
+    <i class="feather icon-send btn-icon-prepend"></i>
+    Submit
+  </button>
+</div>

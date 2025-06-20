@@ -1,0 +1,173 @@
+.table-responsive {
+    overflow: hidden;
+}
+
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile+label {
+
+    color: white;
+    background-color: red;
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+}
+
+.inputfile:focus+label,
+.inputfile+label:hover {
+    background-color: red;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+
+}
+
+.inputfile+label {
+    cursor: pointer;
+    /* "hand" cursor */
+}
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+table {
+    thead {
+        tr {
+            th {
+                padding-left: 20px;
+            }
+        }
+
+    }
+
+    tbody {
+        tr {
+            td {
+                padding-left: 20px;
+
+            }
+        }
+    }
+}
+
+.btn-previous {
+    margin-right: 2px;
+}
+
+.action-btn {
+    margin-right: 5px;
+}
+
+
+mat-chip {
+    background-color: #05A34A !important;
+    color: white !important;
+}
+
+.hide {
+    display: none;
+}
+
+tr {
+    height: unset !important;
+    vertical-align: middle;
+}
+
+th {
+    height: 40px;
+}
+
+.edit-btn {
+    margin-right: 5px;
+    // padding-left: 20px;
+}
+
+.view-btn {
+    padding-left: 20px;
+
+}
+
+.status-btn {
+    width: 100%;
+    text-align: left;
+    padding-left: 0px;
+
+}
+
+#bmi-chart {
+    text-align: center;
+}
+
+.Obesity {
+    background-color: #FFB200;
+}
+
+.Mordibly {
+    background-color: #EA9093;
+
+}
+
+.Overweight {
+    background-color: #FFDD75;
+}
+
+.Normal {
+    background-color: #9BD29E;
+}
+
+.Underweight {
+    background-color: #55B5EF;
+
+}
+
+.quill-editor-error {
+    font-size: 12px;
+    color: red;
+    text-align: right;
+
+}
+
+.titleicon_delete
+{
+color: red;
+//margin-left: 80%;
+}
+.titleicon_edit{
+   color: green;
+}
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon-container {
+    margin-left: 8px; /* Adjust the margin as needed to control the spacing between the title and the icon */
+}
+  

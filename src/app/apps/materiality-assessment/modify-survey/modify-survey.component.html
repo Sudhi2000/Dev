@@ -1,0 +1,440 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Stakeholder Engagement <span>
+                                </span></a>
+                            <p class="mt-1 mb-1"><b>Modify Survey</b></p>
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Created Date</h6>
+                            <h6 class="text-end mb-5 ">{{Form.value.created_date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+                                <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex">
+
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">article</mat-icon>
+                                            Topics
+                                        </ng-template>
+                                        <div class="row  w-100" id="topics" style="width: 100%;">
+                                            <form class="d-flex my-2 my-lg-0 w-100" [formGroup]="filterForm">
+
+                                                <div class="d-flex align-items-center mb-2 w-100">
+                                                    <div class="me-2 col-md-4">
+                                                        <mat-form-field appearance="outline">
+                                                            <mat-label>Industry</mat-label>
+                                                            <input type="text" matInput formControlName="industry">
+                                                            <mat-error>Required Field</mat-error>
+                                                        </mat-form-field>
+
+                                                    </div>
+                                                    <div class="me-2  col-md-8">
+                                                        <mat-form-field appearance="outline">
+                                                            <mat-label>Framework</mat-label>
+                                                            <input type="text" matInput formControlName="framework">
+                                                            <mat-error>Required Field</mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div style="margin-bottom: 20px; " class=" col-md-4">
+                                                        <!-- <button type="button" class="btn btn-primary btn-icon me-2"
+                                                            (click)="search()">
+                                                            <i class="feather icon-search btn-icon-prepend"></i>
+                                                        </button>
+
+                                                        <button type="button" class="btn btn-danger btn-icon me-2"
+                                                            (click)="reset()">
+                                                            <i class="feather icon-rotate-cw btn-icon-prepend"></i>
+                                                        </button> -->
+
+                                                        <!-- <button type="button"
+                                                            class="btn btn-primary btn-icon-text btn-l ml-auto"
+                                                            (click)="addTopic()" [disabled]="!filterForm.valid">
+                                                            <i class="feather icon-plus btn-icon-prepend"></i>
+                                                            Add Materiality Topic
+                                                        </button> -->
+                                                    </div>
+                                                </div>
+
+
+                                            </form>
+                                            <div class="col-sm-7">
+                                                <div class="card-body">
+                                                    <h6 class="card-title mb-3">Topics</h6>
+                                                    <ul class="list-group">
+                                                        <li *ngFor="let list of filteredMaterialityTopics; let i = index"
+                                                            class="list-group-item" sortablejsItem
+                                                            [attr.data-index]="i">
+                                                            <ngb-accordion>
+                                                                <ngb-panel>
+                                                                    <ng-template ngbPanelTitle>
+                                                                        <div
+                                                                            class="accordion-button custom-header justify-content-between w-100 d-flex align-items-center">
+                                                                            <span>{{ list.attributes.topic }} ({{
+                                                                                list.attributes.sub_topic }})</span>
+                                                                            <div
+                                                                                class="d-flex align-items-center gap-2">
+                                                                                <button type="button"
+                                                                                    class="btn btn-sm btn-primary"
+                                                                                    *ngIf="!topicAlreadySelected(list.id)"
+                                                                                    (click)="addTopics(list); $event.stopPropagation()">Add</button>
+                                                                                <i class="bi bi-chevron-down"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </ng-template>
+                                                                    <ng-template ngbPanelContent>
+                                                                        <div class="row">
+                                                                            <div class="col-md-6">
+                                                                                <mat-form-field appearance="outline">
+                                                                                    <mat-label>Industry</mat-label>
+                                                                                    <input type="text"
+                                                                                        value="{{ list.attributes.industry }}"
+                                                                                        matInput readonly>
+                                                                                    <mat-error>Required
+                                                                                        Field</mat-error>
+                                                                                </mat-form-field>
+
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <mat-form-field appearance="outline">
+                                                                                    <mat-label>Framework</mat-label>
+                                                                                    <input type="text"
+                                                                                        value="{{ list.attributes.framework }}"
+                                                                                        matInput readonly>
+                                                                                    <mat-error>Required
+                                                                                        Field</mat-error>
+                                                                                </mat-form-field>
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-6">
+                                                                                <mat-form-field appearance="outline">
+                                                                                    <mat-label>Category</mat-label>
+                                                                                    <input type="text"
+                                                                                        value="{{ list.attributes.category }}"
+                                                                                        matInput readonly>
+                                                                                    <mat-error>Required
+                                                                                        Field</mat-error>
+                                                                                </mat-form-field>
+
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <mat-form-field appearance="outline">
+                                                                                    <mat-label>Topic</mat-label>
+                                                                                    <input type="text"
+                                                                                        value="{{ list.attributes.topic }}"
+                                                                                        matInput readonly>
+                                                                                    <mat-error>Required
+                                                                                        Field</mat-error>
+                                                                                </mat-form-field>
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-6">
+                                                                                <mat-form-field appearance="outline">
+                                                                                    <mat-label>Sub Topic</mat-label>
+                                                                                    <input type="text"
+                                                                                        value="{{ list.attributes.sub_topic }}"
+                                                                                        matInput readonly>
+                                                                                    <mat-error>Required
+                                                                                        Field</mat-error>
+                                                                                </mat-form-field>
+
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <mat-form-field appearance="outline">
+                                                                                    <mat-label>Individual
+                                                                                        Topic</mat-label>
+                                                                                    <input type="text"
+                                                                                        value="{{ list.attributes.individual_topic }}"
+                                                                                        matInput readonly>
+                                                                                    <mat-error>Required
+                                                                                        Field</mat-error>
+                                                                                </mat-form-field>
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-6">
+                                                                                <mat-form-field appearance="outline">
+                                                                                    <mat-label>Stakeholder
+                                                                                        Category</mat-label>
+                                                                                    <input type="text"
+                                                                                        value="{{ list.attributes.stakeholder_category }}"
+                                                                                        matInput readonly>
+                                                                                    <mat-error>Required
+                                                                                        Field</mat-error>
+                                                                                </mat-form-field>
+
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <mat-form-field appearance="outline">
+                                                                                    <mat-label>Stakeholder
+                                                                                        Type</mat-label>
+                                                                                    <input type="text"
+                                                                                        value="{{ list.attributes.stakeholder_type }}"
+                                                                                        matInput readonly>
+                                                                                    <mat-error>Required
+                                                                                        Field</mat-error>
+                                                                                </mat-form-field>
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </ng-template>
+                                                                </ngb-panel>
+                                                            </ngb-accordion>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-sm-5">
+
+                                                <div class="card-body">
+                                                    <h6 class="card-title mb-3">Selected Topics</h6>
+                                                    <h6 class="card-title mb-3">{{this.filterForm.value.industry}}</h6>
+                                                    <ul class="list-group list-group-container" id="sortable-list">
+                                                        <li *ngFor="let list of selected_topics" class="list-group-item"
+                                                            #sortableItem [attr.data-id]="list.id">
+                                                            <div class="list-item-content">
+                                                                <div class="left-content">
+                                                                    <span class="topic-text">{{ list.attributes.topic
+                                                                        }} ({{list?.attributes?.sub_topic || list.sub_topic}})</span>
+                                                                </div>
+                                                                <button type="button"
+                                                                    class="btn btn-primary btn-icon-text btn-xs"
+                                                                    (click)="removeTopic(list)">
+                                                                    <i class="feather icon-minus btn-icon-prepend"></i>
+                                                                </button>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                                (click)="nextStep()">
+                                                <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                                Next
+                                            </button>
+                                        </div>
+                                    </mat-tab>
+
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">archive</mat-icon>
+                                            Stakeholders
+                                        </ng-template>
+                                        <div class="row">
+                                            <h6 class="mb-3">Stakeholder Details</h6>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button type="button" class="btn btn-primary btn-icon-text btn-xs"
+                                                    (click)="addStakeholder()">
+                                                    <i class="feather icon-plus btn-icon-prepend"></i>
+                                                    Add Stakeholder
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Full Name</th>
+                                                        <th>Role</th>
+                                                        <th>Email ID</th>
+                                                        <th>Category</th>
+                                                        <th>Organisation</th>
+                                                        <th>External</th>
+                                                        <th>Contact</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let data of stakeholders; let i = index">
+                                                        <td>{{data.attributes.full_name}}</td>
+                                                        <td>{{data.attributes.role}}</td>
+                                                        <td>{{data.attributes.email_id}}</td>
+                                                        <td>{{data.attributes.category}}</td>
+                                                        <td>{{data.attributes.organisation}}</td>
+                                                        <td>{{data.attributes.external}}</td>
+                                                        <td>{{data.attributes.contact}}</td>
+                                                        <td>
+                                                            <button type="button"
+                                                                class="btn btn-danger btn-icon-text btn-xs action-btn float-end"
+                                                                (click)="deleteStakeholder(data)">
+                                                                <i class="feather icon-trash-2"></i>
+                                                            </button>
+                                                            <button type="button"
+                                                                class="btn btn-primary btn-icon-text btn-xs action-btn float-end"
+                                                                (click)="modifyStackholder(data,i)">
+                                                                <i class="feather icon-edit"></i>
+                                                            </button>
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                                (click)="nextStep()">
+                                                <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                                Next
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                                (click)="previousStep()">
+                                                <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                                Previous
+                                            </button>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">layers</mat-icon>
+                                            Survey Details
+                                        </ng-template>
+                                        <div class="table-responsive w-100">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <mat-form-field appearance="outline">
+                                                        <mat-label>To:</mat-label>
+                                                        <input type="email" matInput readonly [value]="truncatedEmails"
+                                                            [matTooltip]="emailList.join(', ')"
+                                                            matTooltipPosition="above">
+                                                        <mat-error>Required Field</mat-error>
+                                                    </mat-form-field>
+
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <mat-form-field appearance="outline">
+                                                        <mat-label>CC:</mat-label>
+                                                        <input type="email" matInput formControlName="cc_mail" readonly>
+                                                        <mat-error>Required Field</mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                            <div class="row ">
+
+
+                                                <div class="col-md-3">
+                                                    <mat-form-field appearance="outline" color="primary">
+                                                        <mat-label>Survey Timeline</mat-label>
+                                                        <mat-date-range-input [formGroup]="surveyDateRange"
+                                                            [rangePicker]="picker">
+                                                            <input matStartDate formControlName="start_date"
+                                                                placeholder="Start date"
+                                                                (dateChange)="startDateChange($event)">
+                                                            <input matEndDate formControlName="end_date"
+                                                                placeholder="End date"
+                                                                (dateChange)="endDateChange($event)">
+                                                        </mat-date-range-input>
+                                                        <mat-datepicker-toggle matSuffix
+                                                            [for]="picker"></mat-datepicker-toggle>
+                                                        <mat-date-range-picker #picker></mat-date-range-picker>
+                                                        <mat-error
+                                                            *ngIf="surveyDateRange.controls.start_date.hasError('matStartDateInvalid')">Invalid
+                                                            start date</mat-error>
+                                                        <mat-error
+                                                            *ngIf="surveyDateRange.controls.end_date.hasError('matEndDateInvalid')">Invalid
+                                                            end date
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <mat-form-field appearance="outline">
+                                                        <mat-label>E-Mail Subject </mat-label>
+                                                        <input type="email" matInput formControlName="email_subject">
+                                                        <mat-error>Required Field</mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <mat-form-field appearance="outline">
+                                                        <mat-label>Headline</mat-label>
+                                                        <input type="text" matInput formControlName="headline">
+                                                        <mat-error>Required Field</mat-error>
+                                                    </mat-form-field>
+                                                </div>
+
+                                            </div>
+                                            <div class="row mt-5 mb-4 text-center">
+                                                <div class="d-grid gap-2">
+
+                                                    <!-- <button type="button" class="btn btn-secondary" id="ai-suggest"
+                                                        (click)="checkDescription()" [disabled]="Form.get('start_date')?.invalid || 
+                                                        Form.get('end_date')?.invalid || 
+                                                        Form.get('headline')?.invalid ||
+                                                        Form.get('email_subject')?.invalid ||
+                                                        Form.get('content')?.invalid">
+                                                        AI - Suggest Email Content</button> -->
+                                                    <p class="error hide" id="error-text">Please provide your email
+                                                        subject
+                                                    </p>
+                                                    <button type="button" class="btn btn-success hide" id="ai-loader">
+                                                        <span class="spinner-grow spinner-grow-sm" role="status"
+                                                            aria-hidden="true"></span>
+                                                        Please wait our AI is looking recommendations for email.
+                                                    </button>
+
+                                                </div>
+
+                                            </div>
+                                            <!-- End -->
+                                            <div class="row mb-4 mt-4">
+                                                <quill-editor placeholder="Content" [modules]="quillConfig"
+                                                    formControlName="content">
+                                                </quill-editor>
+                                            </div>
+
+
+
+
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <button [disabled]="!Form.valid" type="button"
+                                                class="btn btn-success btn-icon-text float-end mt-4"
+                                                (click)="schedule()" [disabled]="!Form.valid">
+                                                <i class="feather icon-send btn-icon-prepend"></i>
+                                                Schedule
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-secondary btn-icon-text float-end mt-4 btn-previous"
+                                                (click)="saveAsDraft()">
+                                                <i class="feather icon-save btn-icon-prepend"></i>
+                                                Save as draft
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                                (click)="previousStep()">
+                                                <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                                Previous
+                                            </button>
+                                        </div>
+                                    </mat-tab>
+                                </mat-tab-group>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,507 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Benefit <span>
+                                    Request</span></a>
+                            <h6 class=" mb-3 pb-2">Employee Id: {{Form.value.employee_id}}</h6>
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2"> Date</h6>
+                            <h6 class="text-end mb-3 pb-2">{{Form.value.created_date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100" style="overflow: hidden;">
+                            <div class="row">
+                                <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex">
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">account_box</mat-icon>
+                                            Employee Information
+                                        </ng-template>
+                                        <div class="row ">
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Employee ID</mat-label>
+                                                    <input type="text" matInput formControlName="employee_id">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Name</mat-label>
+                                                    <input type="text" matInput formControlName="name">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Age</mat-label>
+                                                    <input type="number" matInput formControlName="age">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Contact Number</mat-label>
+                                                    <input type="number" matInput formControlName="contact_number">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Designation</mat-label>
+                                                    <input type="text" matInput formControlName="designation">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Department</mat-label>
+                                                    <input type="text" matInput formControlName="department">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Supervisor/Manager</mat-label>
+                                                    <input type="text" matInput formControlName="supervisor_manager">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline" color="primary">
+                                                    <mat-label>Date of Join</mat-label>
+                                                    <input matInput [matDatepicker]="accdp" placeholder="Choose a date"
+                                                        [formControl]="dateOfJoin" (dateChange)="joinDateVal($event)">
+                                                    <mat-datepicker-toggle matSuffix
+                                                        [for]="accdp"></mat-datepicker-toggle>
+                                                    <mat-datepicker #accdp></mat-datepicker>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Average Wages</mat-label>
+                                                    <input type="number" matInput formControlName="average_wages">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <!-- <div class="col-md-6">
+                                                <mat-form-field fxFlex appearance="outline">
+                                                    <mat-label>Survey Category</mat-label>
+                                                    <mat-select formControlName="category">
+                                                        <mat-option *ngFor="let category of categories"
+                                                            value="{{category.attributes.Value}}">
+                                                            {{category.attributes.Value}}</mat-option>
+                                                    </mat-select>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div> -->
+
+                                            <!-- <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Frequency</mat-label>
+                                                    <input type="text" matInput formControlName="freequency">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div> -->
+
+                                            <!-- <div class="col-md-12">
+                                                <quill-editor placeholder="Survey Description" [modules]="quillConfig"
+                                                    formControlName="description">
+                                                </quill-editor>
+                                            </div> -->
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                                (click)="nextStep()">
+                                                <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                                Next
+                                            </button>
+                                            <!-- <button type="button"
+                                            class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                            (click)="previousStep()">
+                                            <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                            Previous
+                                        </button> -->
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">assignment</mat-icon>
+                                            Maternity Leave Application
+                                        </ng-template>
+                                        <div class="row ">
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Application ID</mat-label>
+                                                    <input type="text" matInput formControlName="application_id">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <!-- <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Application Name</mat-label>
+                                                    <input type="text" matInput formControlName="application_name">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div> -->
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline" color="primary">
+                                                    <mat-label>Application Date</mat-label>
+                                                    <input matInput [matDatepicker]="apdp" placeholder="Choose a date"
+                                                        [formControl]="applicaionDate"
+                                                        (dateChange)="applicationDateVal($event)">
+                                                    <mat-datepicker-toggle matSuffix
+                                                        [for]="apdp"></mat-datepicker-toggle>
+                                                    <mat-datepicker #apdp></mat-datepicker>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline" color="primary">
+                                                    <mat-label>Expected Delivery Date</mat-label>
+                                                    <input matInput [matDatepicker]="expdp" placeholder="Choose a date"
+                                                        [formControl]="expectedDeliveryDate"
+                                                        (dateChange)="expectedDeliveryDateVal($event)">
+                                                    <mat-datepicker-toggle matSuffix
+                                                        [for]="expdp"></mat-datepicker-toggle>
+                                                    <mat-datepicker #expdp></mat-datepicker>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline" color="primary">
+                                                    <mat-label>Leave Start Date</mat-label>
+                                                    <input matInput [matDatepicker]="lvsdp" placeholder="Choose a date"
+                                                        [formControl]="leaveStartDate"
+                                                        (dateChange)="leaveStartDateVal($event)">
+                                                    <mat-datepicker-toggle matSuffix
+                                                        [for]="lvsdp"></mat-datepicker-toggle>
+                                                    <mat-datepicker #lvsdp></mat-datepicker>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline" color="primary">
+                                                    <mat-label>Leave End Date</mat-label>
+                                                    <input matInput [matDatepicker]="lvedp" placeholder="Choose a date"
+                                                        [formControl]="leaveEndtDate"
+                                                        (dateChange)="leaveEndDateVal($event)">
+                                                    <mat-datepicker-toggle matSuffix
+                                                        [for]="lvedp"></mat-datepicker-toggle>
+                                                    <mat-datepicker #lvedp></mat-datepicker>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline" color="primary">
+                                                    <mat-label>Actual Delivery Date</mat-label>
+                                                    <input matInput [matDatepicker]="actdp" placeholder="Choose a date"
+                                                        [formControl]="actualDeliveryDate"
+                                                        (dateChange)="actualDeliveryDateVal($event)">
+                                                    <mat-datepicker-toggle matSuffix
+                                                        [for]="actdp"></mat-datepicker-toggle>
+                                                    <mat-datepicker #actdp></mat-datepicker>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Leave Status</mat-label>
+                                                    <mat-select formControlName="leave_status">
+                                                        <mat-option *ngFor="let data of leaveStatusList"
+                                                            value="{{data.attributes.Value}}">
+                                                            {{data.attributes.Value}}</mat-option>
+
+                                                    </mat-select>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                                (click)="nextStep()">
+                                                <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                                Next
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                                (click)="previousStep()">
+                                                <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                                Previous
+                                            </button>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">assignment</mat-icon>
+                                            Benefits and Entitlements
+                                        </ng-template>
+                                        <div class="row">
+                                            <!-- <div class="col-md-12"> -->
+                                            <button type="button" class="btn btn-primary btn-icon-text btn-xs"
+                                                (click)="addBenefits_Entitlements()">
+                                                <i class="feather icon-plus btn-icon-prepend"></i>
+                                                Add Benefits and Entitlements
+                                            </button>
+                                            <!-- </div> -->
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Benefit Type</th>
+                                                            <th>Amount/Value</th>
+                                                            <th>Total Days paid</th>
+                                                            <th>Beneficiary Name</th>
+                                                            <!-- <th>Beneficiary Total Amount</th>
+                                                            <th>Beneficiary Date</th> -->
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let data of BenefitsList">
+                                                            <td>{{data.attributes.benefit_type}}</td>
+                                                            <td>{{data.attributes.amount}}</td>
+                                                            <td>{{data.attributes.total_days_paid}}</td>
+                                                            <td>{{data.attributes.beneficiary_name}}</td>
+                                                            <!-- <td>{{data.attributes.beneficiary_total_amount}}</td>
+                                                            <td>{{data.attributes.beneficiary_date |
+                                                                date:'dd-MMM-yyyy'}}</td> -->
+                                                            <td>
+                                                                <button type="button"
+                                                                    class="btn btn-danger btn-icon-text btn-xs action-btn float-end"
+                                                                    (click)="deleteBenefits(data)" ngbTooltip="Delete">
+                                                                    <i class="feather icon-trash-2"></i>
+                                                                </button>
+                                                                &nbsp;<button type="button"
+                                                                    class="btn btn-primary btn-icon-text btn-xs action-btn float-end"
+                                                                    (click)="modifyBenefits(data)" ngbTooltip="Edit">
+                                                                    <i class="feather icon-edit"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                                (click)="nextStep()">
+                                                <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                                Next
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                                (click)="previousStep()">
+                                                <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                                Previous
+                                            </button>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">assignment</mat-icon>
+                                            Return to Work Plan
+                                        </ng-template>
+                                        <div class="row ">
+
+
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline" color="primary">
+                                                    <mat-label>Notice Date After Delivery</mat-label>
+                                                    <input matInput [matDatepicker]="ntcdp" placeholder="Choose a date"
+                                                        [formControl]="noticeDate" (dateChange)="noticeDateVal($event)">
+                                                    <mat-datepicker-toggle matSuffix
+                                                        [for]="ntcdp"></mat-datepicker-toggle>
+                                                    <mat-datepicker #ntcdp></mat-datepicker>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline" color="primary">
+                                                    <mat-label>Rejoining Date</mat-label>
+                                                    <input matInput [matDatepicker]="rejdp" placeholder="Choose a date"
+                                                        [formControl]="rejoiningDate"
+                                                        (dateChange)="rejoiningDateVal($event)">
+                                                    <mat-datepicker-toggle matSuffix
+                                                        [for]="rejdp"></mat-datepicker-toggle>
+                                                    <mat-datepicker #rejdp></mat-datepicker>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field appearance="outline" color="primary">
+                                                    <mat-label>Support Provided</mat-label>
+                                                    <input type="text" matInput formControlName="support_provided">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                                (click)="nextStep()">
+                                                <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                                Next
+                                            </button>
+                                            <button type="button"
+                                                class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                                (click)="previousStep()">
+                                                <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                                Previous
+                                            </button>
+                                        </div>
+                                    </mat-tab>
+
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">work</mat-icon>
+                                            Medical Documentation
+                                        </ng-template>
+
+                                        <div class="row">
+                                            <!-- <div class="col-md-12"> -->
+                                            <button type="button" class="btn btn-primary btn-icon-text btn-xs"
+                                                (click)="addMedical_documents()">
+                                                <i class="feather icon-plus btn-icon-prepend"></i>
+                                                Add Medical Document
+                                            </button>
+                                            <!-- </div> -->
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Document Type</th>
+                                                            <th>Upload Date</th>
+                                                            <th>Document</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let data of DocumentList">
+                                                            <td>{{data.attributes.document_type}}</td>
+                                                            <td>{{data.attributes.upload_date | date:'dd-MMM-yyyy'}}
+                                                            </td>
+                                                            <td>{{data.attributes.document_name}}</td>
+                                                            <td>
+                                                                <div class="action-buttons">
+                                                                    <button type="button"
+                                                                        class="btn btn-danger btn-icon-text btn-xs action-btn"
+                                                                        (click)="deleteDocument(data)"
+                                                                        ngbTooltip="Delete">
+                                                                        <i class="feather icon-trash-2"></i>
+                                                                    </button>
+                                                                    <button type="button"
+                                                                        class="btn btn-primary btn-icon-text btn-xs action-btn"
+                                                                        (click)="modifyDocument(data)"
+                                                                        ngbTooltip="Edit">
+                                                                        <i class="feather icon-edit"></i>
+                                                                    </button>
+                                                                    <button type="button"
+                                                                        class="btn btn-secondary btn-icon-text btn-xs action-btn float-end"
+                                                                        (click)="viewDocument(data)" placement="top"
+                                                                        ngbTooltip="View">
+                                                                        <i class="feather icon-eye"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <!-- <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                                (click)="nextStep()" *ngIf="tab">
+                                                <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                                Next
+                                            </button> -->
+                                            <button type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                                                (click)="submit()" [disabled]="!Form.valid">
+                                                <i class="feather icon-send btn-icon-prepend"></i>
+                                                Submit
+                                            </button>
+                                            &nbsp; <button type="button"
+                                                class="btn btn-secondary btn-icon-text float-end mt-4 action-btn"
+                                                (click)="saveAsDraft()">
+                                                <i class="feather icon-save btn-icon-prepend"></i>
+                                                Save as Draft
+                                            </button>
+                                            &nbsp; <button type="button"
+                                                class="btn btn-primary btn-icon-text float-end mt-4 btn-previous"
+                                                (click)="previousStep()">
+                                                <i class="feather icon-arrow-left-circle btn-icon-prepend"></i>
+                                                Previous
+                                            </button>
+
+                                        </div>
+
+                                    </mat-tab>
+
+                                </mat-tab-group>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-3">
+                        <button class="btn btn-primary" mat-icon-button aria-label="Example icon-button with a menu">
+                            {{ Form.value.status }}
+                        </button>
+                        <button (click)="navigate()" class="btn btn-success status-btn ms-2" mat-icon-button
+                            aria-label="Example icon-button with a menu">
+                            <i class="feather icon-chevron-left"></i> Back to History
+
+                        </button>
+                    </div>
+                    <div class="mt-2">
+                        <mat-form-field fxFlex appearance="outline">
+                            <mat-label>Division</mat-label>
+                            <mat-select formControlName="division">
+                                <mat-option *ngFor="let division of divisions" value="{{division.division_name}}">
+                                    {{division.division_name}}</mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                        <!-- <mat-form-field fxFlex appearance="outline">
+                            <mat-label>Signature</mat-label>
+                            <input type="text" matInput formControlName="signature">
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field> -->
+                    </div>
+                    <div class="mt-2">
+                        <mat-form-field fxFlex appearance="outline">
+                            <textarea matInput placeholder="Remarks" formControlName="remarks">
+                            </textarea>
+                        </mat-form-field>
+                        <!-- <quill-editor placeholder="Remarks" [modules]="quillConfig" formControlName="remarks">
+                        </quill-editor> -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

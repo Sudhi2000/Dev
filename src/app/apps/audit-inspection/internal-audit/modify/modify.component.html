@@ -1,0 +1,425 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Internal<span>
+                                    Audit</span></a>
+                            <p class="mt-1 mb-1"><b># {{Form.value.reference_number}}</b></p>
+
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Date</h6>
+                            <h6 class="text-end mb-5 ">{{Form.value.date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Division</mat-label>
+                                        <mat-select [formControl]="Division" (selectionChange)="BusinessUnit($event)">
+                                            <mat-option [value]="data.division_name"
+                                                *ngFor="let data of divisions">{{data.division_name}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <mat-form-field fxFlex appearance="outline" color="primary">
+                                        <mat-label>Department</mat-label>
+                                        <mat-select [formControl]="auditDepartment" multiple
+                                            (selectionChange)="AuditDepartment($event)">
+                                            <mat-select-trigger>
+                                                {{auditDepartment.value ? auditDepartment.value[0] : ''}}
+                                                <span *ngIf="auditDepartment.value?.length > 1"
+                                                    class="example-additional-selection">
+                                                    (+{{auditDepartment.value.length - 1}}
+                                                    {{auditDepartment.value?.length === 2 ?
+                                                    'other' :
+                                                    'others'}})
+                                                </span>
+                                            </mat-select-trigger>
+                                            <mat-option *ngFor="let data of departments"
+                                                [value]="data.attributes.department_name">{{data.attributes.department_name}}</mat-option>
+                                            <mat-option disabled (click)="new_department()" class="option-btn"> <i
+                                                    class=" mdi mdi-plus-circle"></i> Create department
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <mat-form-field fxFlex appearance="outline" color="primary">
+                                        <mat-label>Audit Title</mat-label>
+                                        <mat-select [formControl]="auditTitle" multiple
+                                            (selectionChange)="AuditTitle($event)">
+                                            <mat-select-trigger>
+                                                {{auditTitle.value ? auditTitle.value[0] : ''}}
+                                                <span *ngIf="auditTitle.value?.length > 1"
+                                                    class="example-additional-selection">
+                                                    (+{{auditTitle.value.length - 1}}
+                                                    {{auditTitle.value?.length === 2 ?
+                                                    'other' :
+                                                    'others'}})
+                                                </span>
+                                            </mat-select-trigger>
+                                            <mat-option *ngFor="let title of auditTitles"
+                                                [value]="title.attributes.Value"
+                                                [disabled]="title.disabled">{{title.attributes.Value}}</mat-option>
+
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field fxFlex appearance="outline">
+                                        <mat-label>Audit Type</mat-label>
+                                        <mat-select [formControl]="auditType"
+                                            (selectionChange)="ChangeAuditType($event)">
+                                            <mat-option [value]="type.attributes.Value"
+                                                *ngFor="let type of auditTypes">{{type.attributes.Value}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row mt-2 ">
+                                <div class="col-md-6">
+                                    <div class="form-check form-switch mb-3">
+                                        <input type="checkbox" class="form-check-input" id="formSwitch3"
+                                            formControlName="audit_scheduled_for_supplier"
+                                            (change)="Suppier_audit_scheduled($event)">
+                                        <label class="form-check-label" for="formSwitch3">
+                                            Is the audit scheduled for a supplier </label>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                            <div [hidden]="!Form.get('audit_scheduled_for_supplier')?.value">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field fxFlex appearance="outline">
+                                            <mat-label>Supplier Type</mat-label>
+                                            <mat-select [formControl]="Supplier_Type"
+                                                (selectionChange)="Supplier_audit($event)">
+                                                <mat-option [value]="type.attributes.Value"
+                                                    *ngFor="let type of  SupplierTypes">{{type.attributes.Value}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Factory License No</mat-label>
+                                            <input type="text" matInput formControlName="factory_license_no">
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Higg ID</mat-label>
+                                            <input type="text" matInput formControlName="higg_id">
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>ZDHC ID</mat-label>
+                                            <input type="text" matInput formControlName="zdhc_id">
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field fxFlex appearance="outline">
+                                            <mat-label>Process Type</mat-label>
+                                            <mat-select [formControl]="Process_Type"
+                                                (selectionChange)="ProcessType($event)">
+                                                <mat-select-trigger>
+                                                    {{Process_Type.value}}
+                                                </mat-select-trigger>
+                                                <mat-option [value]="data.attributes.name"
+                                                    *ngFor="let data of process_types">
+                                                    <div class="title-container">
+                                                        <span>{{data.attributes.name}}</span>
+                                                        <span class="icon-container">
+                                                            <i class="feather icon-trash-2 titleicon_delete"
+                                                                (click)="delete_process_type(data.id)"></i>
+                                                        </span>
+                                                    </div>
+                                                </mat-option>
+                                                <mat-option (click)="new_process_type()" class="option-btn"> <i
+                                                        class=" mdi mdi-plus-circle"></i> Create New Factory
+
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error>Required Field</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field fxFlex appearance="outline" color="primary">
+                                        <mat-label>Factory Name</mat-label>
+                                        <mat-select [formControl]="factory"
+                                            (selectionChange)="onFactoryNameSelected($event.value)"
+                                            (selectionChange)="AuditFactory($event)">
+                                            <mat-select-trigger>
+                                                {{factory.value}}
+
+                                            </mat-select-trigger>
+                                            <mat-option *ngFor="let data of factories"
+                                                [value]="data.attributes.factory_name">
+                                                <div class="title-container">
+                                                    <span>{{data.attributes.factory_name}}</span>
+                                                    <span class="icon-container"><i
+                                                            class="feather icon-edit titleicon_edit"
+                                                            (click)="update_factory_name(data.id)"></i> &nbsp;
+                                                        <i class="feather icon-trash-2 titleicon_delete"
+                                                            (click)="delete_factory_name(data.id)"></i>
+                                                    </span>
+                                                </div>
+                                            </mat-option>
+                                            <mat-option disabled (click)="new_factory()" class="option-btn"> <i
+                                                    class=" mdi mdi-plus-circle"></i> Create New Factory
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Factory Address</mat-label>
+                                        <input type="text" matInput formControlName="factory_address">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field fxFlex appearance="outline" color="primary">
+                                        <mat-label>Factory Contact Person</mat-label>
+                                        <!-- <mat-select [formControl]="factoryContactPerson"
+                                            (selectionChange)="FactoryContactPerson($event)">
+                                            <mat-select-trigger>
+                                                {{factoryContactPerson.value}}
+                                            </mat-select-trigger>
+                                            <mat-option *ngFor="let assignee of approversList"
+                                                [value]="assignee.attributes.first_name +assignee.attributes.last_name">
+
+                                                <span>{{ assignee.attributes.first_name }}
+                                                    {{assignee.attributes.last_name}}</span>
+                                            </mat-option>
+                                            <mat-option *ngFor="let data of contactPersons"
+                                                [value]="data.attributes.person_name">{{data.attributes.person_name}}</mat-option>
+                                            <mat-option disabled (click)="new_contact_person()" class="option-btn"> <i
+                                                    class=" mdi mdi-plus-circle"></i> Create Contact Person
+                                            </mat-option>
+                                        </mat-select> -->
+                                        <input type="text" matInput formControlName="contact_person">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+
+
+                                </div>
+
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Designation</mat-label>
+                                        <input type="text" matInput formControlName="designation">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Email</mat-label>
+                                        <input type="email" matInput formControlName="contact_email">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Contact Number</mat-label>
+                                        <input type="number" matInput formControlName="contact_number">
+                                        <mat-error>Required Field</mat-error>
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+
+
+                            <div class="row mb-4">
+                                <quill-editor placeholder="Description" [modules]="quillConfig"
+                                    formControlName="description">
+                                </quill-editor>
+                            </div>
+
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-success btn-icon-text float-end mt-4 "
+                                    (click)="create_reference_number('Submit')" [disabled]="!Form.valid">
+                                    <i class="feather icon-send btn-icon-prepend"></i>
+                                    Submit
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-icon-text float-end mt-4 action-btn"
+                                    (click)="create_reference_number('Save')" [disabled]="!Form.valid">
+                                    <i class="feather icon-save btn-icon-prepend"></i>
+                                    Save as Draft
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mt-3">
+                        <button class="btn btn-primary" mat-icon-button aria-label="Example icon-button with a menu">
+                            {{Form.value.status}}
+                        </button>
+                        <button class="btn btn-success status-btn ms-2" mat-icon-button
+                            aria-label="Example icon-button with a menu" (click)="navigate()">
+                            <i class="feather icon-chevron-left"></i> Back to History
+
+                        </button>
+                    </div>
+                    <div class="mt-3">
+
+                        <mat-form-field appearance="outline" color="primary" id="dashboard">
+                            <mat-label>Audit Date *</mat-label>
+                            <mat-date-range-input [formGroup]="auditDateRange" [rangePicker]="picker">
+                                <input matStartDate formControlName="start" placeholder="Start date"
+                                    (dateChange)="startDateChange($event)">
+                                <input matEndDate formControlName="end" placeholder="End date"
+                                    (dateChange)="endDateChange($event)">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                            <mat-error *ngIf="auditDateRange.controls.start.hasError('matStartDateInvalid')">Invalid
+                                start date</mat-error>
+                            <mat-error *ngIf="auditDateRange.controls.end.hasError('matEndDateInvalid')">Invalid end
+                                date
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mt-3">
+
+                        <!-- <mat-form-field fxFlex appearance="outline" color="primary">
+                            <mat-label>Department</mat-label>
+                            <mat-select [formControl]="auditDepartment" multiple
+                                (selectionChange)="AuditDepartment($event)">
+                                <mat-select-trigger>
+                                    {{auditDepartment.value ? auditDepartment.value[0] : ''}}
+                                    <span *ngIf="auditDepartment.value?.length > 1"
+                                        class="example-additional-selection">
+                                        (+{{auditDepartment.value.length - 1}}
+                                        {{auditDepartment.value?.length === 2 ?
+                                        'other' :
+                                        'others'}})
+                                    </span>
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let data of departments"
+                                    [value]="data.attributes.department_name">{{data.attributes.department_name}}</mat-option>
+                                    <mat-option disabled  (click)="new_department()" class="option-btn"> <i
+                                        class=" mdi mdi-plus-circle"></i> Create department
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field> -->
+
+
+                        <mat-form-field fxFlex appearance="outline" color="primary">
+                            <mat-label>Auditee</mat-label>
+                            <mat-select [formControl]="auditee" multiple>
+                                <mat-select-trigger>
+                                    {{ auditee.value ? auditee.value[0]? auditee.value[0].attributes.auditee_name :
+                                    '':''}}
+                                    <span *ngIf="auditee.value?.length > 1" class="example-additional-selection">
+                                        (+{{auditee.value.length - 1}}
+                                        {{auditee.value?.length === 2 ?
+                                        'other' :
+                                        'others'}})
+                                    </span>
+                                </mat-select-trigger>
+
+                                <mat-option *ngFor="let auditee of auditees" (click)="AuditAuditee(auditee)"
+                                    [value]="auditee">
+                                    <span class="option-container">
+                                        {{auditee.attributes.auditee_name}}
+                                        <span>
+                                            <i class="feather icon-edit modifyicon"
+                                                (click)="modifyAuditee($event, auditee)"></i>
+                                            <i class="feather icon-trash-2 deleteicon"
+                                                (click)="deleteAuditee($event, auditee)"></i>
+                                        </span>
+                                    </span></mat-option>
+                                <mat-option disabled (click)="new_auditee()" class="option-btn"> <i
+                                        class=" mdi mdi-plus-circle"></i> Create a new Auditee
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+
+
+                    </div>
+                    <div>
+                        <mat-form-field fxFlex appearance="outline" color="primary">
+                            <mat-label>Approver</mat-label>
+                            <mat-select formControlName="approver">
+                                <mat-option *ngFor="let assignee of approversList" [value]="assignee.id">
+                                    <!-- <img style="vertical-align:middle; margin-right: 4px;"
+                                        src={{assignee.attributes.image?.data.attributes.image}} height="30" /> -->
+                                    <span>{{ assignee.attributes.first_name }}
+                                        {{assignee.attributes.last_name}}</span>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field appearance="outline" color="primary">
+                            <mat-label>Date for Approval</mat-label>
+                            <input matInput [matDatepicker]="dpApproval" placeholder="Choose a date"
+                                [formControl]="approvalDate" (dateChange)="approval_date($event)">
+                            <mat-datepicker-toggle matSuffix [for]="dpApproval"></mat-datepicker-toggle>
+                            <mat-datepicker #dpApproval></mat-datepicker>
+                            <mat-error>Required Field</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

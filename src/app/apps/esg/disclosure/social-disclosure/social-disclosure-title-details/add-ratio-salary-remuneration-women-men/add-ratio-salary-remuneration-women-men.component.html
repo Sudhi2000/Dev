@@ -1,0 +1,70 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Employee Category by Level</mat-label>
+                        <mat-select formControlName="employee_category_by_level">
+                            <mat-option *ngFor="let data of lov[12]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}
+                                </span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Employee Category by Function</mat-label>
+                        <mat-select formControlName="employee_category_by_function">
+                            <mat-option *ngFor="let data of lov[13]?.value" [value]="data.Value">
+                                <span>{{ data.Value }}
+                                </span>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ratio of basic salary and remuneration of women to men using average pay
+                            gap</mat-label>
+                        <input type="number" matInput formControlName="employee_average_pay_gap_salary_ratio"
+                            (blur)="roundToTwoDecimals('employee_average_pay_gap_salary_ratio')">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ratio of basic salary and remuneration of women to men using median pay
+                            gap</mat-label>
+                        <input type="number" matInput formControlName="employee_median_pay_gap_salary_ratio"
+                            (blur)="roundToTwoDecimals('employee_median_pay_gap_salary_ratio')">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+
+            <div class="mb-3">
+                <button *ngIf="data.mode!=='view'" type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                    [disabled]="!Form.valid" (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+                <button *ngIf="data.mode==='view'" type="button" class="btn btn-success btn-icon-text float-end mt-4"
+                    (click)="close()">
+                    <i class="feather icon-x-circle btn-icon-prepend"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

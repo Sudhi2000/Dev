@@ -1,0 +1,8 @@
+mat-dialog-content {
+    max-height: 100vh; /* Ensure it doesn't overflow vertically */
+    overflow: hidden; /* Ensure no overflow on the dialog content */
+}
+
+quill-editor {
+    width: 100%; /* Ensure the editor takes full width */
+}

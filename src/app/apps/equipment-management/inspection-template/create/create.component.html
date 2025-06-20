@@ -1,0 +1,130 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Inspection <span>
+                               Template </span></a>
+                            <p class="mt-1 mb-1"><b>Create an Inspection Template</b></p>
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2">Reporting Date</h6>
+                            <h6 class="text-end mb-5 ">{{Form.value.created_date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+                                <mat-tab-group mat-align-tabs="start" [(selectedIndex)]="selectedIndex">
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">article</mat-icon>
+                                            General Details
+                                        </ng-template>
+                                        <div class="row ">
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Template Name </mat-label>
+                                                    <input type="text" matInput formControlName="template_name">
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label>Category</mat-label>
+                                                    <mat-select formControlName="category" >
+                                                        <mat-option *ngFor="let name of inspectionCategory"
+                                                            value="{{name.attributes.name}}" >
+                                                            {{name.attributes.name}}</mat-option>
+                                                        <mat-option (click)="new_inspection_category()" class="option-btn"> <i
+                                                                class=" mdi mdi-plus-circle"></i> Create a new Category
+                                                        </mat-option>
+                                                    </mat-select>
+                                                    <mat-error>Required Field</mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                         
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                                (click)="nextStep()">
+                                                <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                                Next
+                                            </button>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab>
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">layers</mat-icon>
+                                            Question
+                                        </ng-template>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button type="button" class="btn btn-primary btn-icon-text btn-xs"
+                                                    (click)="createQuestion()">
+                                                    <i class="feather icon-plus btn-icon-prepend"></i>
+                                                    Create Question
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Question</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let data of questionList">
+                                                        <td [innerText]="data.question"></td>
+                                                         
+                                                        <td>
+                                                          
+                                                            <button type="button"
+                                                                class="btn btn-danger btn-icon-text btn-xs action-btn float-end"
+                                                                (click)="deleteQuestion(data)">
+
+                                                                <i class="feather icon-trash-2"></i>
+                                                            </button>
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <button type="button" class="btn btn-primary btn-icon-text float-end mt-4"
+                                                (click)="submit()">
+                                                <i class="feather icon-arrow-right-circle btn-icon-prepend"></i>
+                                                Submit
+                                            </button>
+                                            
+                                        </div>
+                                    </mat-tab>
+                                
+                                </mat-tab-group>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary">{{Form.value.status}}</button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

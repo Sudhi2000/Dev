@@ -1,0 +1,1757 @@
+<div class="container-fluid" id="audit_checklist">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Internal<span>
+                                    Audit</span></a>
+                            <h6 class=" mb-2"># {{generalForm.value.reference_number}}</h6>
+                        </div>
+                        <div class="col-lg-4 pe-0">
+                            <div class="text-end">
+                                <button class="btn btn-success status-btn" mat-icon-button
+                                    aria-label="Example icon-button with a menu" (click)="navigate()">
+                                    <i class="feather icon-chevron-left"></i> Back to History
+                                </button>
+                            </div>
+
+                            <h6 class="fw-bold text-end mt-4 mb-2"> Audit Timeline</h6>
+                            <h6 class="text-end mb-2 pb-2">{{generalForm.value.start| date:'MMM d, y'}} -
+                                {{generalForm.value.end| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+                                <mat-tab-group mat-align-tabs="start">
+                                    <mat-tab [formGroup]="generalForm">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">article</mat-icon>
+                                            General Details
+                                        </ng-template>
+
+
+
+                                        <div class="row">
+                                            <div class="container-fluid d-flex justify-content-between">
+                                                <div class="col-lg-3 ps-0">
+                                                    <a routerLink="." class="nobleui-logo d-block mt-3">Audit<span>
+                                                            Summary</span></a>
+                                                    <h6 class="mb-0 mt-3  fw-normal mb-2"><span
+                                                            class="text-muted">Division :</span>
+                                                        {{generalForm.value.division}}</h6>
+                                                    <h6 class="mb-0 fw-normal mb-2"><span class="text-muted">Department
+                                                            :</span> {{generalForm.value.department}}</h6>
+                                                    <h6 class="mb-0 fw-normal mb-2"><span class="text-muted">Audit Title
+                                                            :</span> {{generalForm.value.title}}</h6>
+                                                    <h6 class="mb-0 fw-normal mb-2"><span class="text-muted">Date for
+                                                            Approval :</span> {{generalForm.value.approval_date|
+                                                        date:'MMM d, y'}}</h6>
+                                                    <h6 class="mb-0 fw-normal mb-2"><span class="text-muted">Actual
+                                                            Start Date :</span> {{generalForm.value.actual_start_date|
+                                                        date:'MMM d, y'}}</h6>
+                                                    <h6 class="mb-0 fw-normal mb-2"><span class="text-muted">Auditee
+                                                            :</span> {{generalForm.value.auditee}}</h6>
+                                                    <h6 class="mb-0 fw-normal mb-2"><span class="text-muted">Approver
+                                                            :</span> {{generalForm.value.approver}}</h6>
+
+
+                                                </div>
+                                                <div class="col-lg-3 pe-0">
+                                                    <h4 class="fw-bold text-uppercase text-end mt-4 mb-2">Reference
+                                                        Number</h4>
+                                                    <h6 class="text-end mb-2 "># {{generalForm.value.reference_number}}
+                                                    </h6>
+                                                    <p class="text-end mb-1">Grading: <strong>{{auditGrade}}</strong>
+                                                    </p>
+                                                    <p class="text-end mb-1">Rating: <strong>{{auditRating}}</strong>
+                                                    </p>
+                                                    <p class="text-end mb-1">Audit Score:
+                                                        <strong>{{TotalAchievedScore}}</strong>
+                                                    </p>
+                                                    <p class="text-end mb-1">Final Score:
+                                                        <strong>{{finalScore}}%</strong>
+                                                    </p>
+
+
+                                                </div>
+                                            </div>
+                                            <div class="container-fluid ">
+                                                <h6 class="mb-0 mt-3  fw-normal mb-2"><span
+                                                        class="text-muted">Description :</span></h6>
+                                                <p class="mt-2" [innerHTML]="generalForm.value.description"> </p>
+                                            </div>
+
+                                            <div class="container-fluid mt-2 d-flex justify-content-center w-100">
+                                                <div class="table-responsive w-100" id="generalChecklist">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Auditing</th>
+                                                                <th class="text-end">Total No. of Question</th>
+                                                                <th class="text-end">Total Answered</th>
+                                                                <th class="text-end">Achievable Score</th>
+                                                                <th class="text-start">Earned Score</th>
+                                                                <th class="text-start">% Achieved</th>
+                                                                <th class="text-start">Rating</th>
+                                                                <th class="text-start">Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            <tr class="text-end" *ngFor="let data of audit_summary">
+                                                                <ng-container>
+                                                                    <td class="text-start"></td>
+                                                                    <td class="text-start">{{data.title}}</td>
+                                                                    <td>{{data.totalquestions}}</td>
+                                                                    <td>{{data.answeredquestions}}</td>
+                                                                    <td>{{data.achievablescore}}</td>
+                                                                    <td>{{data.earnedscore}}</td>
+                                                                    <td>{{data.achieved}}</td>
+                                                                    <td>{{data.rating}}</td>
+                                                                    <td class="text-start"><button type="button"
+                                                                            class="btn btn-primary {{statusButton(data.status)}}">{{data.status}}</button>
+                                                                    </td>
+                                                                </ng-container>
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <ngb-accordion>
+                                                <ngb-panel>
+                                                    <ng-template ngbPanelTitle>
+                                                        <div
+                                                            class="accordion-button custom-header justify-content-between">
+                                                            <span>Grading Index</span>
+
+                                                        </div>
+                                                    </ng-template>
+                                                    <ng-template ngbPanelContent>
+                                                        <div
+                                                            class="container-fluid mt-2 d-flex justify-content-center w-100">
+                                                            <div class="table-responsive w-100">
+                                                                <table class="table table-bordered">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Overall Marks</th>
+                                                                            <th>Rating</th>
+                                                                            <th>Grade</th>
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>Above 90%</td>
+                                                                            <td>Outstanding</td>
+                                                                            <td>A</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>70% – 89%</td>
+                                                                            <td>Good</td>
+                                                                            <td>B</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>50% – 69%</td>
+                                                                            <td>Poor</td>
+                                                                            <td>C</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>49% & below</td>
+                                                                            <td>Bad</td>
+                                                                            <td>D</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </ng-template>
+                                                </ngb-panel>
+                                            </ngb-accordion>
+                                            <ngb-accordion>
+                                                <ngb-panel>
+                                                    <ng-template ngbPanelTitle>
+                                                        <div
+                                                            class="accordion-button custom-header justify-content-between">
+                                                            <span>SCORING CRITERIA</span>
+
+                                                        </div>
+                                                    </ng-template>
+                                                    <ng-template ngbPanelContent>
+                                                        <div
+                                                            class="container-fluid mt-2 d-flex justify-content-center w-100">
+                                                            <div class="table-responsive w-100">
+                                                                <table class="table table-bordered">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>
+                                                                                Yes: The requirement or criteria is
+                                                                                fully met without any deviations.
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>
+                                                                                Partial Yes: The requirement is
+                                                                                partially met but with some deviations
+                                                                                or areas needing improvement.
+                                                                            </td>
+
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>
+                                                                                No: The requirement is not met at all,
+                                                                                indicating a significant deviation or
+                                                                                non-compliance.
+                                                                            </td>
+
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>
+                                                                                N/A (Not Applicable or Assessed): This
+                                                                                designation indicates that the
+                                                                                requirement either does not apply to the
+                                                                                audited area or process, or could not be
+                                                                                evaluated during the audit period due to
+                                                                                specific circumstances.
+                                                                            </td>
+
+                                                                        </tr>
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </ng-template>
+                                                </ngb-panel>
+                                            </ngb-accordion>
+                                            <div class="container-fluid w-100">
+                                                <button *ngIf="generalForm.value.status==='Approved' && checkListStatus"
+                                                    type="button" class="btn btn-success float-end mt-4 ms-2"
+                                                    (click)="markAsCompleted()"><i data-feather="send" appFeatherIcon
+                                                        class="me-2 icon-md"></i> Mark Audit as Completed</button>
+
+                                                <!-- <button type="button" class="btn btn-primary float-end mt-4 ms-2"><i
+                                                        data-feather="printer" appFeatherIcon
+                                                        class="me-2 icon-md" ></i> Print Audit Report</button>
+
+                                                        <button type="button" class="btn btn-outline-primary float-end mt-4 ms-2"><i
+                                                            data-feather="printer" appFeatherIcon
+                                                            class="me-2 icon-md" ></i> Print Audit Summary</button>
+
+                                          -->
+
+
+                                            </div>
+
+
+                                        </div>
+
+
+
+                                    </mat-tab>
+                                    <mat-tab [formGroup]="socialForm"
+                                        *ngIf="generalForm.value.actual_start_date&& showLaborTab">
+
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">view_timeline</mat-icon>
+                                            Social Audit
+                                        </ng-template>
+
+
+
+                                        <div class="row w-100 mx-0 auth-page"
+                                            *ngIf="generalForm.value.labor_audit_status==='Pending'">
+                                            <div
+                                                class="col-md-8 col-xl-6 mx-auto d-flex flex-column align-items-center">
+                                                <img src="../../../../../assets/images/audit.gif" class="img-fluid mb-2"
+                                                    alt="404" width="200">
+                                                <h4 class="mb-2">Start Auditing</h4>
+                                                <h6 class="text-muted mb-3 text-center">Are you ready!, Please click on
+                                                    "Start Auditing" button to start the audit process.</h6>
+                                                <button type="button" class="btn btn-primary"
+                                                    (click)="startLaborAudit()">Start Auditing</button>
+                                            </div>
+                                        </div>
+
+
+                                        <ngb-accordion [closeOthers]="false"
+                                            *ngIf="generalForm.value.labor_audit_status==='In Progress'">
+                                            <ngb-panel *ngFor="let data of auditCheckList">
+                                                <ng-template ngbPanelTitle>
+                                                    <div class="accordion-button custom-header ">
+                                                        <div class="col-md-4">
+                                                            <span>{{data.subCategory}}</span>
+
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="info"
+                                                                [value]="questionProgress(data.subCategory,'Labor')"
+                                                                ngbTooltip="Questions Answered" [showValue]="true"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="primary" [value]="progress(data)"
+                                                                [showValue]="true" ngbTooltip="Marks Obtained"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template ngbPanelContent>
+                                                    <div class="table-responsive pt-3" id="socialChecklist">
+                                                        <div class="d-grid gap-2">
+                                                            <button type="button"
+                                                                class="btn btn-secondary btn-icon-text"
+                                                                (click)="auditCheklist(data)"><i
+                                                                    class="feather icon-check-square btn-icon-prepend"></i>
+                                                                Audit Checklist</button>
+                                                        </div>
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Color Code</th>
+                                                                    <th>#</th>
+                                                                    <th>Legal Reference</th>
+                                                                    <th>Question</th>
+                                                                    <!-- <th>Weightage</th> -->
+                                                                    <th>Status</th>
+                                                                    <th>Rating</th>
+                                                                    <th>Achievable Score</th>
+                                                                    <th>Score</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let list of auditMarks">
+                                                                    <ng-container
+                                                                        *ngIf="list.attributes.sub_category == data.subCategory">
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <i
+                                                                                class="material-icons {{markStatus(list.attributes.audit_mark)}}">bookmark</i>
+
+                                                                        </td>
+                                                                        <td class="col-sm-1"></td>
+                                                                        <td class="col-sm-1"
+                                                                            innerHTML="{{ list.attributes.legal_reference }}">
+                                                                        </td>
+
+                                                                        <td class="col-sm-7">
+                                                                            <p innerHTML="{{list.attributes.question}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <!-- <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.weightage}}">
+                                                                            </p>
+                                                                        </td> -->
+
+                                                                        <td class="col-sm-2 col-marks">
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.audit_mark}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.rating}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.achievable_score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <div class="icon-container">
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Non-Compliance"
+                                                                                    [ngbPopover]="remarkContent"
+                                                                                    *ngIf="list.attributes.remarks"></i>
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Command"
+                                                                                    [ngbPopover]="commandContent"
+                                                                                    *ngIf="list.attributes.command"></i>
+
+                                                                                <button type="button"
+                                                                                    (click)="openDocument(list)">
+                                                                                    <i class="feather icon-file"
+                                                                                        *ngIf="list.attributes.command_evidence_id"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <ng-template #remarkContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.remarks">
+                                                                                </div>
+                                                                            </ng-template>
+
+                                                                            <ng-template #commandContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.command">
+                                                                                </div>
+                                                                            </ng-template>
+                                                                        </td>
+
+                                                                    </ng-container>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </ng-template>
+                                            </ngb-panel>
+                                        </ngb-accordion>
+
+
+                                        <ngb-accordion [closeOthers]="false"
+                                            *ngIf="generalForm.value.labor_audit_status==='Completed'">
+                                            <ngb-panel *ngFor="let data of auditCheckList">
+                                                <ng-template ngbPanelTitle>
+                                                    <div class="accordion-button custom-header ">
+                                                        <div class="col-md-4">
+                                                            <span>{{data.subCategory}}</span>
+
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="info"
+                                                                [value]="questionProgress(data.subCategory,'Labor')"
+                                                                ngbTooltip="Questions Answered" [showValue]="true"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="primary" [value]="progress(data)"
+                                                                [showValue]="true" ngbTooltip="Marks Obtained"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template ngbPanelContent>
+                                                    <div class="table-responsive pt-3" id="socialChecklist">
+
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Color Code</th>
+                                                                    <th>#</th>
+                                                                    <th>Legal Reference</th>
+                                                                    <th>Question</th>
+                                                                    <!-- <th>Weightage</th> -->
+                                                                    <th>Status</th>
+                                                                    <th>Rating</th>
+                                                                    <th>Achievable Score</th>
+                                                                    <th>Score</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let list of auditMarks">
+                                                                    <ng-container
+                                                                        *ngIf="list.attributes.sub_category == data.subCategory">
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <i
+                                                                                class="material-icons {{markStatus(list.attributes.audit_mark)}}">bookmark</i>
+
+                                                                        </td>
+                                                                        <td class="col-sm-1"></td>
+                                                                        <td class="col-sm-1"
+                                                                            innerHTML="{{ list.attributes.legal_reference }}">
+                                                                        </td>
+
+                                                                        <td class="col-sm-7">
+                                                                            <p innerHTML="{{list.attributes.question}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <!-- <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.weightage}}">
+                                                                            </p>
+                                                                        </td> -->
+
+                                                                        <td class="col-sm-2 col-marks">
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.audit_mark}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.rating}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.achievable_score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <div class="icon-container">
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Non-Compliance"
+                                                                                    [ngbPopover]="remarkContent"
+                                                                                    *ngIf="list.attributes.remarks"></i>
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Command"
+                                                                                    [ngbPopover]="commandContent"
+                                                                                    *ngIf="list.attributes.command"></i>
+
+                                                                                <button type="button"
+                                                                                    (click)="openDocument(list)">
+                                                                                    <i class="feather icon-file"
+                                                                                        *ngIf="list.attributes.command_evidence_id"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <ng-template #remarkContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.remarks">
+                                                                                </div>
+                                                                            </ng-template>
+
+                                                                            <ng-template #commandContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.command">
+                                                                                </div>
+                                                                            </ng-template>
+                                                                        </td>
+
+                                                                    </ng-container>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </ng-template>
+                                            </ngb-panel>
+                                        </ngb-accordion>
+
+
+
+
+                                        <div class="d-grid gap-2 mt-3"
+                                            *ngIf="generalForm.value.labor_audit_status==='In Progress'">
+                                            <button type="button" class="btn btn-success"
+                                                (click)="update_pending_audit('labor')">Mark as Completed</button>
+                                        </div>
+                                    </mat-tab>
+                                    <mat-tab [formGroup]="healthForm"
+                                        *ngIf="generalForm.value.actual_start_date && showHealthTab">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">view_timeline</mat-icon>
+                                            Health & Safety Audit
+                                        </ng-template>
+
+                                        <div class="row w-100 mx-0 auth-page"
+                                            *ngIf="generalForm.value.health_audit_status==='Pending'">
+                                            <div
+                                                class="col-md-8 col-xl-6 mx-auto d-flex flex-column align-items-center">
+                                                <img src="../../../../../assets/images/audit.gif" class="img-fluid mb-2"
+                                                    alt="404" width="200">
+                                                <h4 class="mb-2">Start Auditing</h4>
+                                                <h6 class="text-muted mb-3 text-center">Are you ready!, Please click on
+                                                    "Start Auditing" button to start the audit process.</h6>
+                                                <button type="button" class="btn btn-primary"
+                                                    (click)="startHealthAudit()">Start Auditing</button>
+                                            </div>
+                                        </div>
+
+
+                                        <ngb-accordion [closeOthers]="false"
+                                            *ngIf="generalForm.value.health_audit_status==='In Progress'">
+                                            <ngb-panel *ngFor="let data of healthCheckList">
+                                                <ng-template ngbPanelTitle>
+                                                    <div class="accordion-button custom-header ">
+                                                        <div class="col-md-4">
+                                                            <span>{{data.subCategory}}</span>
+
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="info"
+                                                                [value]="questionProgress(data.subCategory,'Health')"
+                                                                ngbTooltip="Questions Answered" [showValue]="true"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="primary" [value]="progress(data)"
+                                                                [showValue]="true" ngbTooltip="Marks Obtained"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template ngbPanelContent>
+                                                    <div class="table-responsive pt-3" id="socialChecklist">
+                                                        <div class="d-grid gap-2">
+                                                            <button type="button"
+                                                                class="btn btn-secondary btn-icon-text"
+                                                                (click)="auditCheklist(data)"><i
+                                                                    class="feather icon-check-square btn-icon-prepend"></i>
+                                                                Audit Checklist</button>
+                                                        </div>
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Color Code</th>
+                                                                    <th>#</th>
+                                                                    <th>Legal Reference</th>
+                                                                    <th>Question</th>
+                                                                    <!-- <th>Weightage</th> -->
+                                                                    <th>Status</th>
+                                                                    <th>Rating</th>
+                                                                    <th>Achievable Score</th>
+                                                                    <th>Score</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let list of auditMarks">
+                                                                    <ng-container
+                                                                        *ngIf="list.attributes.sub_category == data.subCategory">
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <i
+                                                                                class="material-icons {{markStatus(list.attributes.audit_mark)}}">bookmark</i>
+
+                                                                        </td>
+                                                                        <td class="col-sm-1"></td>
+                                                                        <td class="col-sm-1"
+                                                                            innerHTML="{{ list.attributes.legal_reference }}">
+                                                                        </td>
+
+                                                                        <td class="col-sm-7">
+                                                                            <p innerHTML="{{list.attributes.question}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <!-- <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.weightage}}">
+                                                                            </p>
+                                                                        </td> -->
+
+                                                                        <td class="col-sm-2 col-marks">
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.audit_mark}}">
+                                                                            </p>
+
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.rating}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.achievable_score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <div class="icon-container">
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Non-Compliance"
+                                                                                    [ngbPopover]="remarkContent"
+                                                                                    *ngIf="list.attributes.remarks"></i>
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Command"
+                                                                                    [ngbPopover]="commandContent"
+                                                                                    *ngIf="list.attributes.command"></i>
+
+                                                                                <button type="button"
+                                                                                    (click)="openDocument(list)">
+                                                                                    <i class="feather icon-file"
+                                                                                        *ngIf="list.attributes.command_evidence_id"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <ng-template #remarkContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.remarks">
+                                                                                </div>
+                                                                            </ng-template>
+
+                                                                            <ng-template #commandContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.command">
+                                                                                </div>
+                                                                            </ng-template>
+                                                                        </td>
+
+                                                                    </ng-container>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </ng-template>
+                                            </ngb-panel>
+                                        </ngb-accordion>
+
+                                        <ngb-accordion [closeOthers]="false"
+                                            *ngIf="generalForm.value.health_audit_status==='Completed'">
+                                            <ngb-panel *ngFor="let data of healthCheckList">
+                                                <ng-template ngbPanelTitle>
+                                                    <div class="accordion-button custom-header ">
+                                                        <div class="col-md-4">
+                                                            <span>{{data.subCategory}}</span>
+
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="info"
+                                                                [value]="questionProgress(data.subCategory,'Health')"
+                                                                ngbTooltip="Questions Answered" [showValue]="true"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="primary" [value]="progress(data)"
+                                                                [showValue]="true" ngbTooltip="Marks Obtained"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template ngbPanelContent>
+                                                    <div class="table-responsive pt-3" id="socialChecklist">
+
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Color Code</th>
+                                                                    <th>#</th>
+                                                                    <th>Legal Reference</th>
+                                                                    <th>Question</th>
+                                                                    <!-- <th>Weightage</th> -->
+                                                                    <th>Status</th>
+                                                                    <th>Rating</th>
+                                                                    <th>Achievable Score</th>
+                                                                    <th>Score</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let list of auditMarks">
+                                                                    <ng-container
+                                                                        *ngIf="list.attributes.sub_category == data.subCategory">
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <i
+                                                                                class="material-icons {{markStatus(list.attributes.audit_mark)}}">bookmark</i>
+
+                                                                        </td>
+                                                                        <td class="col-sm-1"></td>
+                                                                        <td class="col-sm-1"
+                                                                            innerHTML="{{ list.attributes.legal_reference }}">
+                                                                        </td>
+
+                                                                        <td class="col-sm-7">
+                                                                            <p innerHTML="{{list.attributes.question}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <!-- <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.weightage}}">
+                                                                            </p>
+                                                                        </td> -->
+
+                                                                        <td class="col-sm-2 col-marks">
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.audit_mark}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.rating}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.achievable_score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <div class="icon-container">
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Non-Compliance"
+                                                                                    [ngbPopover]="remarkContent"
+                                                                                    *ngIf="list.attributes.remarks"></i>
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Command"
+                                                                                    [ngbPopover]="commandContent"
+                                                                                    *ngIf="list.attributes.command"></i>
+
+                                                                                <button type="button"
+                                                                                    (click)="openDocument(list)">
+                                                                                    <i class="feather icon-file"
+                                                                                        *ngIf="list.attributes.command_evidence_id"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <ng-template #remarkContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.remarks">
+                                                                                </div>
+                                                                            </ng-template>
+
+                                                                            <ng-template #commandContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.command">
+                                                                                </div>
+                                                                            </ng-template>
+                                                                        </td>
+
+                                                                    </ng-container>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </ng-template>
+                                            </ngb-panel>
+                                        </ngb-accordion>
+
+
+                                        <div class="d-grid gap-2 mt-3"
+                                            *ngIf="generalForm.value.health_audit_status==='In Progress'">
+                                            <button type="button" class="btn btn-success"
+                                                (click)="update_pending_audit('health')">Mark as Completed</button>
+                                        </div>
+
+
+
+
+                                    </mat-tab>
+
+                                    <mat-tab [formGroup]="environmentForm"
+                                        *ngIf="generalForm.value.actual_start_date&& showEnvironmentTab">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">spa icon</mat-icon>
+                                            Environment Audit
+                                        </ng-template>
+
+                                        <div class="row w-100 mx-0 auth-page"
+                                            *ngIf="generalForm.value.environment_audit_status==='Pending'">
+                                            <div
+                                                class="col-md-8 col-xl-6 mx-auto d-flex flex-column align-items-center">
+                                                <img src="../../../../../assets/images/audit.gif" class="img-fluid mb-2"
+                                                    alt="404" width="200">
+                                                <h4 class="mb-2">Start Auditing</h4>
+                                                <h6 class="text-muted mb-3 text-center">Are you ready!, Please click on
+                                                    "Start Auditing" button to start the audit process.</h6>
+                                                <button type="button" class="btn btn-primary"
+                                                    (click)="startEnvironAudit()">Start Auditing</button>
+                                            </div>
+                                        </div>
+
+                                        <ngb-accordion [closeOthers]="false"
+                                            *ngIf="generalForm.value.environment_audit_status==='In Progress'">
+                                            <ngb-panel *ngFor="let data of environmentCheckList">
+                                                <ng-template ngbPanelTitle>
+                                                    <div class="accordion-button custom-header ">
+                                                        <div class="col-md-4">
+                                                            <span>{{data.subCategory}}</span>
+
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="info"
+                                                                [value]="questionProgress(data.subCategory,'Environment')"
+                                                                ngbTooltip="Questions Answered" [showValue]="true"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="primary" [value]="progress(data)"
+                                                                [showValue]="true" ngbTooltip="Marks Obtained"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template ngbPanelContent>
+                                                    <div class="table-responsive pt-3" id="socialChecklist">
+                                                        <div class="d-grid gap-2">
+                                                            <button type="button"
+                                                                class="btn btn-secondary btn-icon-text"
+                                                                (click)="auditCheklist(data)"><i
+                                                                    class="feather icon-check-square btn-icon-prepend"></i>
+                                                                Audit Checklist</button>
+                                                        </div>
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Color Code</th>
+                                                                    <th>#</th>
+                                                                    <th>Legal Reference</th>
+                                                                    <th>Question</th>
+                                                                    <!-- <th>Weightage</th> -->
+                                                                    <th>Status</th>
+                                                                    <th>Rating</th>
+                                                                    <th>Achievable Score</th>
+                                                                    <th>Score</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let list of auditMarks">
+                                                                    <ng-container
+                                                                        *ngIf="list.attributes.sub_category == data.subCategory">
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <i
+                                                                                class="material-icons {{markStatus(list.attributes.audit_mark)}}">bookmark</i>
+
+                                                                        </td>
+                                                                        <td class="col-sm-1"></td>
+                                                                        <td class="col-sm-1"
+                                                                            innerHTML="{{ list.attributes.legal_reference }}">
+                                                                        </td>
+
+                                                                        <td class="col-sm-7">
+                                                                            <p innerHTML="{{list.attributes.question}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <!-- <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.weightage}}">
+                                                                            </p>
+                                                                        </td> -->
+
+                                                                        <td class="col-sm-2 col-marks">
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.audit_mark}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.rating}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.achievable_score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <div class="icon-container">
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Non-Compliance"
+                                                                                    [ngbPopover]="remarkContent"
+                                                                                    *ngIf="list.attributes.remarks"></i>
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Command"
+                                                                                    [ngbPopover]="commandContent"
+                                                                                    *ngIf="list.attributes.command"></i>
+
+                                                                                <button type="button"
+                                                                                    (click)="openDocument(list)">
+                                                                                    <i class="feather icon-file"
+                                                                                        *ngIf="list.attributes.command_evidence_id"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <ng-template #remarkContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.remarks">
+                                                                                </div>
+                                                                            </ng-template>
+
+                                                                            <ng-template #commandContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.command">
+                                                                                </div>
+                                                                            </ng-template>
+                                                                        </td>
+
+                                                                    </ng-container>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </ng-template>
+                                            </ngb-panel>
+                                        </ngb-accordion>
+
+                                        <ngb-accordion [closeOthers]="false"
+                                            *ngIf="generalForm.value.environment_audit_status==='Completed'">
+                                            <ngb-panel *ngFor="let data of environmentCheckList">
+                                                <ng-template ngbPanelTitle>
+                                                    <div class="accordion-button custom-header ">
+                                                        <div class="col-md-4">
+                                                            <span>{{data.subCategory}}</span>
+
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="info"
+                                                                [value]="questionProgress(data.subCategory,'Environment')"
+                                                                ngbTooltip="Questions Answered" [showValue]="true"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="primary" [value]="progress(data)"
+                                                                [showValue]="true" ngbTooltip="Marks Obtained"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template ngbPanelContent>
+                                                    <div class="table-responsive pt-3" id="socialChecklist">
+
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Color Code</th>
+                                                                    <th>#</th>
+                                                                    <th>Legal Reference</th>
+                                                                    <th>Question</th>
+                                                                    <!-- <th>Weightage</th> -->
+                                                                    <th>Status</th>
+                                                                    <th>Rating</th>
+                                                                    <th>Achievable Score</th>
+                                                                    <th>Score</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let list of auditMarks">
+                                                                    <ng-container
+                                                                        *ngIf="list.attributes.sub_category == data.subCategory">
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <i
+                                                                                class="material-icons {{markStatus(list.attributes.audit_mark)}}">bookmark</i>
+
+                                                                        </td>
+                                                                        <td class="col-sm-1"></td>
+                                                                        <td class="col-sm-1"
+                                                                            innerHTML="{{ list.attributes.legal_reference }}">
+                                                                        </td>
+
+                                                                        <td class="col-sm-7">
+                                                                            <p innerHTML="{{list.attributes.question}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <!-- <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.weightage}}">
+                                                                            </p>
+                                                                        </td> -->
+
+                                                                        <td class="col-sm-2 col-marks">
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.audit_mark}}">
+                                                                            </p>
+
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.rating}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.achievable_score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <div class="icon-container">
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Non-Compliance"
+                                                                                    [ngbPopover]="remarkContent"
+                                                                                    *ngIf="list.attributes.remarks"></i>
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Command"
+                                                                                    [ngbPopover]="commandContent"
+                                                                                    *ngIf="list.attributes.command"></i>
+
+                                                                                <button type="button"
+                                                                                    (click)="openDocument(list)">
+                                                                                    <i class="feather icon-file"
+                                                                                        *ngIf="list.attributes.command_evidence_id"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <ng-template #remarkContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.remarks">
+                                                                                </div>
+                                                                            </ng-template>
+
+                                                                            <ng-template #commandContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.command">
+                                                                                </div>
+                                                                            </ng-template>
+                                                                        </td>
+
+                                                                    </ng-container>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </ng-template>
+                                            </ngb-panel>
+                                        </ngb-accordion>
+
+                                        <div class="d-grid gap-2 mt-3"
+                                            *ngIf="generalForm.value.environment_audit_status==='In Progress'">
+                                            <button type="button" class="btn btn-success"
+                                                (click)="update_pending_audit('environment')">Mark as Completed</button>
+                                        </div>
+
+
+
+
+
+
+                                    </mat-tab>
+                                    <!-- Management Audit -->
+                                    <mat-tab [formGroup]="managementForm"
+                                        *ngIf="generalForm.value.actual_start_date&& showManagementTab">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">work icon</mat-icon>
+                                            Management System
+                                        </ng-template>
+
+                                        <div class="row w-100 mx-0 auth-page"
+                                            *ngIf="generalForm.value.management_audit_status==='Pending'">
+                                            <div
+                                                class="col-md-8 col-xl-6 mx-auto d-flex flex-column align-items-center">
+                                                <img src="../../../../../assets/images/audit.gif" class="img-fluid mb-2"
+                                                    alt="404" width="200">
+                                                <h4 class="mb-2">Start Auditing</h4>
+                                                <h6 class="text-muted mb-3 text-center">Are you ready!, Please click on
+                                                    "Start Auditing" button to start the audit process.</h6>
+                                                <button type="button" class="btn btn-primary"
+                                                    (click)="startManagementAudit()">Start Auditing</button>
+                                            </div>
+                                        </div>
+
+                                        <ngb-accordion [closeOthers]="false"
+                                            *ngIf="generalForm.value.management_audit_status==='In Progress'">
+                                            <ngb-panel *ngFor="let data of managementCheckList">
+                                                <ng-template ngbPanelTitle>
+                                                    <div class="accordion-button custom-header ">
+                                                        <div class="col-md-4">
+                                                            <span>{{data.subCategory}}</span>
+
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="info"
+                                                                [value]="questionProgress(data.subCategory,'Management')"
+                                                                ngbTooltip="Questions Answered" [showValue]="true"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="primary" [value]="progress(data)"
+                                                                [showValue]="true" ngbTooltip="Marks Obtained"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template ngbPanelContent>
+                                                    <div class="table-responsive pt-3" id="socialChecklist">
+                                                        <div class="d-grid gap-2">
+                                                            <button type="button"
+                                                                class="btn btn-secondary btn-icon-text"
+                                                                (click)="auditCheklist(data)"><i
+                                                                    class="feather icon-check-square btn-icon-prepend"></i>
+                                                                Audit Checklist</button>
+                                                        </div>
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Color Code</th>
+                                                                    <th>#</th>
+                                                                    <th>Legal Reference</th>
+                                                                    <th>Question</th>
+                                                                    <!-- <th>Weightage</th> -->
+                                                                    <th>Status</th>
+                                                                    <th>Rating</th>
+                                                                    <th>Achievable Score</th>
+                                                                    <th>Score</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let list of auditMarks">
+                                                                    <ng-container
+                                                                        *ngIf="list.attributes.sub_category == data.subCategory">
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <i
+                                                                                class="material-icons {{markStatus(list.attributes.audit_mark)}}">bookmark</i>
+
+                                                                        </td>
+                                                                        <td class="col-sm-1"></td>
+                                                                        <td class="col-sm-1"
+                                                                            innerHTML="{{ list.attributes.legal_reference }}">
+                                                                        </td>
+
+                                                                        <td class="col-sm-7">
+                                                                            <p innerHTML="{{list.attributes.question}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <!-- <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.weightage}}">
+                                                                            </p>
+                                                                        </td> -->
+
+                                                                        <td class="col-sm-2 col-marks">
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.audit_mark}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.rating}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.achievable_score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <div class="icon-container">
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Non-Compliance"
+                                                                                    [ngbPopover]="remarkContent"
+                                                                                    *ngIf="list.attributes.remarks"></i>
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Command"
+                                                                                    [ngbPopover]="commandContent"
+                                                                                    *ngIf="list.attributes.command"></i>
+
+                                                                                <button type="button"
+                                                                                    (click)="openDocument(list)">
+                                                                                    <i class="feather icon-file"
+                                                                                        *ngIf="list.attributes.command_evidence_id"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <ng-template #remarkContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.remarks">
+                                                                                </div>
+                                                                            </ng-template>
+
+                                                                            <ng-template #commandContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.command">
+                                                                                </div>
+                                                                            </ng-template>
+                                                                        </td>
+
+                                                                    </ng-container>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </ng-template>
+                                            </ngb-panel>
+                                        </ngb-accordion>
+
+                                        <ngb-accordion [closeOthers]="false"
+                                            *ngIf="generalForm.value.management_audit_status==='Completed'">
+                                            <ngb-panel *ngFor="let data of managementCheckList">
+                                                <ng-template ngbPanelTitle>
+                                                    <div class="accordion-button custom-header ">
+                                                        <div class="col-md-4">
+                                                            <span>{{data.subCategory}}</span>
+
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="info"
+                                                                [value]="questionProgress(data.subCategory,'Management')"
+                                                                ngbTooltip="Questions Answered" [showValue]="true"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="primary" [value]="progress(data)"
+                                                                [showValue]="true" ngbTooltip="Marks Obtained"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template ngbPanelContent>
+                                                    <div class="table-responsive pt-3" id="socialChecklist">
+
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Color Code</th>
+                                                                    <th>#</th>
+                                                                    <th>Legal Reference</th>
+                                                                    <th>Question</th>
+                                                                    <!-- <th>Weightage</th> -->
+                                                                    <th>Status</th>
+                                                                    <th>Rating</th>
+                                                                    <th>Achievable Score</th>
+                                                                    <th>Score</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let list of auditMarks">
+                                                                    <ng-container
+                                                                        *ngIf="list.attributes.sub_category == data.subCategory">
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <i
+                                                                                class="material-icons {{markStatus(list.attributes.audit_mark)}}">bookmark</i>
+
+                                                                        </td>
+                                                                        <td class="col-sm-1"></td>
+                                                                        <td class="col-sm-1"
+                                                                            innerHTML="{{ list.attributes.legal_reference }}">
+                                                                        </td>
+
+                                                                        <td class="col-sm-7">
+                                                                            <p innerHTML="{{list.attributes.question}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <!-- <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.weightage}}">
+                                                                            </p>
+                                                                        </td> -->
+
+                                                                        <td class="col-sm-2 col-marks">
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.audit_mark}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.rating}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.achievable_score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <div class="icon-container">
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Non-Compliance"
+                                                                                    [ngbPopover]="remarkContent"
+                                                                                    *ngIf="list.attributes.remarks"></i>
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Command"
+                                                                                    [ngbPopover]="commandContent"
+                                                                                    *ngIf="list.attributes.command"></i>
+
+                                                                                <button type="button"
+                                                                                    (click)="openDocument(list)">
+                                                                                    <i class="feather icon-file"
+                                                                                        *ngIf="list.attributes.command_evidence_id"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <ng-template #remarkContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.remarks">
+                                                                                </div>
+                                                                            </ng-template>
+
+                                                                            <ng-template #commandContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.command">
+                                                                                </div>
+                                                                            </ng-template>
+                                                                        </td>
+
+                                                                    </ng-container>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </ng-template>
+                                            </ngb-panel>
+                                        </ngb-accordion>
+
+                                        <div class="d-grid gap-2 mt-3"
+                                            *ngIf="generalForm.value.management_audit_status==='In Progress'">
+                                            <button type="button" class="btn btn-success"
+                                                (click)=" update_pending_audit('management')">Mark as Completed</button>
+                                        </div>
+
+
+                                    </mat-tab>
+                                    <!-- Management audit end -->
+                                    <mat-tab [formGroup]="securityForm"
+                                        *ngIf="generalForm.value.actual_start_date&& showSecurityTab">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">bolt</mat-icon>
+                                            Security (CTPAT) Audit
+                                        </ng-template>
+
+                                        <div class="row w-100 mx-0 auth-page"
+                                            *ngIf="generalForm.value.security_audit_status==='Pending'">
+                                            <div
+                                                class="col-md-8 col-xl-6 mx-auto d-flex flex-column align-items-center">
+                                                <img src="../../../../../assets/images/audit.gif" class="img-fluid mb-2"
+                                                    alt="404" width="200">
+                                                <h4 class="mb-2">Start Auditing</h4>
+                                                <h6 class="text-muted mb-3 text-center">Are you ready!, Please click on
+                                                    "Start Auditing" button to start the audit process.</h6>
+                                                <button type="button" class="btn btn-primary"
+                                                    (click)="startSecurityAudit()">Start Auditing</button>
+                                            </div>
+                                        </div>
+
+                                        <ngb-accordion [closeOthers]="false"
+                                            *ngIf="generalForm.value.security_audit_status==='In Progress'">
+                                            <ngb-panel *ngFor="let data of securityCheckList">
+                                                <ng-template ngbPanelTitle>
+                                                    <div class="accordion-button custom-header ">
+                                                        <div class="col-md-4">
+                                                            <span>{{data.subCategory}}</span>
+
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="info"
+                                                                [value]="questionProgress(data.subCategory,'Security')"
+                                                                ngbTooltip="Questions Answered" [showValue]="true"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="primary" [value]="progress(data)"
+                                                                [showValue]="true" ngbTooltip="Marks Obtained"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template ngbPanelContent>
+                                                    <div class="table-responsive pt-3" id="socialChecklist">
+                                                        <div class="d-grid gap-2">
+                                                            <button type="button"
+                                                                class="btn btn-secondary btn-icon-text"
+                                                                (click)="auditCheklist(data)"><i
+                                                                    class="feather icon-check-square btn-icon-prepend"></i>
+                                                                Audit Checklist</button>
+                                                        </div>
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Color Code</th>
+                                                                    <th>#</th>
+                                                                    <th>Legal Reference</th>
+                                                                    <th>Question</th>
+                                                                    <!-- <th>Weightage</th> -->
+                                                                    <th>Status</th>
+                                                                    <th>Rating</th>
+                                                                    <th>Achievable Score</th>
+                                                                    <th>Score</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let list of auditMarks">
+                                                                    <ng-container
+                                                                        *ngIf="list.attributes.sub_category == data.subCategory">
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <i
+                                                                                class="material-icons {{markStatus(list.attributes.audit_mark)}}">bookmark</i>
+
+                                                                        </td>
+                                                                        <td class="col-sm-1"></td>
+                                                                        <td class="col-sm-1"
+                                                                            innerHTML="{{ list.attributes.legal_reference }}">
+                                                                        </td>
+
+                                                                        <td class="col-sm-7">
+                                                                            <p innerHTML="{{list.attributes.question}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <!-- <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.weightage}}">
+                                                                            </p>
+                                                                        </td> -->
+
+                                                                        <td class="col-sm-2 col-marks">
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.audit_mark}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.rating}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.achievable_score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <div class="icon-container">
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Non-Compliance"
+                                                                                    [ngbPopover]="remarkContent"
+                                                                                    *ngIf="list.attributes.remarks"></i>
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Command"
+                                                                                    [ngbPopover]="commandContent"
+                                                                                    *ngIf="list.attributes.command"></i>
+
+                                                                                <button type="button"
+                                                                                    (click)="openDocument(list)">
+                                                                                    <i class="feather icon-file"
+                                                                                        *ngIf="list.attributes.command_evidence_id"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <ng-template #remarkContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.remarks">
+                                                                                </div>
+                                                                            </ng-template>
+
+                                                                            <ng-template #commandContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.command">
+                                                                                </div>
+                                                                            </ng-template>
+                                                                        </td>
+
+                                                                    </ng-container>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </ng-template>
+                                            </ngb-panel>
+                                        </ngb-accordion>
+
+                                        <ngb-accordion [closeOthers]="false"
+                                            *ngIf="generalForm.value.security_audit_status==='Completed'">
+                                            <ngb-panel *ngFor="let data of securityCheckList">
+                                                <ng-template ngbPanelTitle>
+                                                    <div class="accordion-button custom-header ">
+                                                        <div class="col-md-4">
+                                                            <span>{{data.subCategory}}</span>
+
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="info"
+                                                                [value]="questionProgress(data.subCategory,'Security')"
+                                                                ngbTooltip="Questions Answered" [showValue]="true"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: end;">
+                                                            <ngb-progressbar type="primary" [value]="progress(data)"
+                                                                [showValue]="true" ngbTooltip="Marks Obtained"
+                                                                style="width: 70%;"></ngb-progressbar>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template ngbPanelContent>
+                                                    <div class="table-responsive pt-3" id="socialChecklist">
+
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Color Code</th>
+                                                                    <th>#</th>
+                                                                    <th>Legal Reference</th>
+                                                                    <th>Question</th>
+                                                                    <!-- <th>Weightage</th> -->
+                                                                    <th>Status</th>
+                                                                    <th>Rating</th>
+                                                                    <th>Achievable Score</th>
+                                                                    <th>Score</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr *ngFor="let list of auditMarks">
+                                                                    <ng-container
+                                                                        *ngIf="list.attributes.sub_category == data.subCategory">
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <i
+                                                                                class="material-icons {{markStatus(list.attributes.audit_mark)}}">bookmark</i>
+
+                                                                        </td>
+                                                                        <td class="col-sm-1"></td>
+                                                                        <td class="col-sm-1"
+                                                                            innerHTML="{{ list.attributes.legal_reference }}">
+                                                                        </td>
+
+                                                                        <td class="col-sm-7">
+                                                                            <p innerHTML="{{list.attributes.question}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <!-- <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.weightage}}">
+                                                                            </p>
+                                                                        </td> -->
+
+                                                                        <td class="col-sm-2 col-marks">
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.audit_mark}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.rating}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p
+                                                                                innerHTML="{{list.attributes.achievable_score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p innerHTML="{{list.attributes.score}}">
+                                                                            </p>
+                                                                        </td>
+                                                                        <td class="col-sm-1 col-remarks">
+                                                                            <div class="icon-container">
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Non-Compliance"
+                                                                                    [ngbPopover]="remarkContent"
+                                                                                    *ngIf="list.attributes.remarks"></i>
+                                                                                <i class="feather icon-alert-circle"
+                                                                                    popoverTitle="Command"
+                                                                                    [ngbPopover]="commandContent"
+                                                                                    *ngIf="list.attributes.command"></i>
+
+                                                                                <button type="button"
+                                                                                    (click)="openDocument(list)">
+                                                                                    <i class="feather icon-file"
+                                                                                        *ngIf="list.attributes.command_evidence_id"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <ng-template #remarkContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.remarks">
+                                                                                </div>
+                                                                            </ng-template>
+
+                                                                            <ng-template #commandContent>
+                                                                                <div
+                                                                                    [innerHTML]="list.attributes.command">
+                                                                                </div>
+                                                                            </ng-template>
+                                                                        </td>
+
+                                                                    </ng-container>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </ng-template>
+                                            </ngb-panel>
+                                        </ngb-accordion>
+
+                                        <div class="d-grid gap-2 mt-3"
+                                            *ngIf="generalForm.value.security_audit_status==='In Progress'">
+                                            <button type="button" class="btn btn-success"
+                                                (click)="update_pending_audit('security')">Mark as Completed</button>
+                                        </div>
+
+
+
+
+
+                                    </mat-tab>
+                                    <mat-tab [formGroup]="actionPlanForm" *ngIf="generalForm.value.actual_start_date">
+                                        <ng-template mat-tab-label>
+                                            <mat-icon class="example-tab-icon">diversity_3</mat-icon>
+                                            Action Plan
+                                        </ng-template>
+                                        <div class="btn-group">
+                                            <button *ngIf="generalForm.value.status=='Completed'" type="button"
+                                                class="btn btn-primary btn-icon-text btn-xs action-btn"
+                                                (click)="createAction()">
+                                                <i class="feather icon-plus btn-icon-prepend"></i>
+                                                Create Action Plan
+                                            </button>
+
+                                            <button type="button" class="btn btn-secondary btn-icon-text btn-xs"
+                                                id="ext_action_report" (click)="exportActionPlan()">
+                                                <i class="feather icon-sidebar btn-icon-prepend"></i>
+                                                Export Action Plan
+                                            </button>
+
+                                            <button type="button"
+                                                class="btn btn-secondary btn-icon-text btn-icon-text btn-xs hide"
+                                                id="ext_action_report_loader">
+                                                <span class="spinner-border spinner-border-sm" role="status"
+                                                    aria-hidden="true"></span>
+                                                &nbsp; Please wait...
+                                            </button>
+
+
+
+                                        </div>
+                                        <div class="table-responsive pt-3" id="generalChecklist">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Corrective / Preventive Action</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let list of actionPlan">
+                                                        <td></td>
+                                                        <td class="col-sm-7">
+                                                            <p
+                                                                innerHTML="{{list.attributes.findings | slice:0:700 }}{{list.attributes.findings?.length > 20 ? '...' : ''}}">
+                                                            </p>
+                                                        </td>
+                                                        <td class="action">
+                                                            <div class="table-responsive" id="correctiveSetting">
+                                                                <ul class="list-group">
+                                                                    <li
+                                                                        class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        Date
+                                                                        <span>{{list.attributes.date |
+                                                                            date:'dd-MMM-yyyy'}}</span>
+                                                                    </li>
+                                                                    <li
+                                                                        class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        Priority
+                                                                        <span
+                                                                            class="badge {{status(list.attributes.priority)}} ">{{list.attributes.priority}}</span>
+                                                                    </li>
+                                                                    <li
+                                                                        class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        Status
+                                                                        <span>{{list.attributes.status}}</span>
+                                                                    </li>
+                                                                </ul>
+
+                                                                <div class="d-grid gap-2 mt-3">
+                                                                    <button type="button" class="btn btn-primary"
+                                                                        (click)="updateActionPlan(list)"
+                                                                        *ngIf="list.attributes.status!=='Completed' && this.generalForm.value.status==='Completed'">Update
+                                                                        Action Plan</button>
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        (click)="viewActionPlan(list)">View
+                                                                        Action Plan</button>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </mat-tab>
+                                </mat-tab-group>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

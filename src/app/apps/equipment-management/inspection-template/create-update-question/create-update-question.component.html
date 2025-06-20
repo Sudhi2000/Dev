@@ -1,0 +1,23 @@
+
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            
+            <div class="row ">
+                <div class="row mb-4">
+                    <quill-editor placeholder="Question" [modules]="quillConfig"
+                        formControlName="question">
+                    </quill-editor>
+                </div>
+                 
+            </div>
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid" (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

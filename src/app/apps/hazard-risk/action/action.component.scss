@@ -1,0 +1,64 @@
+.table-responsive {
+    overflow: hidden;
+}
+
+.mat-ink-bar {
+    height: 5px !important;
+}
+
+mat-tab {
+    overflow: hidden;
+}
+
+.mat-button-toggle-checked {
+    background-color: #6571ff;
+    color: white !important;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.ai-loader {
+    margin-left: 13px;
+}
+
+.hide {
+    display: none;
+}
+
+.image {
+    padding-left: 10px;
+}
+
+.selected-observation {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.submit-but {
+    margin-right: 5px;
+}
+
+.warning-font-size {
+    font-size: 12px;
+    color: red;
+    text-align: right;
+
+}
+
+.quill-editor-error {
+    font-size: 12px;
+    color: red;
+    text-align: right;
+
+}

@@ -1,0 +1,82 @@
+<div class="container-fluid">
+    <div class="row" [formGroup]="Form">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid d-flex justify-content-between header">
+                        <div class="col-lg-8 ps-0">
+                            <a routerLink="." class="nobleui-logo d-block mt-3">Chemical Management <span>
+                                    </span></a>
+                            <p class="mt-1 mb-1"><b>Chemical Disposal -<span> # {{Form.value.reference_number}}</span></b></p>
+                        </div>
+                        
+                        <div class="col-lg-4 pe-0">
+                            <h6 class="fw-bold text-end mt-4 mb-2"> Date</h6>
+                            <h6 class="text-end mb-5 ">{{Form.value.reported_date| date:'MMM d, y'}}</h6>
+                        </div>
+                    </div>
+                    <div class="container-fluid  d-flex justify-content-center w-100">
+                        <div class="table-responsive w-100">
+                            <div class="row">
+                                 
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button type="button" class="btn btn-primary btn-icon-text btn-xs"
+                                                (click)="createDispose()">
+                                                    <i class="feather icon-plus btn-icon-prepend"></i>
+                                                    Create Disposal
+                                                </button>
+                                            </div>
+                                        </div>
+                                         
+                                        <div class="row">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        
+                                                        <th>Disposed Date</th>
+                                                        <th>Authorized Contractor</th>
+                                                        <th>Disposed Quantity</th>
+                                                        <th>Disposal Details</th>
+                                                        
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let data of disposeList">
+                                                        
+                                                        <td>{{data.attributes.disposal_date | date:'MMM d, y'}}</td>
+                                                        <td>{{data.attributes.authorized_contractor}}</td>
+                                                        <td>{{data.attributes.disposed_quantity}}</td>
+                                                        <td class="col-sm-7 textwrap">
+                                                            <p
+                                                                innerHTML="{{data.attributes.disposal_details }}">
+                                                            </p>
+                                                        </td>
+                                                        
+                                                        <td>
+                                                            <button type="button"
+                                                                class="btn btn-danger btn-icon-text btn-xs action-btn float-end"
+                                                                (click)="updateDeleteTransaction(data)">
+
+                                                                <i class="feather icon-trash-2"></i>
+                                                            </button>
+                                                            <!-- <button type="button" class="btn btn-primary"
+                                                            (click)="deleteDispose(data)"
+                                                            >Update
+                                                            Action Plan</button> -->
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                         
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

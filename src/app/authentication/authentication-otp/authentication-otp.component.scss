@@ -1,0 +1,157 @@
+/* Styles for OTP container */
+// .otp-container {
+//     text-align: center;
+//     padding: 20px;
+//   }
+  
+//   .otp-container h1 {
+//     font-size: 24px;
+//     margin-bottom: 10px;
+//   }
+  
+//   .otp-container p {
+//     font-size: 16px;
+//     margin-bottom: 20px;
+//   }
+  
+//   .input-group {
+//     margin-bottom: 20px;
+//   }
+  
+//   .input-group input {
+//     width: 100%;
+//     padding: 10px;
+//     font-size: 16px;
+//     border-radius: 5px;
+//     border: 1px solid #ccc;
+//   }
+  
+//   /* Styles for button group */
+//   .button-group {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//   }
+  
+//   .button-group .btn {
+//     margin: 0 10px;
+//     padding: 10px 20px;
+//     border-radius: 5px;
+//     font-size: 16px;
+//     cursor: pointer;
+//   }
+  
+//   .btn-primary {
+//     color: #fff;
+//   }
+  
+//   .btn-primary:hover {
+//     background-color: #0056b3;
+//   }
+  
+//   .btn-secondary {
+//     background-color: #6c757d;
+//     color: #fff;
+//   }
+  
+//   .btn-secondary:hover {
+//     background-color: #5a6268;
+//   }
+  
+//   .btn-resend {
+//     background-color: #d50e0e;
+//     color: #fff;
+//   }
+  
+//   .btn-warning:hover {
+//     background-color: #e0a800;
+//   }
+  
+
+/* Styles for OTP container */
+.otp-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .otp-container h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .otp-container p {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .input-group {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .otp-box {
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin: 0 5px;
+    text-align: center;
+  }
+  
+  /* Hide increment and decrement buttons */
+  .otp-box::-webkit-inner-spin-button,
+  .otp-box::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  /* Styles for button group */
+  .button-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .button-group .btn {
+    margin: 0 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    color: #fff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+  
+  .btn-resend {
+    background-color: #d50e0e;
+    color: #fff;
+  }
+  
+  .btn-warning:hover {
+    background-color: #e0a800;
+  }
+  .logo {
+    img {
+        width: 200px;
+    }
+    margin-bottom: 10px;
+}

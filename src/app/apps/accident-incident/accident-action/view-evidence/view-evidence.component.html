@@ -1,0 +1,14 @@
+<div mat-dialog-content class="row">
+    <div class="col-md-12">
+      <div class="d-flex flex-column">
+        <ng-container *ngFor="let image of evidences; let i=index">
+          <div class="p-1">
+            <figure class="mb-2">
+              <img class="img-fluid rounded" [src]="image.src" width="500" alt="">
+            </figure>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,80 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row ">
+                <div class="col-md-6">
+
+                    <mat-form-field appearance="outline" color="primary">
+                        <mat-label>Issued Date</mat-label>
+                        <input matInput [matDatepicker]="collFromDP" placeholder="Choose a date"
+                            [formControl]="issuedDate" (dateChange)="issued_Date($event)">
+                        <mat-datepicker-toggle matSuffix [for]="collFromDP"></mat-datepicker-toggle>
+                        <mat-datepicker #collFromDP></mat-datepicker>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Issued Quantity</mat-label>
+                        <input type="number" matInput formControlName="issued_quantity">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>unit</mat-label>
+                        <input type="text" matInput formControlName="unit">
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <!-- <mat-form-field appearance="outline">
+                        <mat-label>Issued To</mat-label>
+                        <mat-select formControlName="issued_to">
+                            <mat-option *ngFor="let name of issuedUserList" value="{{name.attributes.name}}">
+                                {{name.attributes.name}}</mat-option>
+                            <mat-option (click)="create_issuedUser()" class="option-btn"> <i
+                                    class=" mdi mdi-plus-circle"></i> Create a new Issued User
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Issued To</mat-label>
+                        <mat-select formControlName="issued_to" >
+                            <!-- <mat-select-trigger>
+                                {{issued_to}}
+
+                            </mat-select-trigger> -->
+                            <mat-option *ngFor="let data of issuedUserList" value="{{data.attributes.name}}">
+                                <div class="title-container">
+                                    <span>{{data.attributes.name}}</span>
+                                    <span class="icon-container"><i class="feather icon-edit titleicon_edit"
+                                            (click)="update_issued_to(data)"></i> &nbsp;
+                                        <i class="feather icon-trash-2 titleicon_delete"
+                                            (click)="delete_issued_to(data.id)"></i>
+                                    </span>
+                                </div>
+                            </mat-option>
+                            <mat-option disabled (click)="create_issuedUser()" class="option-btn"> <i
+                                    class=" mdi mdi-plus-circle"></i> Create New Issued User
+
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+
+                </div>
+            </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4 " (click)="submit()"
+                    [disabled]="!Form.valid">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

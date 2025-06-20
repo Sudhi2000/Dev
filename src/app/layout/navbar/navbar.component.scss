@@ -1,0 +1,85 @@
+.navbar .navbar-content .navbar-nav .nav-item .nav-link .indicator {
+  right: -1px;
+}
+
+.mdi:before {
+  font-size: 15px;
+}
+
+.zero {
+  padding-left: 12px;
+}
+
+.navbar .navbar-content .navbar-nav .nav-item .nav-link .indicator .circle {
+  background: green;
+}
+
+.navbar .navbar-content .navbar-nav .nav-item .nav-link .indicator .circle::before {
+  background: green;
+}
+
+.perfect-scrollbar-example {
+  position: relative;
+  max-height: 250px;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+.rounded-circle {
+  border: solid 2px #1CA260
+}
+
+.nobleui-logo {
+  align-self: center;
+
+  img {
+    width: 175px !important;
+  }
+
+}
+
+.client-logo {
+  padding-left: 15px;
+}
+
+.scrolling-words-container {
+  display: flex;
+  align-items: center;
+  // font-size: 2rem;
+  font-weight: 500;
+}
+
+.scrolling-words-box {
+  height: 3rem;
+  margin: auto;
+  overflow: hidden;
+  align-items: left;
+  font-weight: 600;
+
+  ul {
+    margin: 0 0.625rem;
+    padding: 0;
+    animation: scrollUp 5s infinite;
+
+    li {
+      display: flex;
+      align-items: center;
+      // justify-content: flex-end;
+      height: 3rem;
+      list-style: none;
+    }
+  }
+}
+
+// Variables
+$item-count: 4;
+
+@keyframes scrollUp {
+  @for $i from 1 through ($item-count - 1) {
+
+    #{($i * 25) - 10%},
+    #{$i * 25%} {
+      transform: translateY((-100% / $item-count) * $i);
+    }
+  }
+}

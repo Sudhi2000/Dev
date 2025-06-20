@@ -1,0 +1,912 @@
+open(index: number): void {
+    // open lightbox
+    this._lightbox.open(this.evidences, index);
+  }
+
+  close(): void {
+    // close lightbox programmatically
+    this._lightbox.close();
+  }
+
+
+  //check organisation has access
+  configuration() {
+    this.generalService.get_app_config().subscribe({
+      next: (result: any) => {
+        const status = result.data.attributes.modules.hazard_risk
+        this.currency = result.data.attributes.currency
+        if (status === false) {
+          this.router.navigate(["/error/upgrade-subscription"])
+        } else if (status === true) {
+          const allcookies = document.cookie.split(';');
+          const name = environment.org_id
+          for (var i = 0; i < allcookies.length; i++) {
+            var cookiePair = allcookies[i].split("=");
+            if (name == cookiePair[0].trim()) {
+              this.orgID = decodeURIComponent(cookiePair[1])
+              this.generalForm.controls['org_id'].setValue(decodeURIComponent(cookiePair[1]))
+            }
+          }
+          this.me()
+        }
+      },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => { }
+    })
+  }
+
+  //check user has access
+  me() {
+    this.authService.me().subscribe({
+      next: (result: any) => {
+        const status = result.ehs_action
+        if (status === false) {
+          this.router.navigate(["/error/unauthorized"])
+        } else {
+          this.get_dropdown_values()
+          // this.get_controls()
+          this.get_ehs_details()
+          this.get_profiles()
+          this.generalForm.controls['updator'].setValue(result.id)
+        }
+      },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => { }
+    })
+  }
+
+  //get dropdown values
+  get_dropdown_values(){
+    const module = "Hazard and Risk"
+    this.generalService.get_dropdown_values(module).subscribe({
+      next:(result:any)=>{
+        
+        const controls = result.data.filter(function (elem:any) {
+          return (elem.attributes.Category === "Controls")
+        })
+        this.controls = controls
+      },
+      error:(err:any)=>{},
+      complete:()=>{}
+    })
+  }
+
+  //get profiles
+  get_profiles() {
+    this.authService.get_profiles(this.orgID).subscribe({
+      next: (result: any) => {
+        this.deligates = result.data
+      },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => { }
+    })
+  }
+
+
+
+  get_ehs_details() {
+    const reference = this.route.snapshot.paramMap.get('id');
+    this.hazardService.get_ehs_details(this.orgID, reference).subscribe({
+      next: (result: any) => {
+        console.log(result.data[0].attributes.status)
+        
+        this.generalForm.controls['id'].setValue(result.data[0].id)
+        this.generalForm.controls['reference_number'].setValue(result.data[0].attributes.reference_number)
+        this.generalForm.controls['due_date'].setValue(result.data[0].attributes.due_date)
+        this.generalForm.controls['category'].setValue(result.data[0].attributes.category)
+        this.generalForm.controls['sub_category'].setValue(result.data[0].attributes.sub_category)
+        this.generalForm.controls['observation'].setValue(result.data[0].attributes.observation)
+        this.generalForm.controls['division'].setValue(result.data[0].attributes.division)
+        this.generalForm.controls['location_department'].setValue(result.data[0].attributes.location_department)
+        this.generalForm.controls['sub_location'].setValue(result.data[0].attributes.sub_location)
+        this.generalForm.controls['description'].setValue(result.data[0].attributes.description)
+        this.resolutionForm.controls['evidence_id'].setValue(result.data[0].attributes.evidence_after_id)
+        this.generalForm.controls['reported_date'].setValue(result.data[0].attributes.reported_date)
+        this.generalForm.controls['reporter'].setValue(result.data[0].attributes.reporter.data.id)
+        this.actionForm.controls['reporterName'].setValue(result.data[0].attributes.reporter.data.attributes.first_name + ' ' + result.data[0].attributes.reporter.data.attributes.last_name)
+        this.actionForm.controls['reporterDesignation'].setValue(result.data[0].attributes.reporter.data.attributes.designation)
+        this.actionForm.controls['level'].setValue(result.data[0].attributes.level)
+        this.actionForm.controls['status'].setValue(result.data[0].attributes.status)
+        this.actionForm.controls['responsible_person'].setValue(result.data[0].attributes.responsible.data.attributes.first_name+' '+result.data[0].attributes.responsible.data.attributes.last_name)
+        this.actionForm.controls['responsible_deignation'].setValue(result.data[0].attributes.responsible.data.attributes.designation)
+       
+        if (this.actionForm.value.status === "Verify" || this.actionForm.value.status === "Completed") {
+          this.router.navigate(["/apps/hazard-risk/assigned-tasks"])
+        }
+        this.duedate.setValue(new Date(result.data[0].attributes.due_date))
+        const dueDate = new Date(result.data[0].attributes.due_date)
+        const coolperiod = dueDate.setDate(dueDate.getDate() + 10)
+        this.coolPeriod = new Date(coolperiod)
+        this.generalForm.disable()
+        this.actionForm.controls['level'].disable()
+        this.duedate.disable()
+        if(result.data[0].attributes.completed_date){
+          this.completedDate.setValue(new Date(result.data[0].attributes.completed_date))
+          this.resolutionForm.controls['completed_date'].setValue(new Date(result.data[0].attributes.completed_date))
+        }
+        if (result.data[0].attributes.status === "Open") {
+          this.resolutionForm.disable()
+          this.completedDate.disable()
+          this.actionForm.controls['deligate'].disable()
+        } else if (result.data[0].attributes.status === "In-Progress") {
+          this.resolutionForm.enable()
+          this.completedDate.enable()
+        }
+        if (result.data[0].attributes.targeted_date) {
+          this.resolutionForm.controls['targeted_date'].setValue(result.data[0].attributes.targeted_date)
+          this.targetedDate.setValue(new Date(result.data[0].attributes.targeted_date))
+          this.resolutionForm.controls['targeted_date'].disable()
+          this.targetedDate.disable()
+        }
+        this.resolutionForm.controls['control'].setValue(result.data[0].attributes.control)
+        this.resolutionForm.controls['cost'].setValue(result.data[0].attributes.cost)
+        this.costSymbol(result.data[0].attributes.cost)
+        this.resolutionForm.controls['action_taken'].setValue(result.data[0].attributes.action_taken)
+        this.resolutionForm.controls['remarks'].setValue(result.data[0].attributes.remarks)
+     
+        if (result.data[0].attributes.deligate.data) {
+          this.actionForm.controls['deligate'].setValue(result.data[0].attributes.deligate.data.id)
+        }
+
+        const evidence = result.data[0].attributes.ehs_evidences.data.filter(function (elem:any) {
+          return (elem.attributes.evidence_after === false)
+        })
+
+        const evidenceAfter = result.data[0].attributes.ehs_evidences.data.filter(function (elem:any) {
+          return (elem.attributes.evidence_after === true)
+        })
+
+        let eviData: any[] = []
+        evidence.forEach((elem: any) => {
+          eviData.push({
+            src: environment.client_backend + '/uploads/' + elem.attributes.evidence_name + '.' + elem.attributes.format,
+            caption: "Evidence",
+            thumb: environment.client_backend + '/uploads/' + elem.attributes.evidence_name + '.' + elem.attributes.format
+          })
+        })
+        this.evidences = eviData
+
+        let eviDataAfter:any[]=[]
+        eviDataAfter.push({
+          src: environment.client_backend + '/uploads/' + evidenceAfter[0].attributes.evidence_name + '.' + evidenceAfter[0].attributes.format,
+          caption: "Evidence",
+          thumb: environment.client_backend + '/uploads/' + evidenceAfter[0].attributes.evidence_name + '.' + evidenceAfter[0].attributes.format
+        })
+        this.resolutionForm.controls['evidence_after_ID'].setValue(evidenceAfter[0].id)
+
+
+
+
+
+        if (this.actionForm.value.status === "Open") {
+          Swal.fire({
+            title: 'Open Task',
+            imageUrl: "assets/images/calendar.gif",
+            imageWidth: 150,
+            text: "In order to provide the resolution details. You have to change the status from 'Open' to 'In-Progress'. ",
+            showCancelButton: false,
+            cancelButtonColor: '#d33',
+          })
+        }
+      },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => { }
+    })
+  }
+
+  //attach evidence
+  compressFile() {
+    this.imageCompress.uploadFile().then(({ image, orientation }) => {
+      this.imageCompress.compressFile(image, orientation, 50, 50).then(
+        result => {
+          this.resolutionForm.controls['evidence'].setValue(result)
+          console.warn('Size in bytes is now:', this.imageCompress.byteCount(result));
+        }
+      );
+    });
+  }
+
+  onSelect(event: any) {
+    const fileLength = this.files.length
+    const addedLength = event.addedFiles.length
+    if (fileLength === 0 && addedLength < 2) {
+      const size = event.addedFiles[0].size / 1024 / 1024
+      if (size > 2) {
+        this.resolutionForm.controls['modified_evidence'].setValue(false)
+        const statusText = "Please choose an image below 2 MB"
+        this._snackBar.open(statusText, 'Close Warning', {
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
+      } else {
+        var fileTypes = ['jpg', 'jpeg', 'png'];
+        var extension = event.addedFiles[0].name.split('.').pop().toLowerCase(),
+          isSuccess = fileTypes.indexOf(extension) > -1;
+        if (isSuccess) {
+          this.generalForm.controls['evidence'].setErrors(null)
+          this.resolutionForm.controls['modified_evidence'].setValue(true)
+          this.files.push(...event.addedFiles);
+        } else {
+          this.resolutionForm.controls['modified_evidence'].setValue(false)
+
+          const statusText = "Please choose images ('jpg', 'jpeg', 'png')"
+          this._snackBar.open(statusText, 'Close Warning', {
+            horizontalPosition: this.horizontalPosition,
+            verticalPosition: this.verticalPosition,
+          });
+        }
+      }
+    } else if (fileLength < 6) {
+      this.resolutionForm.controls['modified_evidence'].setValue(false)
+      const statusText = "You have exceed the upload limit"
+      this._snackBar.open(statusText, 'Close Warning', {
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      });
+    }
+    
+  }
+
+  onRemove(event: any) {
+    this.files.splice(this.files.indexOf(event), 1);
+    if (this.files.length === 0) {
+      this.generalForm.controls['evidence'].reset()
+    }
+  }
+
+  submit() {
+
+    if (this.resolutionForm.value.modified_evidence) {
+      this.files.forEach((elem: any)=>{
+        this.evidenceFormData.delete('files')
+        const extension = elem.name.split('.').pop().toLowerCase()
+        this.resolutionForm.controls['evidence_type'].setValue(extension)
+        this.evidenceFormData.append('files', elem, this.generalForm.value.reference_number + '.' + extension)
+        // this.update_ehs_evidence_resolution()
+        this.upload_ehs_evidence()
+      console.log('have')
+
+      })
+      
+
+    } else {
+      this.update_ehs_resolution()
+      console.log('not have')
+
+
+    }
+
+
+
+    // if (this.resolutionForm.value.modified_evidence) {
+
+    //   this.hazardService.destroy(this.resolutionForm.value.evidence_id).subscribe({
+    //     next: (result: any) => {
+    //       const name = result[0].hash
+    //       const format = this.resolutionForm.value.evidence_type
+    //       const fileName = name + '.' + format
+    //       this.resolutionForm.controls['evidence_name'].setValue(fileName)
+    //       this.resolutionForm.controls['evidence_id'].setValue(result[0].id)
+    //     },
+    //     error: (err: any) => { },
+    //     complete: () => { }
+    //   })
+
+    // } else {
+
+    //   this.hazardService.update_ehs_resolution(this.generalForm.value, this.resolutionForm.value).subscribe({
+    //     next: (result: any) => {
+    //     },
+    //     error: (err: any) => {
+    //       this.router.navigate(["/error/internal"])
+    //     },
+    //     complete: () => {
+    //       this.update_ehs_evidence()
+    //     }
+    //   })
+
+    // }
+
+
+  }
+
+  upload_ehs_evidence(){
+
+    if (this.resolutionForm.value.evidence_id){
+
+      this.hazardService.destroy(this.resolutionForm.value.evidence_id).subscribe({
+        next: (result: any) => {
+          console.log(result)
+          this.hazardService.upload(this.evidenceFormData).subscribe({
+            next: (result: any) => {
+              
+              const name = result[0].hash
+              const format = this.resolutionForm.value.evidence_type
+              const fileName = name + '.' + format
+              this.resolutionForm.controls['evidence_name'].setValue(fileName)
+              this.resolutionForm.controls['evidence_id'].setValue(result[0].id)
+            },
+            error: (err: any) => { },
+            complete: () => {
+              this.update_ehs_evidence_after()
+            }
+          })
+        },
+        error: (err: any) => { },
+        complete: () => { }
+      })
+
+    }else{
+
+      this.hazardService.upload(this.evidenceFormData).subscribe({
+        next: (result: any) => {
+          console.log(result)
+          const name = result[0].hash
+          const format = this.resolutionForm.value.evidence_type
+          const fileName = name + '.' + format
+          this.resolutionForm.controls['evidence_name'].setValue(fileName)
+          this.resolutionForm.controls['evidence_id'].setValue(result[0].id)
+         
+        },
+        error: (err: any) => { },
+        complete: () => {
+          this.update_ehs_evidence_after()
+        }
+      })
+
+    }
+
+  }
+
+  update_ehs_evidence_after(){
+    let data:any[]=[]
+    data.push({
+      id:this.resolutionForm.value.evidence_after_ID,
+      evidence_name
+    })
+    console.log(this.resolutionForm.value)
+  }
+
+  // update_ehs_evidence_resolution() {
+
+  //   console.log(this.resolutionForm.value.evidence_id)
+  //   if (this.resolutionForm.value.evidence_id) {
+  //     console.log('have')
+  //     this.hazardService.destroy(this.resolutionForm.value.evidence_id).subscribe({
+  //       next: (result: any) => {
+  //         console.log(result)
+  //         this.hazardService.upload(this.evidenceFormData).subscribe({
+  //           next: (result: any) => {
+  //             const name = result[0].hash
+  //             const format = this.resolutionForm.value.evidence_type
+  //             const fileName = name + '.' + format
+  //             this.resolutionForm.controls['evidence_name'].setValue(fileName)
+  //             this.resolutionForm.controls['evidence_id'].setValue(result[0].id)
+  //           },
+  //           error: (err: any) => { },
+  //           complete: () => {
+  //             this.update_ehs_resolution_evidence()
+  //           }
+  //         })
+  //       },
+  //       error: (err: any) => { },
+  //       complete: () => { }
+  //     })
+
+  //   } else {
+  //     console.log(this.evidenceFormData)
+
+  //     this.hazardService.upload(this.evidenceFormData).subscribe({
+  //       next: (result: any) => {
+  //         const name = result[0].hash
+  //         const format = this.resolutionForm.value.evidence_type
+  //         const fileName = name + '.' + format
+  //         this.resolutionForm.controls['evidence_name'].setValue(fileName)
+  //         this.resolutionForm.controls['evidence_id'].setValue(result[0].id)
+  //       },
+  //       error: (err: any) => { },
+  //       complete: () => {
+  //         this.update_ehs_resolution_evidence()
+  //       }
+  //     })
+
+  //   }
+
+
+
+
+
+
+
+
+
+
+
+  // }
+
+  update_ehs_resolution_evidence() {
+
+    this.hazardService.update_ehs_evidence_resolution(this.generalForm.value, this.resolutionForm.value).subscribe({
+      next: (result: any) => { },
+      error: (err: any) => { },
+      complete: () => {
+        this.create_update_activity()
+      }
+    })
+
+  }
+
+  update_ehs_resolution() {
+    console.log(111)
+
+    this.hazardService.update_ehs_resolution(this.generalForm.value, this.resolutionForm.value).subscribe({
+      next: (result: any) => { },
+      error: (err: any) => { },
+      complete: () => {
+        Swal.fire({
+          title: 'Updated',
+          imageUrl: "assets/images/update.gif",
+          imageWidth: 150,
+          text: "The resolution details has updated successfully. You can modify the details until the task completion",
+          showCancelButton: false,
+          cancelButtonColor: '#d33',
+        }).then((result) => {
+          this.get_ehs_details()
+        })
+      }
+    })
+
+  }
+
+  update_ehs_evidence() {
+    this.hazardService.update_ehs_evidence_after(this.generalForm.value.evidenceId, this.resolutionForm.value.evidence).subscribe({
+      next: (result: any) => { },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => {
+        this.create_update_activity()
+      }
+    })
+  }
+
+  create_update_activity() {
+    const action = "Updated a Hazard / Risk"
+    const refernceNumber = this.generalForm.value.reference_number
+    const user = this.generalForm.value.updator
+    this.generalService.create_activity_stream(action, refernceNumber, user).subscribe({
+      next: (result: any) => {
+        console.log(result)
+      },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => {
+        Swal.fire({
+          title: 'Updated',
+          imageUrl: "assets/images/update.gif",
+          imageWidth: 150,
+          text: "The resolution details has updated successfully. You can modify the details until the task completion",
+          showCancelButton: false,
+          cancelButtonColor: '#d33',
+        }).then((result) => {
+          this.get_ehs_details()
+        })
+      }
+    })
+  }
+
+  cost(data: any) {
+    const amount = this.currencyPipe.transform(Number(data.target.value), this.currency);
+    this.resolutionForm.controls['cost'].setValue(data.target.value)
+    this.costSymbol(Number(data.target.value))
+  }
+
+  costSymbol(data: any) {
+    const amount = this.currencyPipe.transform(data, this.currency);
+    this.resolutionForm.controls['costVal'].setValue(amount)
+  }
+
+  in_progress() {
+    const target = this.resolutionForm.value.targeted_date
+    if (target) {
+      Swal.fire({
+        title: 'Start Progress',
+        imageUrl: "assets/images/confirm-1.gif",
+        imageWidth: 250,
+        text: "Please reconfirm that provided targeted date is correct. If it is correct, please click on 'Yes,Proceed' button otherwise simply click on 'Cancel' button to review the data.",
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, proceed!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.start_progress()
+        }
+      })
+    } else {
+      Swal.fire({
+        title: 'Empty Target Date',
+        imageUrl: "assets/images/calendar.gif",
+        imageWidth: 150,
+        text: "In order to start progress, please select targeted completion date to complete this task. If not choosen, the due date will be consider as the targeted completion date. ",
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, proceed!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.start_progress_due_date()
+        }
+      })
+    }
+  }
+
+  start_progress_due_date() {
+    this.hazardService.start_progress_due_date(this.generalForm.value, this.generalForm.value.due_date).subscribe({
+      next: (result: any) => {
+      },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => {
+        this.create_progress_activity()
+      }
+    })
+  }
+
+  start_progress() {
+    this.hazardService.start_progress(this.generalForm.value, this.resolutionForm.value.targeted_date).subscribe({
+      next: (result: any) => {
+      },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => {
+        this.create_progress_activity()
+      }
+    })
+  }
+
+  create_progress_activity() {
+    const action = "Started progress on a Hazard / Risk Task"
+    const refernceNumber = this.generalForm.value.reference_number
+    const user = this.generalForm.value.updator
+    this.generalService.create_activity_stream(action, refernceNumber, user).subscribe({
+      next: (result: any) => {
+        console.log(result)
+      },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => {
+        Swal.fire({
+          title: 'In Progress',
+          imageUrl: "assets/images/start-working.gif",
+          imageWidth: 250,
+          text: "You have successfully changed the status to In-Progress. Please complete the task before the targeted completion date.",
+          showCancelButton: false,
+
+        }).then((result) => {
+          this.ngOnInit()
+        })
+      }
+    })
+  }
+
+
+  targetdate(data: any) {
+    const date = new Date(data.value)
+    date.setDate(date.getDate() + 1)
+    this.resolutionForm.controls['targeted_date'].setValue(date)
+  }
+
+  completeDate(data: any) {
+    const date = new Date(data.value)
+    date.setDate(date.getDate() + 1)
+    this.resolutionForm.controls['completed_date'].setValue(date)
+  }
+
+  deligate(data: any) {
+    const people = this.deligates.filter(function (elem) {
+      return (elem.id == data.value)
+    })
+    this.actionForm.controls['deligate_person'].setValue(people[0].attributes.first_name + ' ' + people[0].attributes.last_name)
+
+    Swal.fire({
+      title: 'Add Team Member',
+      imageUrl: "assets/images/deligate.gif",
+      imageWidth: 150,
+      text: "You are trying to add one of your teammates to support you in completing this particular task. Please confirm.",
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, proceed!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.add_deligatee()
+      }
+    })
+  }
+
+
+
+  add_deligatee() {
+    // const ehsID = this.generalForm.value.id
+    const deligateID = this.actionForm.value.deligate
+    const deligateName = this.actionForm.value.deligate_person
+    this.hazardService.add_deligate(this.generalForm.value, deligateID, deligateName).subscribe({
+      next: (result: any) => { },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => {
+        this.create_deligate_activity()
+      }
+    })
+  }
+
+  create_deligate_activity() {
+    const action = "Added deligate to a Hazard / Risk task"
+    const refernceNumber = this.generalForm.value.reference_number
+    const user = this.generalForm.value.updator
+    this.generalService.create_activity_stream(action, refernceNumber, user).subscribe({
+      next: (result: any) => {
+        console.log(result)
+      },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => {
+        this.create_deligate_notification()
+      }
+    })
+  }
+
+  create_deligate_notification() {
+    let data: any[] = []
+    data.push({
+      module: "Hazard/Risk Management",
+      action: 'Added deligate in Hazard/Risk task:',
+      reference_number: this.generalForm.value.reference_number,
+      userID: this.actionForm.value.deligate,
+      access_link: "/apps/hazard-risk/view/",
+      profile: this.generalForm.value.updator
+    })
+    this.generalService.create_notification(data[0]).subscribe({
+      next: (result: any) => { },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => {
+        Swal.fire({
+          title: 'Teammates  Added',
+          imageUrl: "assets/images/user.gif",
+          imageWidth: 250,
+          text: "You have successfully added one of your teammates to support you in complete this particular task. We will notify the delegate in this regard.",
+          showCancelButton: false,
+        }).then((result) => {
+          this.get_ehs_details()
+        })
+      }
+    })
+  }
+
+
+  handleFileInput(event: any) {
+
+    if (event.target.files.length) {
+      var fileTypes = ['jpg', 'jpeg', 'png'];  //acceptable file types
+      var extension = event.target.files[0].name.split('.').pop().toLowerCase(),  //file extension from input file
+        isSuccess = fileTypes.indexOf(extension) > -1;  //is extension in acceptable types
+      this.resolutionForm.controls['evidence_type'].setValue(extension);
+      if (isSuccess) { //yes
+        // start file reader
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          if (event.target?.result) {
+            this.resolutionForm.controls['evidence'].setValue(event.target.result)
+            this.resolutionForm.controls['modified_evidence'].setValue(event.target.result)
+
+          }
+        };
+        reader.readAsDataURL(event.target.files[0]);
+
+        this.evidenceFormData.append('files', event.target.files[0], this.generalForm.value.reference_number + '.' + extension)
+
+      } else {
+
+        const statusText = "Please choose images ('jpg', 'jpeg', 'png')"
+        this._snackBar.open(statusText, 'Close Warning', {
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
+
+      }
+    }
+
+
+
+
+
+
+
+  }
+
+  completed() {
+
+
+    console.log(this.resolutionForm.value.evidenceId)
+    if (this.resolutionForm.value.evidence_id) {
+      console.log('have')
+      this.hazardService.destroy(this.resolutionForm.value.evidence_id).subscribe({
+        next: (result: any) => {
+          console.log(result)
+          this.hazardService.upload(this.evidenceFormData).subscribe({
+            next: (result: any) => {
+              const name = result[0].hash
+              const format = this.resolutionForm.value.evidence_type
+              const fileName = name + '.' + format
+              this.resolutionForm.controls['evidence_name'].setValue(fileName)
+              this.resolutionForm.controls['evidence_id'].setValue(result[0].id)
+            },
+            error: (err: any) => { },
+            complete: () => {
+              this.complete_transaction()
+            }
+          })
+        },
+        error: (err: any) => { },
+        complete: () => { }
+      })
+
+    } else {
+      console.log('not have')
+
+      this.hazardService.upload(this.evidenceFormData).subscribe({
+        next: (result: any) => {
+          const name = result[0].hash
+          const format = this.resolutionForm.value.evidence_type
+          const fileName = name + '.' + format
+          this.resolutionForm.controls['evidence_name'].setValue(fileName)
+          this.resolutionForm.controls['evidence_id'].setValue(result[0].id)
+        },
+        error: (err: any) => { },
+        complete: () => {
+          this.complete_transaction()
+        }
+      })
+
+    }
+
+
+    // const resolution = this.resolutionForm.valid
+    // if (resolution) {
+    //   const completionDate = this.resolutionForm.value.completed_date
+    //   if (completionDate) {
+    //     this.hazardService.ehs_completion(this.generalForm.value, this.resolutionForm.value).subscribe({
+    //       next: (result: any) => { },
+    //       error: (err: any) => {
+    //         this.router.navigate(["/error/internal"])
+    //       },
+    //       complete: () => {
+    //         this.update_com_evidence()
+    //       }
+    //     })
+    //   } else {
+    //     Swal.fire({
+    //       title: 'Empty Completion Date',
+    //       imageUrl: "assets/images/calendar.gif",
+    //       imageWidth: 150,
+    //       text: "In order to complete the task. Please provide the task completed date",
+    //       showCancelButton: false,
+    //       cancelButtonColor: '#d33',
+    //     })
+    //   }
+    // } else {
+    //   const statusText = "Please provide resolution details"
+    //   this._snackBar.open(statusText, 'Close Warning', {
+    //     horizontalPosition: this.horizontalPosition,
+    //     verticalPosition: this.verticalPosition,
+    //   });
+    // }
+  }
+
+  complete_transaction() {
+
+    const resolution = this.resolutionForm.valid
+    if (resolution) {
+      const completionDate = this.resolutionForm.value.completed_date
+      if (completionDate) {
+        this.hazardService.ehs_completion(this.generalForm.value, this.resolutionForm.value).subscribe({
+          next: (result: any) => { },
+          error: (err: any) => {
+            this.router.navigate(["/error/internal"])
+          },
+          complete: () => {
+            this.create_complete_activity()
+          }
+        })
+      } else {
+        Swal.fire({
+          title: 'Empty Completion Date',
+          imageUrl: "assets/images/calendar.gif",
+          imageWidth: 150,
+          text: "In order to complete the task. Please provide the task completed date",
+          showCancelButton: false,
+          cancelButtonColor: '#d33',
+        })
+      }
+    } else {
+      const statusText = "Please provide resolution details"
+      this._snackBar.open(statusText, 'Close Warning', {
+        horizontalPosition: this.horizontalPosition,
+        verticalPosition: this.verticalPosition,
+      });
+    }
+
+
+    // this.hazardService.update_ehs_evidence_after(this.generalForm.value.evidenceId, this.resolutionForm.value.evidence).subscribe({
+    //   next: (result: any) => { },
+    //   error: (err: any) => {
+    //     this.router.navigate(["/error/internal"])
+    //   },
+    //   complete: () => {
+    //     this.create_complete_activity()
+    //   }
+    // })
+  }
+
+  create_complete_activity() {
+    const action = "Hazard / Risk Task Completed"
+    const refernceNumber = this.generalForm.value.reference_number
+    const user = this.generalForm.value.updator
+    this.generalService.create_activity_stream(action, refernceNumber, user).subscribe({
+      next: (result: any) => {
+        console.log(result)
+      },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => {
+        this.create_notification()
+      }
+    })
+  }
+
+  create_notification() {
+    let data: any[] = []
+    data.push({
+      module: "Hazard/Risk Management",
+      action: 'Completed Hazard/Risk task:',
+      reference_number: this.generalForm.value.reference_number,
+      userID: this.generalForm.value.reporter,
+      access_link: "/apps/hazard-risk/verify/",
+      profile: this.generalForm.value.updator
+    })
+    this.generalService.create_notification(data[0]).subscribe({
+      next: (result: any) => { },
+      error: (err: any) => {
+        this.router.navigate(["/error/internal"])
+      },
+      complete: () => {
+        Swal.fire({
+          title: 'Task Completed',
+          imageUrl: "assets/images/success.gif",
+          imageWidth: 150,
+          text: "The task completed successully. The resoution details has submitted for review.",
+          showCancelButton: false,
+          cancelButtonColor: '#d33',
+        })
+        this.router.navigate(["/apps/hazard-risk/assigned-tasks"])
+      }
+    })
+  }

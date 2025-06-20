@@ -1,0 +1,70 @@
+<div mat-dialog-content [formGroup]="Form">
+    <div class="container-fluid d-flex justify-content-center w-100">
+        <div class="table-responsive w-100">
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Source</mat-label>
+                        <mat-select formControlName="source" (selectionChange)="source($event)">
+                            <mat-option *ngFor="let source of sources" value="{{source.attributes.Value}}">
+                                {{source.attributes.Value}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Baseline Consumption</mat-label>
+                        <input type="number" matInput formControlName="baseline_consumption"
+                            (change)="calcGhgEmission()">
+                        <span class="suffix" matSuffix>{{Form.value.baseline_Unit}}</span>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6" *ngIf="Form.value.category == 'Energy' && this.Form.value.sq_specific == true">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Standard</mat-label>
+                        <mat-select formControlName="standard" (selectionChange)="CalculateGHG($event)">
+                            <mat-option *ngFor="let standard of standards" value="{{standard.attributes.Value}}">
+                                {{standard.attributes.Value}}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>GHG Emission</mat-label>
+                        <input type="number" matInput formControlName="GHG_emission">
+                        <span class="suffix" matSuffix>tCO₂e</span>
+
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Expected Savings</mat-label>
+                        <input type="number" matInput formControlName="expected_savings">
+                        <span class="suffix" matSuffix>{{Form.value.baseline_Unit}}</span>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-end">
+                    <button type="button" class="btn btn-success btn-icon-text mt-4" *ngIf="mode!='update'"
+                        [disabled]="!Form.valid" (click)="submit()">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Add
+                    </button>
+                    <button type="button" class="btn btn-success btn-icon-text mt-4" [disabled]="!Form.valid"
+                        *ngIf="mode =='update'" (click)="update()">
+                        <i class="feather icon-send btn-icon-prepend"></i>
+                        Update
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>

@@ -1,0 +1,75 @@
+<form [formGroup]="CreateForm">
+<div mat-dialog-title >Audit Details - {{CreateForm.value.reference}}</div>
+<mat-dialog-content>
+   
+
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+
+            <mat-form-field fxFlex appearance="outline" color="primary">
+                <mat-label>Audit Date</mat-label>
+                <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+                    <input matStartDate formControlName="start" placeholder="Start date">
+                    <input matEndDate formControlName="end" placeholder="End date">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+               
+              </mat-form-field>
+
+              <mat-form-field fxFlex appearance="outline" color="primary">
+                <mat-label>Audit Type</mat-label>
+                <input type="text" matInput formControlName="AuditType">
+              </mat-form-field>
+
+              <mat-form-field fxFlex appearance="outline" color="primary">
+                <mat-label>Division</mat-label>
+                <input type="text" matInput formControlName="division">
+              </mat-form-field>
+
+              
+
+        </div>
+
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+            <mat-form-field fxFlex appearance="outline" color="primary">
+                <mat-label>Title</mat-label>
+                <input type="text" matInput formControlName="title">
+              </mat-form-field>
+
+              
+        </div>
+        <div class="col-md-12" *ngIf="CreateForm.value.AuditType==='Internal Audit'">
+            <mat-label>Description:</mat-label>
+
+            <p innerHTML={{CreateForm.value.description}}></p>
+            
+
+              
+           
+              
+             
+
+             
+            
+          </div>
+
+
+
+
+ 
+
+
+
+  
+
+
+
+</mat-dialog-content>
+</form>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+    <button type="button" class="btn btn-secondary btn-icon-text float-end mt-4 action-btn"
+                                    (click)="cancel()" >
+                                    CANCEL
+                                </button>
+  </mat-dialog-actions>

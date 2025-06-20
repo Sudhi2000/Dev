@@ -1,0 +1,33 @@
+.table-responsive {
+    overflow: hidden;
+}
+.action-btn {
+    margin-right: 5px;
+}
+.option-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.deleteicon
+{
+color: red;
+margin-left: 15px;
+}
+.modifyicon
+{
+    color: green;
+}
+.titleicon_delete
+{
+color: red;
+//margin-left: 80%;
+}
+.titleicon_edit{
+   color: green;
+}
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

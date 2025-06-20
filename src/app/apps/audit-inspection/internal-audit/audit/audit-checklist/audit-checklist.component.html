@@ -1,0 +1,94 @@
+<!-- <div mat-dialog-title>Audit Checklist - {{subCategory}}</div>
+<div class="table-responsive pt-3" id="socialChecklist">
+ 
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Question</th>
+                <th>Rating ( 0-3 )</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let list of auditCheckList">
+                <td class="col-sm-1"></td>
+                <td class="col-sm-7"
+                    innerHTML="{{list.attributes.description}}">
+                    <p innerHTML="{{list.attributes.description}}">
+                    </p>
+                </td>
+
+                <td class="col-sm-2">
+                    <select class="form-select form-select-sm mb-3"
+                        (change)="auditMark(list,$event)">
+                        <option selected>Select a Marks</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="mb-5">
+        <button type="button" class="btn btn-primary btn-icon-text float-end mt-4" (click)="submit()">
+            <i class="feather icon-send btn-icon-prepend"></i>
+            Submit
+        </button>
+    </div>
+</div> -->
+
+<h2 mat-dialog-title>Audit Checklist - {{ subCategory }}</h2>
+<mat-dialog-content class="mat-typography">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Legal Reference</th>
+        <th>Question</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let list of auditCheckList">
+        <td class="col-sm-1"></td>
+        <td class="col-sm-1" innerHTML="{{ list.attributes.legal_reference }}"></td>
+        <td class="col-sm-7" innerHTML="{{ list.attributes.description }}">
+          <p innerHTML="{{ list.attributes.description }}"></p>
+        </td>
+
+        <td class="col-sm-2">
+          <select
+            class="form-select form-select-sm mb-3"
+            (change)="auditMark(list, $event)"
+          >
+            <option value="Select a Status" selected>Select a Status</option>
+            <option value="Yes">Yes</option>
+            <option value="Partial Yes">Partial Yes</option>
+            <option value="No">No</option>
+            <!-- <option value="not">Not Applicable</option> -->
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <!-- <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button> -->
+
+  <button
+    type="button"
+    class="btn btn-primary btn-icon-text"
+    (click)="submit()"
+  >
+    <i class="feather icon-send btn-icon-prepend"></i>
+    Submit
+  </button>
+  <button type="button" class="btn btn-secondary" mat-dialog-close>
+    Cancel
+  </button>
+</mat-dialog-actions>

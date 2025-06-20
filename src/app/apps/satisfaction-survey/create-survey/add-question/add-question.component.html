@@ -1,0 +1,71 @@
+<!-- <div mat-dialog-content [formGroup]="Form" style="width: 600px;">
+    <div class="container-fluid  d-flex justify-content-center w-100">
+        <div class="table-responsive w-100" style="overflow: hidden;">
+            <div class="row ">
+                <div class="col-md-12">
+                    <mat-form-field fxFlex appearance="outline" color="primary">
+                        <mat-label>Question</mat-label>
+                        <mat-select [formControl]="Question" multiple (selectionChange)="QuestionChange($event)">
+                            <mat-select-trigger>
+                                {{Question.value ? Question.value[0] : ''}}
+                                <span *ngIf="Question.value?.length > 1" class="example-additional-selection">
+                                    (+{{Question.value.length - 1}}
+                                    {{Question.value?.length === 2 ?
+                                    'other' :
+                                    'others'}})
+                                </span>
+                            </mat-select-trigger>
+                            <mat-option *ngFor="let emp of Questions" [value]="emp.attributes.question">
+                                {{
+                                getTruncatedQuestion(emp.attributes.question) }}</mat-option>
+                        </mat-select>
+                        <mat-error>Required Field</mat-error>
+                    </mat-form-field>
+
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-success btn-icon-text float-end mt-4" [disabled]="!Form.valid"
+                    (click)="submit()">
+                    <i class="feather icon-send btn-icon-prepend"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+<h2 mat-dialog-title>Question</h2>
+<mat-dialog-content class="mat-typography">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+              <th style="width: 10px;">
+                <input type="checkbox" [checked]="isAllSelected()" (change)="toggleAllSelection($event)">
+              </th>
+              <th>Question</th>
+            </tr>
+          </thead>
+          
+        <tbody>
+            <tr *ngFor="let list of Questions">
+                <td><input type="checkbox" [(ngModel)]="list.selected"
+                        (change)="onCheckboxChange(list)"></td>
+                <td class="question-container " innerHTML="{{ list.attributes.question }}">
+                    <p innerHTML="{{ list.attributes.question }}"></p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button type="button" class="btn btn-primary btn-icon-text" (click)="submit()">
+        <i class="feather icon-send btn-icon-prepend"></i>
+        Submit
+    </button>
+    &nbsp;<button type="button" class="btn btn-secondary" mat-dialog-close>
+        Cancel
+    </button>
+</mat-dialog-actions>
