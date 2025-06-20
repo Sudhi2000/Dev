@@ -21,17 +21,20 @@ jobs:
         with:
           node-version: 18
 
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: npm install
 
       - name: Build Angular project
         id: build_status
         run: npm run build --prod
-
-      - name: Upload to S3
-        run: |
-         aws s3 sync ./dist/tempapp/browser s3://v5-sattva-sample/tempapp/browser --delete
-
 
       - name: Get commit message
         id: commit_message
@@ -89,11 +92,16 @@ jobs:
       - name: Build Angular project
         run: npm run build --prod
 
+      - name: List build output (debug step)
+        run: ls -R ./dist/tempapp/browser
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws_s3_bucket : v5-sattva-sample
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          SOURCE_DIR: tempapp/browser 
+
+      - name: Upload to S3
+        run: |
+          aws s3 sync ./dist/tempapp/browser s3://v5-sattva-sample/tempapp/browser --delete
