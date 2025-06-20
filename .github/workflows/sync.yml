@@ -9,7 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      build-status: ${{ steps.build_status.outcome }}
       commit-message: ${{ steps.commit_message.outputs.message }}
 
     steps:
@@ -33,13 +32,17 @@ jobs:
         run: npm install --force
 
       - name: Build Angular project
-        id: build_status
-        run: npm run build --prod
+        run: npm run build -- --configuration production
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: angular-build
+          path: dist/tempapp/browser
 
       - name: Get commit message
         id: commit_message
-        run: |
-          echo "message=$(git log -1 --pretty=format:'%s')" >> "$GITHUB_OUTPUT"
+        run: echo "message=$(git log -1 --pretty=format:'%s')" >> "$GITHUB_OUTPUT"
 
   notify_dev_on_failure:
     needs: build
@@ -58,7 +61,7 @@ jobs:
 
   notify_qa:
     needs: build
-    if: ${{ needs.build.result == 'success' }}
+    if: ${{ success() }}
     runs-on: ubuntu-latest
     steps:
       - name: Notify QA via Slack
@@ -75,25 +78,14 @@ jobs:
     needs: notify_qa
     runs-on: ubuntu-latest
     environment:
-      name: qa-approval
+      name: qa-approval  # You must set this environment up in repo Settings > Environments
       url: https://your-qa-instance.com
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
         with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build Angular project
-        run: npm run build --prod
-
-      - name: List build output (debug step)
-        run: ls -R ./dist/tempapp/browser
+          name: angular-build
+          path: dist/tempapp/browser
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -104,5 +96,4 @@ jobs:
 
       - name: Upload to S3
         run: |
-         aws s3 sync ./dist/tempapp/browser s3://v5-sattva-sample/ --delete
-
+          aws s3 sync ./dist/tempapp/browser s3://v5-sattva-sample/ --delete
